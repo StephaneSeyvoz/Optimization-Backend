@@ -1,0 +1,23 @@
+
+import helloworld.Service;
+ 
+@Singleton
+primitive collection.ServerSelfbindsSimpleCollection {
+  
+  requires Service as s0;
+  requires Service as s1;
+  requires Service as s2;
+  requires Service as s3;
+  requires Service as s4;
+  requires Service as s5;
+  requires optional Service as s6;
+  
+  provides Service as s[7];
+  
+  provides Main as main;
+  
+  attribute string header = "-> ";
+
+  data serverData.c;
+  source ServerSelfbindsSimpleCollection.c;
+}

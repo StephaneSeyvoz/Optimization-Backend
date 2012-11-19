@@ -1,0 +1,6 @@
+
+primitive EmptyMultiPrimitive extends ApplicationType {
+
+  source empty_main.c
+
+}

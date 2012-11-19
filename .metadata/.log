@@ -1,0 +1,43 @@
+!SESSION 2012-11-19 16:20:20.681 -----------------------------------------------
+eclipse.buildId=M20120914-1800
+java.version=1.7.0_03
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data F:\Seyvoz\mergesbx\Optim-GitHub\finalmerge\Optimization-Backend -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property http.proxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property http.proxyPort is not set but should be 8080.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property https.proxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property https.proxyPort is not set but should be 8080.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property socksProxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.365
+!MESSAGE System property socksProxyPort is not set but should be 8080.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property https.proxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property https.proxyPort is not set but should be 8080.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property socksProxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property socksProxyPort is not set but should be 8080.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property socksProxyHost is not set but should be pipf.fr.schneider-electric.com.
+
+!ENTRY org.eclipse.core.net 1 0 2012-11-19 16:20:23.380
+!MESSAGE System property socksProxyPort is not set but should be 8080.

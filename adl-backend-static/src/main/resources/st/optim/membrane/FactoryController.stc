@@ -1,0 +1,53 @@
+template st.optim.membrane.FactoryController
+  : st.common.ComponentHelper
+  implements st.optim.membrane.ControllerGenerator {
+
+st.interfaces.IDLDefinition idl2c = st.interfaces.IDL2C; 
+
+$${
+
+isVoid   ::= [ "void"   : "true" ]
+
+// -----------------------------------------------------------------------------
+// Implementation of the ControllerGenerator interface
+// -----------------------------------------------------------------------------
+
+ControllerImplementation(definition, instance, controller, interfaceDefinitions) ::= <<
+
+/* -------------------------------------------------------------------------- */
+/* Implementation of the Factory interface                                    */
+/* -------------------------------------------------------------------------- */
+
+<newFcInstance(definition=definition.astDecorations.("factory-definition").definition)>
+
+<destroyFcInstance(definition=definition.astDecorations.("factory-definition").definition)>
+
+>>
+
+// -----------------------------------------------------------------------------
+// Internal templates
+// -----------------------------------------------------------------------------
+
+newFcInstance(definition) ::= <<
+#include "<definition.name;format="nameToPath">.adl.h"
+
+int METH(factory, newFcInstance)(void ** instance) {
+  return __component_<definition.name;format="toCName">_factory(instance, GET_MY_INTERFACE(allocator)
+    <FactoryParameters(definition=definition)>);
+}
+>>
+
+FactoryParameters(definition) ::= <<
+<if (definition.astNodeTypes.("formalParameter"))>
+<definition.formalParameters:{, ATTR(<it.name;format="nameToPath">)}>
+<endif>
+>>
+
+destroyFcInstance(definition) ::= <<
+int METH(factory, destroyFcInstance)(void * instance) {
+  return __component_<definition.name;format="toCName">_destroy(instance, GET_MY_INTERFACE(allocator));
+}
+>>
+
+}$$
+}

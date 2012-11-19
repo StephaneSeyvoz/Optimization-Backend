@@ -1,0 +1,19 @@
+
+@Singleton
+composite collection.ServerSelfbindsSimpleCollectionComposite {
+  
+  provides Main as main;
+  
+  contains ServerSelfbindsSimpleCollection as server;
+  
+  binds this.main to server.main;
+  
+  binds server.s0 to server.s[0];
+  binds server.s1 to server.s[1];
+  binds server.s2 to server.s[2];
+  binds server.s3 to server.s[3];
+  binds server.s4 to server.s[4];
+  binds server.s5 to server.s[5];
+  //binds server.s6 to server.s[6];
+  
+}

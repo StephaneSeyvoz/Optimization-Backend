@@ -1,0 +1,20 @@
+
+@Run(addBootstrap=true)
+@Singleton
+composite optionals.HelloworldB1 {
+
+  provides Main as main;
+
+  contains Client as clientSubComp;
+  
+  contains Server as serverSubComp;
+  
+  binds this.main to clientSubComp.main;
+  
+  /**
+   * Test optimizations CALLs behavior, when optional bound/unbound
+   * Checking impact on the component's glue
+   */
+  binds clientSubComp.s to serverSubComp.s;
+  
+}
