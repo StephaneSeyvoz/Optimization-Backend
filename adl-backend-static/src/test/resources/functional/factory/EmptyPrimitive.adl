@@ -1,6 +1,0 @@
-
-primitive factory.EmptyPrimitive extends ApplicationType {
-
-  source ../empty_main.c
-
-}

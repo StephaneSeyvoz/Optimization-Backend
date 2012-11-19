@@ -1,4 +1,0 @@
-
-type impl.MyLibType {
-  provides MyLib as myLib;
-}

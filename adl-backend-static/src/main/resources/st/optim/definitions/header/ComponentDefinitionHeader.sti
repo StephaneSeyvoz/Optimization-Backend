@@ -1,3 +1,0 @@
-interface ComponentDefinitionHeader;
-
-ComponentDefinitionHeader(definition, instance);

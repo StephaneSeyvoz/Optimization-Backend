@@ -1,7 +1,0 @@
-
-primitive factory.FactoryTester extends ApplicationType {
-
-  requires fractal.api.Factory as factory;
-  
-  source factoryTester.c;
-}

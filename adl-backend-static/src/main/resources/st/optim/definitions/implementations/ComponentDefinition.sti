@@ -1,3 +1,0 @@
-interface ComponentDefinition;
-
-ComponentDefinition(definition, instance, interfaceDefinitions);

@@ -1,4 +1,0 @@
-
-interface impl.MyLib {
-  int add(int, int);
-}

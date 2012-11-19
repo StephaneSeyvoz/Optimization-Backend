@@ -1,4 +1,0 @@
-
-interface singleton.Bservice {
-  intptr_t getPrivate();
-}

@@ -1,9 +1,0 @@
-interface ComponentInstances;
- 
-ComponentInstances(topLevelDefinition, definition, instances);
-
-ComponentInstances(topLevelDefinition, definition, instances);
-
-TopLevelInstances(topLevelDefinition, definitions, instances);
-
-BindingInstances(topLevelDefinition, definitions, instances);

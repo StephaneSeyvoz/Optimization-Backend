@@ -1,4 +1,0 @@
-
-@Run
-primitive attr.ParametricAttr21 extends attr.ParametricAttr2(0, NULL) {
-}

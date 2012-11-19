@@ -1,6 +1,0 @@
-
-composite factory.EmptyComposite extends ApplicationType {
-  contains EmptyPrimitive as subComp;
-  
-  binds this.main to subComp.main;
-}

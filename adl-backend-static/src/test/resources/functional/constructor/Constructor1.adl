@@ -1,8 +1,0 @@
-
-@Run
-@Singleton
-primitive constructor.Constructor1 extends ApplicationType {
-
-  source constructor1.c;
-
-}
