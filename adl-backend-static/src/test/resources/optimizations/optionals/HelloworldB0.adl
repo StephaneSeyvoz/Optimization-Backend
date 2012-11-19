@@ -1,0 +1,14 @@
+
+@Run(addBootstrap=true)
+@Singleton
+composite optionals.HelloworldB0 {
+
+  provides Main as main;
+
+  contains Client as clientSubComp;
+  
+  contains Server as serverSubComp;
+  
+  binds this.main to clientSubComp.main;
+  
+}

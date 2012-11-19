@@ -1,0 +1,14 @@
+
+import helloworld.Service;
+
+@Singleton
+@Run(addBootstrap=true)
+composite collection.HelloworldSelfbindsSimpleCollection {
+
+  provides Main as main;
+	
+  contains ServerSelfbindsSimpleCollectionComposite as serverSubComp;
+
+  binds this.main to serverSubComp.main;
+  
+}

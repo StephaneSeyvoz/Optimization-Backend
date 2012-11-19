@@ -1,0 +1,5 @@
+
+@Singleton
+type SingletonApplicationType {
+  provides Main as main;
+}

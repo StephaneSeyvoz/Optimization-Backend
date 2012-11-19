@@ -1,0 +1,8 @@
+@Singleton
+@StaticBindings
+composite GenericApplicationSB<App conformsto SingletonApplicationType> {
+  contains App as app;
+  contains Bootstrap as bootstrap;
+  
+  binds bootstrap.entryPoint to app.main;
+}

@@ -1,0 +1,7 @@
+
+@Singleton
+primitive EmptySingletonPrimitive extends ApplicationType {
+
+  source empty_main.c
+
+}

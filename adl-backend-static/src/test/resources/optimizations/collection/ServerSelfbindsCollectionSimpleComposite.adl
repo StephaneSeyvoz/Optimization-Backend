@@ -1,0 +1,21 @@
+
+import helloworld.Service;
+
+@Singleton
+composite collection.ServerSelfbindsCollectionSimpleComposite {
+  
+  provides Main as main;
+  
+  contains ServerSelfbindsCollectionSimple as server;
+  
+  binds this.main to server.main;
+  
+  binds server.s[0] to server.s0;
+  binds server.s[1] to server.s1;
+  binds server.s[2] to server.s2;
+  binds server.s[3] to server.s3;
+  binds server.s[4] to server.s4;
+  binds server.s[5] to server.s5;
+  //binds server.s[6] to server.s6;
+  
+}

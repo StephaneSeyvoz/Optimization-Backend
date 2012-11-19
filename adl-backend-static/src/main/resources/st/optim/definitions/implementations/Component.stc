@@ -1,0 +1,124 @@
+template st.optim.definitions.implementations.Component
+  implements st.optim.definitions.implementations.ComponentDefinition {
+
+st.interfaces.IDLDefinition idl2c = st.interfaces.IDL2C ; 
+
+$${
+
+  
+isClient ::= [ "client" : "true" ]
+isServer ::= [ "server" : "true" ]
+
+// -----------------------------------------------------------------------------
+// Implementation of the ComponentDefinition interface
+// -----------------------------------------------------------------------------
+
+ComponentDefinition(definition, instance, interfaceDefinitions) ::= <<
+/* Generated file: <definition.name;format="nameToPath">.inc */
+#define __COMPONENT_IN_<definition.name;format="toUpperCName">
+#include "<definition.name;format="nameToPath">.adl.h"
+
+<ServerMethodsDeclaration(definition=definition, interfaceDefinitions=interfaceDefinitions)>
+
+<! SSZ : BEGIN MODIFICATION !>
+<OptimizedMethodsDeclaration(definition=definition, instance=instance, interfaceDefinitions=interfaceDefinitions)>
+<! SSZ : END MODIFICATION !>
+
+>>
+
+// -----------------------------------------------------------------------------
+// Internal templates
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Server method declaration
+
+ServerMethodsDeclaration(definition, interfaceDefinitions) ::= <<
+/* Start declaration of server methods */
+<definition.interfaces:ServerMethodDecls(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=it); separator="\n">
+<if (definition.astNodeTypes.("internalInterface"))>
+<definition.internalInterfaces:ServerMethodDecls(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=it); separator="\n">
+<endif>
+/* End declaration of server methods */
+>>
+
+ServerMethodDecls(definition, interfaceDefinitions, itf) ::= <<
+<if (isServer.(itf.role))>
+<if (itf.numberOfElement)>
+<itf.astDecorations.("collectionIndexes"):ServerMethodDecls1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf, index=it);separator="\n">
+<else>
+<ServerMethodDecls1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
+<endif>
+<endif>
+>>
+
+ServerMethodDecls1(definition, interfaceDefinitions, itf, index) ::= <<
+<if (definition.astDecorations.("is-singleton"))>
+<interfaceDefinitions.(itf.signature).methods:SingletonServerMethodDecl(definition=definition, itf=itf, index=index, method=it);separator="\n">
+<else>
+<interfaceDefinitions.(itf.signature).methods:MultiServerMethodDecl(definition=definition, itf=itf, index=index, method=it);separator="\n">
+<endif>
+>>
+
+MultiServerMethodDecl(definition, itf, index, method) ::= <<
+<(idl2c.methodDef)(method=method,methodName=METHODName(itfName=itf.name, index=index, methodName=method.name), withThisPtr="typed")>;
+>>
+
+SingletonServerMethodDecl(definition, itf, index, method) ::= <<
+<(idl2c.methodDef)(method=method,methodName=METHODName(itfName=itf.name, index=index, methodName=method.name), withThisPtr="false")>;
+>>
+
+METHODName(itfName, index, methodName) ::= <<
+<if (index)>
+INTERFACE_COLLECTION_METHOD(<itfName>, <index>, <methodName>)
+<else>
+INTERFACE_METHOD(<itfName>, <methodName>)
+<endif>
+>>
+
+// -----------------------------------------------------------------------------
+// Client method declaration
+
+OptimizedMethodsDeclaration(definition, instance, interfaceDefinitions) ::= <<
+/* Start declaration of client methods : Used by optimized calls */
+<definition.interfaces:OptimizedMethodDecls(definition=definition, instance=instance, interfaceDefinitions=interfaceDefinitions, itf=it, isInternal="false"); separator="\n">
+<if (definition.astNodeTypes.("internalInterface"))>
+<definition.internalInterfaces:OptimizedMethodDecls(definition=definition, instance=instance, interfaceDefinitions=interfaceDefinitions, itf=it, isInternal="true"); separator="\n">
+<endif>
+
+/* End declaration of client methods */
+>>
+
+OptimizedMethodDecls(definition, instance, interfaceDefinitions, itf, isInternal) ::= <<
+<if (isClient.(itf.role))>
+<OptimizedMethodDecls1(definition=definition, instance=instance, interfaceDefinitions=interfaceDefinitions, itf=itf, isInternal=isInternal)>
+<endif>
+>>
+
+OptimizedMethodDecls1(definition, instance, interfaceDefinitions, itf, index, isInternal) ::= <<
+<if (definition.astDecorations.("is-singleton"))>
+<interfaceDefinitions.(itf.signature).methods:SingletonOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
+<endif>
+>>
+
+SingletonOptimizedMethodDecl(definition, instance, itf, index, method, isInternal) ::= <<
+<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
+<(idl2c.methodDef)(method=method,methodName=OptimizationMETHODName(instance=instance, itfName=itf.name, methodName=method.name, isInternal=isInternal), withThisPtr="false")>;
+<elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
+<(idl2c.methodDef)(method=method,methodName=OptimizationMETHODName(instance=instance, itfName=itf.name, methodName=method.name), withThisPtr="false")>;
+<endif>
+>>
+
+StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
+
+OptimizationMETHODName(instance, itfName, methodName, isInternal) ::= <<
+<if (isInternal)>
+__component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itfName, isInternal=isInternal)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itfName, isInternal=isInternal)).binding.toInterface>_<methodName>
+<else>
+__component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itfName)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itfName)).binding.toInterface>_<methodName>
+<endif>
+>>
+
+}$$
+ 
+}

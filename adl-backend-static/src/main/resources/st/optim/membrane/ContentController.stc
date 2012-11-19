@@ -1,0 +1,255 @@
+template st.optim.membrane.ContentController
+  : st.common.ComponentHelper
+  implements st.optim.membrane.ControllerGenerator {
+  
+st.interfaces.IDLDefinition idl2c = st.interfaces.IDL2C; $${
+
+// -----------------------------------------------------------------------------
+// Implementation of the ControllerGenerator interface
+// -----------------------------------------------------------------------------
+
+ControllerGlobalDecl(definition, controller) ::= <<
+#include "fractal/internal/CCdelegate.h"
+
+/* declare internal interfaces descriptor. This structure is defined in the 
+   membrane implementation (i.e. in 'ctrl_impl.c' file) */
+extern struct __component_InternalItfsDescriptor <definition.name;format="toCName">_internalItfs_descriptor;
+>>
+
+ControllerData(definition, controller) ::= <<
+struct __component_ContentDescriptor *contentDesc;
+>>
+
+ControllerDataStaticInit(definition, controller) ::= <<
+/* contentDesc */ &instance_name##_contentDesc,
+>>
+
+nbDynamicSubComponent(definition) ::= <<
+<definition.astDecorations.("annotations").annotationMap.("org.ow2.mind.adl.annotations.controller.ContentController").nbDynamicSubComponent>
+>>
+
+ControllerGlobalDataStaticInit(definition, controller) ::= <<
+struct __component_SubComponentDescriptor instance_name##_subComponentDesc[<length(definition.components)> + <nbDynamicSubComponent(definition=definition)>] = \
+  {<definition.components:InitSubCompDesc(definition=definition, component=it); separator=", ">}; \
+struct __component_ContentDescriptor instance_name##_contentDesc = { \
+  sizeof(instance_name##_subComponentDesc)/sizeof(struct __component_SubComponentDescriptor), \
+  instance_name##_subComponentDesc, \
+  & <definition.name;format="toCName">_internalItfs_descriptor \
+};
+>>
+
+InitSubCompDesc(definition, component) ::= <<
+{&(<component.name>.__component_internal_data.type.component), "<component.name>"}
+>>
+
+
+ControllerDataFactoryNew(definition, controller) ::= <<
+  newInstance->__component_internal_data.contentDesc = 
+    (struct __component_ContentDescriptor*) CALL_PTR((memory_api_Allocator) allocItf, alloc)(sizeof(struct __component_ContentDescriptor));
+  if (newInstance->__component_internal_data.contentDesc == NULL)
+    goto error_contentDesc;
+  
+  newInstance->__component_internal_data.contentDesc->nbSubComponent = <length(definition.components)> + <nbDynamicSubComponent(definition=definition)>;
+  newInstance->__component_internal_data.contentDesc->subComponents = 
+    (struct __component_SubComponentDescriptor*) CALL_PTR((memory_api_Allocator) allocItf, alloc)(sizeof(struct __component_SubComponentDescriptor) * newInstance->__component_internal_data.contentDesc->nbSubComponent);
+  if (newInstance->__component_internal_data.contentDesc->subComponents == NULL)
+    goto error_content_dynamicSubComponents;
+  {
+    int i = 0;
+    <definition.components:factoryInitCompDesc(definition=definition, component=it);separator="\n">
+  }
+  
+>>
+
+factoryInitCompDesc(definition, component) ::= <<
+newInstance->__component_internal_data.contentDesc->subComponents[i].subComponent 
+  = &(newInstance->__component_internal_data.components.<component.name>->__component_internal_data.type.component);
+newInstance->__component_internal_data.contentDesc->subComponents[i].name = "<component.name>";
+i++;
+>>
+
+ControllerDataFactoryNewClear(definition, controller) ::= <<
+  CALL_PTR((memory_api_Allocator) allocItf, free)(newInstance->__component_internal_data.contentDesc->subComponents);
+error_content_dynamicSubComponents :
+  CALL_PTR((memory_api_Allocator) allocItf, free)(newInstance->__component_internal_data.contentDesc);
+error_contentDesc :
+>>
+
+ControllerDataFactoryDestroy(definition, controller) ::= <<
+  CALL_PTR((memory_api_Allocator) allocItf, free)(destroyInstance->__component_internal_data.contentDesc->subComponents);
+  CALL_PTR((memory_api_Allocator) allocItf, free)(destroyInstance->__component_internal_data.contentDesc);
+>>
+
+ControllerImplementation(definition, instance, controller, interfaceDefinitions) ::= <<
+
+/* -----------------------------------------------------------------------------
+   Implementation of the ContentController interface
+----------------------------------------------------------------------------- */
+
+<initInternalItfsDescriptor(definition=definition)>
+
+<getFcSubComponents(definition=definition)>
+
+<getFcSubComponent(definition=definition)>
+
+<getFcSubComponentName(definition=definition)>
+
+<addFcSubComponent(definition=definition)>
+
+<addFcNamedSubComponent(definition=definition)>
+
+<removeFcSubComponent(definition=definition)>
+
+<addFcSubBinding(definition=definition)>
+
+<removeFcSubBinding(definition=definition)>
+
+>>
+
+// -----------------------------------------------------------------------------
+// Internal templates
+// -----------------------------------------------------------------------------
+
+initInternalItfsDescriptor(definition) ::= <<
+struct __component_InternalClientItfDescriptor <definition.name;format="toCName">_internalClientItf_descriptor[] = {
+<if (definition.astNodeTypes.("internalInterface"))>
+  <definition.internalInterfaces:initInternalClientItfDescriptor(definition=definition, itf=it)>
+<endif>
+};
+
+struct __component_InternalServerItfDescriptor <definition.name;format="toCName">_internalServerItf_descriptor[] = {
+<if (definition.astNodeTypes.("internalInterface"))>
+  <definition.internalInterfaces:initInternalServerItfDescriptor(definition=definition, itf=it)>
+<endif>
+<definition.interfaces:initControllerServerItfDescriptor(definition=definition, itf=it)>
+};
+
+struct __component_InternalItfsDescriptor <definition.name;format="toCName">_internalItfs_descriptor = {
+  sizeof(<definition.name;format="toCName">_internalClientItf_descriptor)/sizeof(struct __component_InternalClientItfDescriptor),
+  <definition.name;format="toCName">_internalClientItf_descriptor,
+  sizeof(<definition.name;format="toCName">_internalServerItf_descriptor)/sizeof(struct __component_InternalServerItfDescriptor),
+  <definition.name;format="toCName">_internalServerItf_descriptor
+};
+>>
+
+initInternalClientItfDescriptor(definition, itf) ::= <<
+<if (isClient.(itf.role))>
+<if (itf.numberOfElement)>
+<itf.astDecorations.("collectionIndexes"):initInternalClientItfDescriptor1(definition=definition, itf=itf, index=it);separator=",\n">,
+<else>
+<initInternalClientItfDescriptor1(definition=definition, itf=itf)>,
+<endif>
+<endif>
+>>
+
+initInternalClientItfDescriptor1(definition, itf, index) ::= <<
+__COMPONENT_INIT_INTERNAL_CLIENT_ITF_DESCRIPTOR(<ComponentTypeName(definitionName=definition.name)>, <itf.name><if (index)>[<index>]<endif>, <itf.astDecorations.("delegated-interface").name><if (index)>[<index>]<endif>)
+
+>>
+
+initInternalServerItfDescriptor(definition, itf) ::= <<
+<if (isServer.(itf.role))>
+<if (itf.numberOfElement)>
+<itf.astDecorations.("collectionIndexes"):initInternalServerItfDescriptor1(definition=definition, itf=itf, index=it);separator=",\n">,
+<else>
+<initInternalServerItfDescriptor1(definition=definition, itf=itf)>,
+<endif>
+<endif>
+>>
+
+initInternalServerItfDescriptor1(definition, itf, index) ::= <<
+__COMPONENT_INIT_INTERNAL_SERVER_ITF_DESCRIPTOR(<ComponentTypeName(definitionName=definition.name)>, <itf.name><if (index)>[<index>]<endif>)
+
+>>
+
+initControllerServerItfDescriptor(definition, itf) ::= <<
+<if (itf.astDecorations.("controller-interface"))>
+<if (itf.numberOfElement)>
+<itf.astDecorations.("collectionIndexes"):initControllerServerItfDescriptor1(definition=definition, itf=itf, index=it);separator=",\n">,
+<else>
+<initControllerServerItfDescriptor1(definition=definition, itf=itf)>,
+<endif>
+<endif>
+>>
+
+initControllerServerItfDescriptor1(definition, itf, index) ::= <<
+__COMPONENT_INIT_CONTROLLER_SERVER_ITF_DESCRIPTOR(<ComponentTypeName(definitionName=definition.name)>, <itf.name><if (index)>[<index>]<endif>)
+
+>>
+
+getFcSubComponents(definition) ::= <<
+int METH(contentController, getFcSubComponents)(fractal_api_Component subComponents[]) 
+{
+  return __component_getFcSubComponents(subComponents,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+getFcSubComponent(definition) ::= <<
+int METH(contentController, getFcSubComponent)(__MIND_STRING_TYPEDEF name,
+    fractal_api_Component *subComponent) 
+{
+  return __component_getFcSubComponent(name, subComponent,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+getFcSubComponentName(definition) ::= <<
+int METH(contentController, getFcSubComponentName)(fractal_api_Component subComponent,
+    __MIND_STRING_TYPEDEF *name) 
+{
+  return __component_getFcSubComponentName(subComponent, name,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+addFcSubComponent(definition) ::= <<
+int METH(contentController, addFcSubComponent)(fractal_api_Component subComponent) 
+{
+  return __component_addFcSubComponent(subComponent,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+addFcNamedSubComponent(definition) ::= <<
+int METH(contentController, addFcNamedSubComponent)(fractal_api_Component subComponent,
+    __MIND_STRING_TYPEDEF name) 
+{
+  return __component_addFcNamedSubComponent(subComponent, name,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+removeFcSubComponent(definition) ::= <<
+int METH(contentController, removeFcSubComponent)(fractal_api_Component subComponent) 
+{
+  return __component_removeFcSubComponents(subComponent,
+      <contentDescPointer(definition=definition)>);
+}
+>>
+
+addFcSubBinding(definition) ::= <<
+int METH(contentController, addFcSubBinding)(fractal_api_Component clientComponent,
+      __MIND_STRING_TYPEDEF clientItfName, fractal_api_Component serverComponent,
+      __MIND_STRING_TYPEDEF serverItfName) 
+{
+  return __component_addFcSubBinding(clientComponent, clientItfName, serverComponent, serverItfName,
+      <contentDescPointer(definition=definition)>, CONTEXT_PTR_ACCESS);
+}
+>>
+
+removeFcSubBinding(definition) ::= <<
+int METH(contentController, removeFcSubBinding)(fractal_api_Component clientComponent,
+      __MIND_STRING_TYPEDEF clientItfName) 
+{
+  return __component_removeFcSubBinding(clientComponent, clientItfName,
+      <contentDescPointer(definition=definition)>, CONTEXT_PTR_ACCESS);
+}
+>>
+
+contentDescPointer(definition) ::= <<
+CONTEXT_PTR_ACCESS->__component_internal_data.contentDesc
+>>
+
+}$$
+}

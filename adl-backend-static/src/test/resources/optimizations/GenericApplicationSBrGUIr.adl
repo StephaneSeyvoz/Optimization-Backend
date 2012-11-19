@@ -1,0 +1,9 @@
+@Singleton
+@StaticBindings(recursive=true)
+@GarbageUnusedInternals(recursive=true)
+composite GenericApplicationSBrGUIr<App conformsto SingletonApplicationType> {
+  contains App as app;
+  contains Bootstrap as bootstrap;
+  
+  binds bootstrap.entryPoint to app.main;
+}

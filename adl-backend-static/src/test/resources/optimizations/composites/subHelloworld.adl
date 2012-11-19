@@ -1,0 +1,14 @@
+
+@Singleton
+composite composites.subHelloworld {
+
+  provides Main as main;
+
+  contains Client2 as clientComp2;
+  contains Server2 as serverComp2;
+  
+  binds this.main to clientComp2.main;
+  
+  binds clientComp2.s to serverComp2.s;
+  binds clientComp2.s2 to serverComp2.s2;
+}
