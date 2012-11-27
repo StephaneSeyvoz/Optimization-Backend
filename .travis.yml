@@ -12,6 +12,6 @@ install:
   - "cd .."
 script:
   - "cd adl-frontend-static"
-  - "mvn -U verify -PCI-profile"
+  - "mvn -U install -PCI-profile"
   - "cd ../adl-backend-static"
   - "mvn -U verify -PCI-profile"
