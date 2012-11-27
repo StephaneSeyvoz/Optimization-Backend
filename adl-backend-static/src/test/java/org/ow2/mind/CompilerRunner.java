@@ -100,7 +100,7 @@ public class CompilerRunner {
 	public CompilerRunner(final Map<Object, Object> initialContext)
 			throws ADLException {
 		this.initialContext = initialContext;
-		
+
 		final Injector pluginManagerInjector = Guice
 				.createInjector(new PluginLoaderModule());
 		pluginManager = pluginManagerInjector.getInstance(PluginManager.class);
@@ -112,15 +112,15 @@ public class CompilerRunner {
 		options.addOptions(CommandLineOptionExtensionHelper.getCommandOptions(pluginManager));
 		// parse arguments to a CommandLine.
 		try {
-	    	final CommandLine cmdLine = CommandLine.parseArgs(options, false, "--optimize");
-	    	initialContext.put(CmdOptionBooleanEvaluator.CMD_LINE_CONTEXT_KEY, cmdLine);
-	    	// TODO: check if we need to do more ?
+			final CommandLine cmdLine = CommandLine.parseArgs(options, false, "--optimize");
+			initialContext.put(CmdOptionBooleanEvaluator.CMD_LINE_CONTEXT_KEY, cmdLine);
+			// TODO: check if we need to do more ?
 		} catch (InvalidCommandLineException e) {
 			// We should never get here anyway as we are the ones building the command line.
 			e.printStackTrace();
 		}
 		//
-		
+
 		final Injector injector = Guice.createInjector(GuiceModuleExtensionHelper
 				.getModules(pluginManager, initialContext));
 
@@ -140,7 +140,7 @@ public class CompilerRunner {
 
 	public void initContext() throws ADLException {
 		context = new HashMap<Object, Object>(initialContext);
-		
+
 		if (!buildDir.exists()) {
 			buildDir.mkdirs();
 		}

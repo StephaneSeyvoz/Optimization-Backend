@@ -98,10 +98,15 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		Definition compDef = graph.getDefinition();
 
 		// Check if the current component is the top-level one (the whole application) (maybe there is a cleaner way ?)
-		if (graph.getParents().length == 0){
+		// And it doesn't provide/require interfaces
+		if ((graph.getParents().length == 0)
+				&& ((!(compDef instanceof InterfaceContainer))
+					|| ((compDef instanceof InterfaceContainer)
+							&& ((((InterfaceContainer) compDef).getInterfaces() == null)
+								|| (((InterfaceContainer) compDef).getInterfaces() != null) && (((InterfaceContainer) compDef).getInterfaces().length == 0))))){
 			externalTypeOptimizationAllowed = true;
 			internalTypeOptimizationAllowed = true;
-		} else {		
+		} else {	
 			// First check for type data
 			externalTypeOptimizationAllowed = parentIsTaggedStaticBindings(graph)
 					&& OptimASTHelper.isSingleton(compDef)
