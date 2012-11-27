@@ -1,0 +1,12 @@
+language: java
+install:
+  - "cd adl-frontend-static"
+  - "mvn -U clean -PCI-profile"
+  - "cd ../adl-backend-static"
+  - " mvn -U clean -PCI-profile"
+  - "cd .."
+script:
+  - "cd adl-frontend-static"
+  - "mvn -U verify -PCI-profile"
+  - "cd ../adl-backend-static"
+  - "mvn -U verify -PCI-profile"
