@@ -1,0 +1,17 @@
+language: java
+before_install:
+  - "git clone https://github.com/MIND-Tools/mind-compiler.git"
+  - "cd mind-compiler"
+  - "mvn install -DskipTests"
+  - "cd .."
+install:
+  - "cd adl-frontend-static"
+  - "mvn -U clean -PCI-profile"
+  - "cd ../adl-backend-static"
+  - " mvn -U clean -PCI-profile"
+  - "cd .."
+script:
+  - "cd adl-frontend-static"
+  - "mvn -U install -PCI-profile"
+  - "cd ../adl-backend-static"
+  - "mvn -U verify -PCI-profile"
