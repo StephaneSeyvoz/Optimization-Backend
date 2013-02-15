@@ -47,9 +47,9 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 			final Binder binder) {
 
 		/*
-		 * SSZ: We use an OptimAnnotation to differenciate THIS MultiBinder from the standard MultiBinder.
-		 * Otherwise, the Google Guice MultiBinder API (at least in version 2.0) gives you the already created
-		 * DefinitionSourceGenerator MultiBinder already populated with the Standard backend Module.
+		 * SSZ: We use an OptimAnnotation to differentiate THIS MultiBinder from the standard MultiBinder.
+		 * Otherwise, the Google Guice MultiBinder API (at least in version 2.0) gives you the 
+		 * DefinitionSourceGenerator that the MultiBinder already populated in the Standard backend Module.
 		 * This means the "addBinding" calls results were concatenated, leading to queue the optimization backend
 		 * source generation tasks in the delegation chain, meaning our code generation would be called first,
 		 * then OVERWRITTEN by the standard backend source generators afterwards (first in the delegation chain = last called, like a stack).

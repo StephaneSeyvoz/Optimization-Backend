@@ -168,9 +168,26 @@ MultiCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::= <<
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>[(index)]->meths->methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>[(index)]->selfData,
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>[(index)]->meths->methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>[(index)]->selfData)
 <else>
+  <if (itf.astDecorations.("target-is-single-itf"))>
+// Optimized binding (single interface)
+<MultiCALLSingleInterface(definition=definition, itf=itf, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)))>
+  <else>
+// No binding optimization : Normal behavior
 #define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->meths->methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
 #define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->meths->methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData)
+  <endif>
 <endif>
+>>
+
+/*
+ * @Single
+ * Single interface
+ * Same as SingletonCALLSingleInterface except this time the function is static but with a context pointer
+ * as the target can be a non-Singleton
+ */
+MultiCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
@@ -181,11 +198,16 @@ SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData)
 <else>
     <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
-// Optimized binding
+// Optimized binding (simple static binding)
 <SingletonCALLStaticBinding(definition=definition, itf=itf, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)))>
     <else>
+      <if (itf.astDecorations.("target-is-single-itf"))>
+// Optimized binding (single interface)
+<SingletonCALLSingleInterface(definition=definition, itf=itf, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)))>
+      <else>
 // No binding optimization : Normal behavior
 <SingletonStandardCALL(definition=definition, itf=itf)>
+      <endif>
     <endif>
 <endif>
 >>
@@ -198,6 +220,17 @@ SingletonCALLStaticBinding(definition, interfaceDefinitions, itf, bindingDesc) :
 SingletonStandardCALL(definition, itf) ::= <<
 #define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
 #define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData)   
+>>
+
+/*
+ * @Single
+ * Single interface
+ * Same as SingletonCALLStaticBinding except this time the function is static but with a context pointer
+ * as the target can be a non-Singleton
+ */
+SingletonCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 CALLServerInterface(definition, interfaceDefinitions, instance, itf) ::= <<
