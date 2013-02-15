@@ -208,7 +208,7 @@ newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<end
 <endif>
 newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.isBound = newInstance;
 <\n>
->
+>>
 
 
 
