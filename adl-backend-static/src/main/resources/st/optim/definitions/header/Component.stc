@@ -628,9 +628,9 @@ InitializeClientInterface(definition, itf) ::= <<
 
 InitializeServerInterface(definition, itf) ::= <<
 <if (itf.numberOfElement)>
-{<itf.astDecorations.("collectionIndexes"):{ {&instance_name, <if (itf.astDecorations.("single-itf"))><else>&<vTableInstanceName(definition=definition,itf=itf, index=it)>, <endif><isBoundValue(definition=definition, itf=itf, index=it)>}}; separator=", ">}
+{<itf.astDecorations.("collectionIndexes"):{ {&instance_name, <if (itf.astDecorations.("single-itf"))>/* @Single interface optimization */ 0, <else>&<vTableInstanceName(definition=definition,itf=itf, index=it)>, <endif><isBoundValue(definition=definition, itf=itf, index=it)>}}; separator=", ">}
 <else>
-{&instance_name, <if (itf.astDecorations.("single-itf"))>/* @Single interface optimization: &<vTableInstanceName(definition=definition,itf=itf)>, */ <else>&<vTableInstanceName(definition=definition,itf=itf)>, <endif><isBoundValue(definition=definition, itf=itf)>}
+{&instance_name, <if (itf.astDecorations.("single-itf"))>/* @Single interface optimization */ 0, <else>&<vTableInstanceName(definition=definition,itf=itf)>, <endif><isBoundValue(definition=definition, itf=itf)>}
 <endif>
 >>
 

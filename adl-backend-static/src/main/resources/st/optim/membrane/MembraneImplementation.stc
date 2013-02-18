@@ -202,7 +202,7 @@ InitializeServerInterface(definition, itf, isInternal) ::= <<
 InitializeServerInterface1(definition, itf, index, isInternal) ::= <<
 newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.selfData = newInstance;
 <if (itf.astDecorations.("single-itf"))>// @Single interface: No meths vTable struct 
-/* newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = &<vTableInstanceName(definition=definition,itf=itf,index=index)>; */<\n>
+newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = 0; <\n>
 <else>
 newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = &<vTableInstanceName(definition=definition,itf=itf,index=index)>;
 <endif>
