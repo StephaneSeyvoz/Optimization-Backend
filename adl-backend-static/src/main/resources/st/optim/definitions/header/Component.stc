@@ -381,28 +381,33 @@ ComponentVTableDecl(definition) ::= <<
 ServerInterfaceVTableDecl(definition, itf) ::= <<
 <! SSZ : BEGIN MODIFICATION !>
 <if(isServer.(itf.role))>
-<if (itf.numberOfElement)>
+  <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):{index | extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf,index=index)>;};separator="\n">
-<else>
-  <! Optimization : Here we check if bindings from our instance are static !>
-  <if (definition.astDecorations.("parent-has-static-bindings"))>
-    <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-      <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
+  <else>
+    <if (itf.astDecorations.("single-itf"))>
+// Optimized with @Single: Removed reference as the VTable has already been garbaged anyway
+// extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+    <else>
+      <! Optimization : Here we check if bindings from our instance are static !>
+      <if (definition.astDecorations.("parent-has-static-bindings"))>
+        <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
+        <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
 // No optimization : default behavior 7
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      <else>
-      	<if (itf.astDecorations.("controller-interface"))>
+        <else>
+          <if (itf.astDecorations.("controller-interface"))>
 // No optimization : Parent has @StaticBindings but binding destination is a controller
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      	<else>
+      	  <else>
 // Optimized : Removed reference as the VTable has already been garbaged anyway
 // extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+      	  <endif>
       	<endif>
-      <endif>
-  <else>
+      <else>
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+      <endif>
+    <endif>
   <endif>
-<endif>
 <endif>
 <! SSZ : END MODIFICATION !>
 >>
