@@ -77,7 +77,7 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 		setBinder.addBinding().to(OptimizedDefinitionHeaderSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedDefinitionIncSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedImplementationHeaderSourceGenerator.class);
-		setBinder.addBinding().to(DefinitionMacroSourceGenerator.class);
+		setBinder.addBinding().to(OptimizedDefinitionMacroSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedMembraneSourceGenerator.class);
 		setBinder.addBinding().to(IDLDefinitionSourceGenerator.class);
 		setBinder.addBinding().to(GenericDefinitionNameSourceGenerator.class);
@@ -96,6 +96,12 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 						OptimizedDefinitionIncSourceGenerator.DEFAULT_TEMPLATE);
 	}
 
+	protected void configureDefinitionMacroSourceGenerator() {
+	    bind(String.class).annotatedWith(
+	        Names.named(OptimizedDefinitionMacroSourceGenerator.TEMPLATE_NAME)).toInstance(
+	        OptimizedDefinitionMacroSourceGenerator.DEFAULT_TEMPLATE);
+	  }
+	
 	protected void configureMembraneSourceGenerator() {
 		bind(String.class).annotatedWith(
 				Names.named(OptimizedMembraneSourceGenerator.TEMPLATE_NAME)).toInstance(

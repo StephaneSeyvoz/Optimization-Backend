@@ -4,6 +4,10 @@ before_install:
   - "cd mind-compiler"
   - "mvn install -DskipTests"
   - "cd .."
+  - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
+  - "cd single-interface-plugin"
+  - "mvn install -DskipTests"
+  - "cd .."
 install:
   - "cd adl-frontend-static"
   - "mvn -U clean -PCI-profile"

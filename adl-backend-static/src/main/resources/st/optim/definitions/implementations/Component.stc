@@ -97,7 +97,11 @@ OptimizedMethodDecls(definition, instance, interfaceDefinitions, itf, isInternal
 
 OptimizedMethodDecls1(definition, instance, interfaceDefinitions, itf, index, isInternal) ::= <<
 <if (definition.astDecorations.("is-singleton"))>
-<interfaceDefinitions.(itf.signature).methods:SingletonOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
+  <interfaceDefinitions.(itf.signature).methods:SingletonOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
+<endif>
+<if (itf.astDecorations.("static-definition-binding-target-itf"))>
+  <! Here it doesnt matter if the caller is singleton or not !>
+  <interfaceDefinitions.(itf.signature).methods:StaticDefinitionBindingOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
 <endif>
 >>
 
@@ -106,6 +110,17 @@ SingletonOptimizedMethodDecl(definition, instance, itf, index, method, isInterna
 <(idl2c.methodDef)(method=method,methodName=OptimizationMETHODName(instance=instance, itfName=itf.name, methodName=method.name, isInternal=isInternal), withThisPtr="false")>;
 <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
 <(idl2c.methodDef)(method=method,methodName=OptimizationMETHODName(instance=instance, itfName=itf.name, methodName=method.name), withThisPtr="false")>;
+<endif>
+>>
+
+StaticDefinitionBindingOptimizedMethodDecl(definition, instance, itf, index, method, isInternal) ::= <<
+<(idl2c.methodDef)(method=method,methodName=StaticDefinitionBindingOptimizedMethodName(instance=instance, itfName=itf.name, methodName=method.name), withThisPtr="true")>;
+>>
+
+StaticDefinitionBindingOptimizedMethodName(instance, itfName, methodName, isInternal) ::= <<
+<! useless double-check, but you never know... !>
+<if (itf.astDecorations.("static-definition-binding-target-itf"))>
+<itf.astDecorations.("static-definition-binding-target-itf")>_<methodName> 
 <endif>
 >>
 

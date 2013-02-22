@@ -202,7 +202,7 @@ InitializeServerInterface(definition, itf, isInternal) ::= <<
 InitializeServerInterface1(definition, itf, index, isInternal) ::= <<
 newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.selfData = newInstance;
 <if (itf.astDecorations.("single-itf"))>// @Single interface: No meths vTable struct 
-/* newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = &<vTableInstanceName(definition=definition,itf=itf,index=index)>; */<\n>
+newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = 0; <\n>
 <else>
 newInstance->__component_internal_data.<if (isInternal)>inner_type<else>type<endif>.<itf.name><if (index)>[<index>]<endif>.meths = &<vTableInstanceName(definition=definition,itf=itf,index=index)>;
 <endif>
@@ -482,29 +482,35 @@ ComponentVTableInit(definition, interfaceDefinitions) ::= <<
 
 ServerInterfaceVTableInit(definition, interfaceDefinitions, itf) ::= <<
 <if (isServer.(itf.role))>
-<if (itf.numberOfElement)>
+  <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf, index=it);separator="\n">
-<else>
-<! SSZ : BEGIN MODIFICATION !>
-<if (definition.astDecorations.("parent-has-static-bindings"))>
-  <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-  <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
-<ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
   <else>
-	<! We don't want to optimize controllers !>
-  	<if (itf.astDecorations.("controller-interface"))>
+<! SSZ : BEGIN MODIFICATION !>
+    <if (itf.astDecorations.("single-itf"))>
+/* Optimized according to @Single
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
-  	<else>
+*/
+    <else>
+      <if (definition.astDecorations.("parent-has-static-bindings"))>
+      <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
+        <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
+<ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
+        <else>
+          <! We don't want to optimize controllers !>
+	        <if (itf.astDecorations.("controller-interface"))>
+<ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
+          <else>
 /* Optimized according to @StaticBindings
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
 */
-	<endif>
-  <endif>
-<else>
+          <endif>
+        <endif>
+      <else>
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
-<endif>
+      <endif>
 <! SSZ : END MODIFICATION !>
-<endif>
+    <endif>
+  <endif>
 <endif>
 >>
 
