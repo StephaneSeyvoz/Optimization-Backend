@@ -14,10 +14,7 @@
 	<name>ADL Static backend module</name>
 
 	<properties>
-		<!-- <mind.test.cflags>-g -Wall -Werror -Wredundant-decls
-			-Wunreachable-code
-			-Wstrict-prototypes -Wwrite-strings</mind.test.cflags>-->
-		<mind.test.cflags>-g -Wall -Wredundant-decls
+		<mind.test.cflags>-g -Wall -Werror -Wredundant-decls
 			-Wunreachable-code
 			-Wstrict-prototypes -Wwrite-strings</mind.test.cflags>
 		<mind.test.compiler>gcc</mind.test.compiler>
