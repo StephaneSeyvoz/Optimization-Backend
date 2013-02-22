@@ -265,5 +265,23 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
+	
+	/**
+	 * Testing @Single with @StaticDefinitionsBindingsList and @StaticDefinitionsBinding
+	 */
+	@Test(groups = {"optimizations"})
+	public void staticDefinitionBindingsTestWithSelfCall()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication<" + "definitionbinding.factory.selfcall.Helloworld" + ">";
+		
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+	}
 }
 
