@@ -1,4 +1,4 @@
-template st.optim.definitions.implementations.Macro
+template st.optim.definitions.implementations.OptimizedMacro
   : st.common.ComponentHelper
   implements st.optim.definitions.implementations.ComponentDefinition {
 
@@ -17,6 +17,8 @@ isVoid   ::= [ "void"   : "true" ]
 
 ComponentDefinition(definition, instance, interfaceDefinitions) ::= <<
 /* Generated file: <definition.name;format="nameToPath">.macro */
+
+/* Optimization backend output - st/optim/definitions/implementations/Macro.stc */
 
 #define COMP_DATA struct __component_<definition.name;format="toCName">_internal_data_t __component_internal_data
 
@@ -179,8 +181,14 @@ CALLServerInterface(definition, interfaceDefinitions, itf) ::= <<
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) <vTableInstanceName(definition=definition, itf=itf, index="##index##")>.methName(CONTEXT_PTR_ACCESS,
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) <vTableInstanceName(definition=definition, itf=itf, index="##index##")>.methName(CONTEXT_PTR_ACCESS)
 <else>
+  <if (itf.astDecorations.("single-itf"))>
+// <itf.name> is @Single-optimized
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<definition.name;format="toCName">_<itf.name>_##methName(CONTEXT_PTR_ACCESS,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<definition.name;format="toCName">_<itf.name>_##methName(CONTEXT_PTR_ACCESS)
+  <else>
 #define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) <vTableInstanceName(definition=definition, itf=itf)>.methName(CONTEXT_PTR_ACCESS,
 #define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) <vTableInstanceName(definition=definition, itf=itf)>.methName(CONTEXT_PTR_ACCESS)
+  <endif>
 <endif>
 <endif>
 >>

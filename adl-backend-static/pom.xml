@@ -73,6 +73,14 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>single-interface-plugin</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+			<version>${project.parent.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
