@@ -1,7 +1,6 @@
 
 import memory.Malloc;
 
-@Run(addBootstrap=true)
 @Singleton
 @StaticDefinitionsBindingsList({@StaticDefinitionBinding(fromItf = "definitionbinding.factory.selfcall.Client.s", toItf = "definitionbinding.factory.selfcall.Server.s")})
 composite definitionbinding.factory.selfcall.Helloworld {
