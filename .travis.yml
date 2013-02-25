@@ -6,7 +6,7 @@ before_install:
   - "cd .."
   - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
   - "cd single-interface-plugin"
-  - "mvn install -PCI-profile"
+  - "mvn install"
   - "cd .."
 install:
   - "cd adl-frontend-static"
