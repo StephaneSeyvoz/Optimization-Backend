@@ -2,7 +2,7 @@ language: java
 before_install:
   - "git clone https://github.com/MIND-Tools/mind-compiler.git"
   - "cd mind-compiler"
-  - "mvn install -DskipTests -PCI-profile"
+  - "mvn install -DskipTests"
   - "cd .."
   - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
   - "cd single-interface-plugin"
