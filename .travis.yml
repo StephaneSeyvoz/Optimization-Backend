@@ -2,6 +2,7 @@ language: java
 before_install:
   - "git clone https://github.com/MIND-Tools/mind-compiler.git"
   - "cd mind-compiler"
+  - "git checkout singleton-private-data"
   - "mvn install -DskipTests"
   - "cd .."
   - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
