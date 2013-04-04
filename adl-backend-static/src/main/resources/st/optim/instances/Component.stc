@@ -28,10 +28,10 @@ ComponentInstances(topLevelDefinition, definition, instances) ::= <<
 
 <instances:InitInstance(definition=definition, instance=it); separator="\n\n">
 
-/* SSZ: Duplicate-definition fix for some families of compilers such as IAR */
 <if (definition.astDecorations.("is-singleton"))>
 <if (definition.astNodeTypes.("data"))>
 <if (definition.data)>
+/* SSZ: Duplicate-definition fix for some families of compilers such as IAR */
 <instances:DeclarePrivateData(definition=definition, instance=it); separator="\n\n">
 <endif>
 <endif>
