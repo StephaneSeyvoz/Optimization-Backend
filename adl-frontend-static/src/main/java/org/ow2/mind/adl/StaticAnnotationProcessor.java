@@ -70,9 +70,9 @@ AbstractADLLoaderAnnotationProcessor {
 	 * The current client interface involved in the binding.
 	 */
 	private Interface currentClientItf;
-	
+
 	private Binding binding;
-	
+
 	/**
 	 * Logger.
 	 */
@@ -82,11 +82,15 @@ AbstractADLLoaderAnnotationProcessor {
 			Definition definition, ADLLoaderPhase phase,
 			Map<Object, Object> context) throws ADLException {
 
-		// TODO : check if the source/destination of the Binding are Singleton
+		assert annotation instanceof Static;
+		Static staticAnno = (Static) annotation;
+
+		boolean isSourceSingleton = false;
+		boolean isTargetSingleton = false;
+
 		if ((phase == ADLLoaderPhase.AFTER_CHECKING) && (node instanceof Binding))
 		{
 			binding = (Binding) node;
-			OptimASTHelper.setStaticDecoration(binding);
 
 			/*
 			 * Propagate optimization info to the interfaces (IDL backend)
@@ -96,25 +100,46 @@ AbstractADLLoaderAnnotationProcessor {
 			String toComponent = binding.getToComponent();
 
 			// We don't want to tag "this.<myItfName>" internal interfaces
-			if (!fromComponent.equals("this")) {
+			if (fromComponent.equals("this")) {
+				if (!OptimASTHelper.isSingleton(definition))
+					// logError raises an exception and quits
+					if (staticAnno.ifPossible)
+						return null;
+					else
+						errorManagerItf.logError(
+								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
+				else
+					isSourceSingleton = true;
+			} else {
 				//get the client component instance
 				currentClientCpt = OptimASTHelper.getComponent(definition, fromComponent);
 				//get the client component definition
 				currentClientDef = OptimASTHelper.getResolvedComponentDefinition(currentClientCpt, loaderItf, context);
 				//get the client interface involved in the binding
 				currentClientItf = OptimASTHelper.getInterface(currentClientDef, binding.getFromInterface());
-				
-				if (!OptimASTHelper.isSingleton(currentClientDef)) {
-					errorManagerItf.logError(
-							OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, currentClientDef);
-					//logger.warning("Invalid @Static annotation, source of the binding ("+ currentClientCpt.getName() +") must be a @Singleton");
-					return null;
-				}
-				
-				// Decorate the client interface for later optimization
-				OptimASTHelper.setStaticDecoration(currentClientItf);
+
+				// logError raises an exception and quits
+				if (!OptimASTHelper.isSingleton(currentClientDef))
+					if (staticAnno.ifPossible)
+						return null;
+					else
+						errorManagerItf.logError(
+								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, currentClientDef);
+				else
+					isSourceSingleton = true;
 			}
-			if (!toComponent.equals("this")) {
+
+			if (toComponent.equals("this")) {
+				// logError raises an exception and quits
+				if (!OptimASTHelper.isSingleton(definition))
+					if (staticAnno.ifPossible)
+						return null;
+					else
+						errorManagerItf.logError(
+								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
+				else
+					isTargetSingleton = true;
+			} else {
 				//get the server component instance
 				currentServerCpt = OptimASTHelper.getComponent(definition, toComponent);
 				//get the server component definition
@@ -122,15 +147,28 @@ AbstractADLLoaderAnnotationProcessor {
 				//get the server interface involved in the binding
 				currentServerItf = OptimASTHelper.getInterface(currentServerDef, binding.getToInterface());
 
-				if (!OptimASTHelper.isSingleton(currentServerDef)){
-					errorManagerItf.logError(
-							OptimADLErrors.INVALID_STATIC_BINDING_DESTINATION_NOT_SINGLETON, currentServerDef);
-					//logger.warning("Invalid @Static annotation, destination of the binding (" + currentServerCpt.getName() + ") must be a @Singleton");
-					return null;
-				}
-				
-				// Decorate the server interface for later optimization
-				OptimASTHelper.setStaticDecoration(currentServerItf);
+				// logError raises an exception and quits
+				if (!OptimASTHelper.isSingleton(currentServerDef))
+					if (staticAnno.ifPossible)
+						return null;
+					else
+						errorManagerItf.logError(
+								OptimADLErrors.INVALID_STATIC_BINDING_DESTINATION_NOT_SINGLETON, currentServerDef);
+				else
+					isTargetSingleton = true;
+			}
+
+			// Propagating the decorations only when everything is certain to be optimized
+			if (isSourceSingleton && isTargetSingleton) {
+				if (!fromComponent.equals("this"))
+					// Decorate the client interface for later optimization
+					OptimASTHelper.setStaticDecoration(currentClientItf);
+
+				if (!toComponent.equals("this"))
+					// Decorate the server interface for later optimization
+					OptimASTHelper.setStaticDecoration(currentServerItf);
+
+				OptimASTHelper.setStaticDecoration(binding);
 			}
 		}
 

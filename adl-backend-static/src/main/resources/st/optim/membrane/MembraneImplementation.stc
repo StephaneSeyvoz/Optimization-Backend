@@ -274,9 +274,15 @@ InitializeBindings(definition) ::= <<
 >>
 
 InitializeBinding(definition, binding) ::= <<
+<if (binding.astDecorations.("is-static"))>
+  /* no binding initialization according to @Static on binding from <binding.fromComponent>.<binding.fromInterface> to <binding.toComponent>.<binding.toInterface> */
+/*  newInstance->__component_internal_data.<FromItfContainer(binding=binding)>.<binding.fromInterface><if(binding.fromInterfaceNumber)>[<binding.fromInterfaceNumber>]<endif> = 
+    & newInstance->__component_internal_data.<ToItfContainer(binding=binding)>.<binding.toInterface><if(binding.toInterfaceNumber)>[<binding.toInterfaceNumber>]<endif>; */
+<else>
   /* initialize binding from <binding.fromComponent>.<binding.fromInterface> to <binding.toComponent>.<binding.toInterface> */
   newInstance->__component_internal_data.<FromItfContainer(binding=binding)>.<binding.fromInterface><if(binding.fromInterfaceNumber)>[<binding.fromInterfaceNumber>]<endif> = 
     & newInstance->__component_internal_data.<ToItfContainer(binding=binding)>.<binding.toInterface><if(binding.toInterfaceNumber)>[<binding.toInterfaceNumber>]<endif>;
+<endif>
 >>
 
 FromItfContainer(binding) ::= <<

@@ -26,6 +26,7 @@ import org.ow2.mind.adl.annotation.ADLAnnotationTarget;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.ADLLoaderProcessor;
 import org.ow2.mind.annotation.Annotation;
+import org.ow2.mind.annotation.AnnotationElement;
 import org.ow2.mind.annotation.AnnotationTarget;
 import org.ow2.mind.adl.StaticAnnotationProcessor;
 
@@ -40,6 +41,13 @@ public class Static implements Annotation {
 	private static final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
 
 	public static final String VALUE = "@Static";
+	
+	/**
+	 * More fault-tolerant configuration argument to allow skipping optimizing when not possible,
+	 * instead of raising a blocking error.
+	 */
+	@AnnotationElement(hasDefaultValue=true)
+	public boolean ifPossible = false;
 	
 	public AnnotationTarget[] getAnnotationTargets() {
 		return ANNOTATION_TARGETS;
