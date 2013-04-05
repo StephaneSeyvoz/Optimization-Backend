@@ -29,6 +29,7 @@ import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
 import org.objectweb.fractal.adl.interfaces.Interface;
+import org.objectweb.fractal.adl.types.TypeInterfaceUtil;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
@@ -108,8 +109,15 @@ AbstractADLLoaderAnnotationProcessor {
 					else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
-				else
+				else {
+					//get the client interface involved in the binding
+					currentClientItf = OptimASTHelper.getInterface(definition, binding.getFromInterface());
+					// we can't optimize collections
+					if (TypeInterfaceUtil.isCollection(currentClientItf))
+						return null;
+					
 					isSourceSingleton = true;
+				}
 			} else {
 				//get the client component instance
 				currentClientCpt = OptimASTHelper.getComponent(definition, fromComponent);
@@ -118,6 +126,10 @@ AbstractADLLoaderAnnotationProcessor {
 				//get the client interface involved in the binding
 				currentClientItf = OptimASTHelper.getInterface(currentClientDef, binding.getFromInterface());
 
+				// we can't optimize collections
+				if (TypeInterfaceUtil.isCollection(currentClientItf))
+					return null;
+				
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentClientDef))
 					if (staticAnno.ifPossible)
@@ -137,8 +149,15 @@ AbstractADLLoaderAnnotationProcessor {
 					else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
-				else
+				else {
+					//get the client interface involved in the binding
+					currentServerItf = OptimASTHelper.getInterface(definition, binding.getToInterface());
+					// we can't optimize collections
+					if (TypeInterfaceUtil.isCollection(currentServerItf))
+						return null;
+					
 					isTargetSingleton = true;
+				}
 			} else {
 				//get the server component instance
 				currentServerCpt = OptimASTHelper.getComponent(definition, toComponent);
@@ -147,6 +166,9 @@ AbstractADLLoaderAnnotationProcessor {
 				//get the server interface involved in the binding
 				currentServerItf = OptimASTHelper.getInterface(currentServerDef, binding.getToInterface());
 
+				if (TypeInterfaceUtil.isCollection(currentServerItf))
+					return null;
+				
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentServerDef))
 					if (staticAnno.ifPossible)
@@ -169,6 +191,8 @@ AbstractADLLoaderAnnotationProcessor {
 					OptimASTHelper.setStaticDecoration(currentServerItf);
 
 				OptimASTHelper.setStaticDecoration(binding);
+				
+				logger.info("In composite " + definition.getName() + ", binding from " + fromComponent + "." + binding.getFromInterface() + " to " + toComponent + "." + binding.getToInterface() + " @Static optimization check result: OK");
 			}
 		}
 
