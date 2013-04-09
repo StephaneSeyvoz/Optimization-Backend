@@ -47,7 +47,7 @@ public class Static implements Annotation {
 	 * instead of raising a blocking error.
 	 */
 	@AnnotationElement(hasDefaultValue=true)
-	public boolean ifPossible = false;
+	public boolean ifPossible = true;
 	
 	public AnnotationTarget[] getAnnotationTargets() {
 		return ANNOTATION_TARGETS;

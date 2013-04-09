@@ -84,38 +84,45 @@ AbstractADLLoaderAnnotationProcessor {
 			Map<Object, Object> context) throws ADLException {
 
 		assert annotation instanceof Static;
+		assert node instanceof Binding;
 		Static staticAnno = (Static) annotation;
 
 		boolean isSourceSingleton = false;
 		boolean isTargetSingleton = false;
 
-		if ((phase == ADLLoaderPhase.AFTER_CHECKING) && (node instanceof Binding))
+		// Nowadays the 'ifPossible' option is the default
+
+		if (phase == ADLLoaderPhase.AFTER_CHECKING)
 		{
 			binding = (Binding) node;
 
 			/*
 			 * Propagate optimization info to the interfaces (IDL backend)
-			 * This code inspiration is MIND SP5 plugin, with a small fix.
 			 */
 			String fromComponent = binding.getFromComponent();
+			String fromInterface = binding.getFromInterface();
 			String toComponent = binding.getToComponent();
+			String toInterface = binding.getToInterface();
 
 			// We don't want to tag "this.<myItfName>" internal interfaces
 			if (fromComponent.equals("this")) {
 				if (!OptimASTHelper.isSingleton(definition))
 					// logError raises an exception and quits
-					if (staticAnno.ifPossible)
+					if (staticAnno.ifPossible) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + definition.getName() + " (source 'this') isn't a @Singleton");
 						return null;
-					else
+					} else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
 				else {
 					//get the client interface involved in the binding
-					currentClientItf = OptimASTHelper.getInterface(definition, binding.getFromInterface());
+					currentClientItf = OptimASTHelper.getInterface(definition, fromInterface);
 					// we can't optimize collections
-					if (TypeInterfaceUtil.isCollection(currentClientItf))
+					if (TypeInterfaceUtil.isCollection(currentClientItf)) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + fromInterface + " (source) is a collection element");
 						return null;
-					
+					}
+
 					isSourceSingleton = true;
 				}
 			} else {
@@ -124,17 +131,20 @@ AbstractADLLoaderAnnotationProcessor {
 				//get the client component definition
 				currentClientDef = OptimASTHelper.getResolvedComponentDefinition(currentClientCpt, loaderItf, context);
 				//get the client interface involved in the binding
-				currentClientItf = OptimASTHelper.getInterface(currentClientDef, binding.getFromInterface());
+				currentClientItf = OptimASTHelper.getInterface(currentClientDef, fromInterface);
 
 				// we can't optimize collections
-				if (TypeInterfaceUtil.isCollection(currentClientItf))
+				if (TypeInterfaceUtil.isCollection(currentClientItf)) {
+					logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + fromInterface + " (source) is a collection element");
 					return null;
-				
+				}
+
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentClientDef))
-					if (staticAnno.ifPossible)
+					if (staticAnno.ifPossible) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + currentClientDef.getName() + " (source) isn't a @Singleton");
 						return null;
-					else
+					} else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, currentClientDef);
 				else
@@ -144,18 +154,21 @@ AbstractADLLoaderAnnotationProcessor {
 			if (toComponent.equals("this")) {
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(definition))
-					if (staticAnno.ifPossible)
+					if (staticAnno.ifPossible) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + definition.getName() + " (target) isn't a @Singleton");
 						return null;
-					else
+					} else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_SOURCE_NOT_SINGLETON, definition);
 				else {
 					//get the client interface involved in the binding
-					currentServerItf = OptimASTHelper.getInterface(definition, binding.getToInterface());
+					currentServerItf = OptimASTHelper.getInterface(definition, toInterface);
 					// we can't optimize collections
-					if (TypeInterfaceUtil.isCollection(currentServerItf))
+					if (TypeInterfaceUtil.isCollection(currentServerItf)) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + toInterface + " (target) is a collection element");
 						return null;
-					
+					}
+
 					isTargetSingleton = true;
 				}
 			} else {
@@ -164,16 +177,19 @@ AbstractADLLoaderAnnotationProcessor {
 				//get the server component definition
 				currentServerDef = OptimASTHelper.getResolvedComponentDefinition(currentServerCpt, loaderItf, context);
 				//get the server interface involved in the binding
-				currentServerItf = OptimASTHelper.getInterface(currentServerDef, binding.getToInterface());
+				currentServerItf = OptimASTHelper.getInterface(currentServerDef, toInterface);
 
-				if (TypeInterfaceUtil.isCollection(currentServerItf))
+				if (TypeInterfaceUtil.isCollection(currentServerItf)) {
+					logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + toInterface + " (target) is a collection element");
 					return null;
-				
+				}
+
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentServerDef))
-					if (staticAnno.ifPossible)
+					if (staticAnno.ifPossible) {
+						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + currentServerDef.getName() + " (target) isn't a @Singleton");
 						return null;
-					else
+					} else
 						errorManagerItf.logError(
 								OptimADLErrors.INVALID_STATIC_BINDING_DESTINATION_NOT_SINGLETON, currentServerDef);
 				else
@@ -191,8 +207,8 @@ AbstractADLLoaderAnnotationProcessor {
 					OptimASTHelper.setStaticDecoration(currentServerItf);
 
 				OptimASTHelper.setStaticDecoration(binding);
-				
-				logger.info("In composite " + definition.getName() + ", binding from " + fromComponent + "." + binding.getFromInterface() + " to " + toComponent + "." + binding.getToInterface() + " @Static optimization check result: OK");
+
+				logger.info("In composite " + definition.getName() + ", binding from " + fromComponent + "." + fromInterface + " to " + toComponent + "." + toInterface + " optimization check result: OK");
 			}
 		}
 
