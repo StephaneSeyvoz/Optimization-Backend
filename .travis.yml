@@ -2,12 +2,11 @@ language: java
 before_install:
   - "git clone https://github.com/StephaneSeyvoz/mind-compiler.git"
   - "cd mind-compiler"
-  - "git checkout singleton-private-data"
-  - "mvn install -DskipTests"
+  - "mvn -U install -DskipTests"
   - "cd .."
   - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
   - "cd single-interface-plugin"
-  - "mvn install"
+  - "mvn -U install"
   - "cd .."
 install:
   - "cd adl-frontend-static"
