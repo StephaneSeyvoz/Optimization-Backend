@@ -33,4 +33,12 @@ public class TestItfInheritance extends AbstractFunctionalTest {
     runner.compileRunAndCheck("itfinheritance.HelloworldApplication", null);
   }
 
+  @Test(groups = {"checkin"})
+  public void testCollectionItfInheritance() throws Exception {
+    initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+        "common", "functional");
+    runner.compileRunAndCheck("itfinheritance.HelloworldApplicationCollection",
+        null);
+  }
+  
 }

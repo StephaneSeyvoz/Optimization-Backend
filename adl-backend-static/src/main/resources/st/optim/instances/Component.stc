@@ -176,9 +176,9 @@ AddItfValue(definition, instance, itf, isInternal) ::= <<
 
 AddItfCollectionValue(definition, instance, itf, index, isInternal) ::= <<
 <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
-, /* <itf.name>[<index>] */ <StaticBindingValue(bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
+, /* <itf.name>[<index>] */ <CollectionBindingCastIfNeeded(instance=instance, itf=itf, index=index, isInternal=isInternal)><StaticBindingValue(bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
 <else>
-, /* <itf.name>[<index>] */ <StaticCollectionBindingValue(bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)), index=index)>
+, /* <itf.name>[<index>] */ <CollectionBindingCastIfNeeded(instance=instance, itf=itf, index=index, isInternal=isInternal)><StaticCollectionBindingValue(bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)), index=index)>
 <endif>
 >>
 
@@ -215,6 +215,7 @@ StaticCollectionBindingValue(bindingDesc, index) ::= <<
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
 
 BindingCastIfNeeded(instance, itf, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
+CollectionBindingCastIfNeeded(instance, itf, index, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
 
 DefineAttributeValues(definition, instance) ::= <<
 <if (definition.astNodeTypes.("attribute"))>
