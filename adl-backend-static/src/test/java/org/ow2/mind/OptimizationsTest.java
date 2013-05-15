@@ -68,7 +68,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		setup();
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		// GarbageUnusedInternals <=> GUI, StaticBindings <=> SB, r = recursive
 		String annotationCombinations[] = { "", "GUI", "GUIr", "S", "SB", "SBGUI", "SBGUIr", "SBr", "SBrGUI", "SBrGUIr"} ;
@@ -195,7 +194,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "helloworld.Helloworld";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		final Definition d = runner.load(adlName);
 		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
@@ -233,7 +231,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "partial.HelloworldApplicationSB_HWnoSB_sHWSB";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		runner.addCFlags(flags);
 
@@ -256,7 +253,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "partial.HelloworldApplicationSBGUIr_HWnoSB_sHWSB";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		runner.addCFlags(flags);
 
@@ -277,6 +273,24 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		initContext(true);
 		String adlName = "GenericApplication<" + "definitionbinding.factory.selfcall.Helloworld" + ">";
+		
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+	}
+	
+	/**
+	 * Testing @SingleStaticCallPointer
+	 */
+	@Test(groups = {"optimizations"})
+	public void staticFreezeCallPointerTestWithSelfCall()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication<" + "singlestaticcallptr.factory.selfcall.Helloworld" + ">";
 		
 		File exeFile = runner.compile(adlName, null);
 		final int r = runner.run(exeFile, (String[]) null);

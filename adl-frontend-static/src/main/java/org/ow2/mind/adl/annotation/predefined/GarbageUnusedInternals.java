@@ -48,7 +48,7 @@ public class GarbageUnusedInternals implements Annotation {
 	public boolean recursive = false;
 	
 	// Check if it should not be on COMPONENT
-	private static final AnnotationTarget[] ANNOTATION_TARGET = {
+	private final AnnotationTarget[] ANNOTATION_TARGET = {
 	      ADLAnnotationTarget.DEFINITION};
 	
 	public static final String VALUE = "@GarbageUnusedInternals";

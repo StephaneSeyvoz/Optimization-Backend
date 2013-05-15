@@ -85,7 +85,7 @@ OptimizedMethodsDeclaration(definition, instance, interfaceDefinitions) ::= <<
 <if (definition.astNodeTypes.("internalInterface"))>
 <definition.internalInterfaces:OptimizedMethodDecls(definition=definition, instance=instance, interfaceDefinitions=interfaceDefinitions, itf=it, isInternal="true"); separator="\n">
 <endif>
-
+<SingleStaticCallPointerMethodDecls(definition=definition, isInternal="false"); separator="\n">
 /* End declaration of client methods */
 >>
 
@@ -100,8 +100,15 @@ OptimizedMethodDecls1(definition, instance, interfaceDefinitions, itf, index, is
   <interfaceDefinitions.(itf.signature).methods:SingletonOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
 <endif>
 <if (itf.astDecorations.("static-definition-binding-target-itf"))>
-  <! Here it doesnt matter if the caller is singleton or not !>
+  <! Here it doesnt matter if the caller is singleton and static or not !>
   <interfaceDefinitions.(itf.signature).methods:StaticDefinitionBindingOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
+<endif>
+>>
+
+SingleStaticCallPointerMethodDecls(definition, isInternal) ::= <<
+<if (definition.astDecorations.("single-static-call-ptr-targetinstance"))>
+  // OptimizedMethodDecls1
+  <definition.astDecorations.("single-static-call-ptr-targetitfdef").methods:SingleStaticCallPointerOptimizedMethodDecl(definition=definition, method=it);separator="\n">
 <endif>
 >>
 
@@ -118,10 +125,17 @@ StaticDefinitionBindingOptimizedMethodDecl(definition, instance, itf, index, met
 >>
 
 StaticDefinitionBindingOptimizedMethodName(instance, itfName, methodName, isInternal) ::= <<
-<! useless double-check, but you never know... !>
 <if (itf.astDecorations.("static-definition-binding-target-itf"))>
 <itf.astDecorations.("static-definition-binding-target-itf")>_<methodName> 
 <endif>
+>>
+
+SingleStaticCallPointerOptimizedMethodDecl(definition, method) ::= <<
+<(idl2c.methodDef)(method=method,methodName=SingleStaticCallPointerOptimizedMethodName(definition=definition, methodName=method.name), withThisPtr="true")>;
+>>
+
+SingleStaticCallPointerOptimizedMethodName(definition, methodName) ::= <<
+<definition.astDecorations.("single-static-call-ptr-targetinstance")>_<methodName> 
 >>
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"

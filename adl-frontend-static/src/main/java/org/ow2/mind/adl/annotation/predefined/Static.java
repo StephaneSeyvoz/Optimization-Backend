@@ -38,7 +38,7 @@ public class Static implements Annotation {
 	 * and it's CALLs in the CPL are replaced by direct function calls to the server (no more "this" context
 	 * pointer and function pointer dereferencing).
 	 */
-	private static final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
+	private final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
 
 	public static final String VALUE = "@Static";
 	

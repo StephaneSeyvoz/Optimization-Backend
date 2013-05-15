@@ -1,0 +1,48 @@
+/**
+ * mindc examples
+ *
+ * Copyright (C) 2010 STMicroelectronics
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * Contact: mind@ow2.org
+ *
+ * Authors: Matthieu Leclercq
+ */
+
+/**
+ * The "helloworld.Server" primitive provides a "s" interface whose signature is
+ * "helloworld.Service". 
+ *
+ * The private data of this primitive component are declared in the 
+ * "serverData.c" file. It is implemented in the "server.c" file.
+ *
+ * Moreover this primitive component has an attribute called "header" of type
+ * string.
+ */
+@controller.Component
+@controller.AttributeController
+primitive singlestaticcallptr.factory.selfcall.Server {
+  
+  provides Service as s ;
+  
+  provides GetServicePointer as getServicePtrItf;
+  
+  attribute string header = "-> ";
+  attribute int instance_number = 0;
+
+  data serverData.c;
+  source server.c;
+}

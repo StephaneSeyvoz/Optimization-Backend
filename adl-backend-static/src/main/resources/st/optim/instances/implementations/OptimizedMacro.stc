@@ -289,8 +289,15 @@ SingletonCALL_PRV(definition) ::= <<
 >>
 
 CALL_PTR(definition) ::= <<
+<if (definition.astDecorations.("single-static-call-ptr-targetinstance"))>
+// CALL_PTR Optimized with @FreezeCallPointer
+#define CALL_INTERFACE_PTR_WITH_PARAM(itf_ptr, methName) <definition.astDecorations.("single-static-call-ptr-targetinstance")>_##methName((itf_ptr)->selfData,
+#define CALL_INTERFACE_PTR_WITHOUT_PARAM(itf_ptr, methName) <definition.astDecorations.("single-static-call-ptr-targetinstance")>_##methName((itf_ptr)->selfData)
+<else>
+// Standard CALL_PTR
 #define CALL_INTERFACE_PTR_WITH_PARAM(itf_ptr, methName) (itf_ptr)->meths->methName((itf_ptr)->selfData,
 #define CALL_INTERFACE_PTR_WITHOUT_PARAM(itf_ptr, methName) (itf_ptr)->meths->methName((itf_ptr)->selfData)
+<endif>
 
 <if (definition.astDecorations.("is-singleton"))>
 <SingletonCALL_PTR(definition=definition)>

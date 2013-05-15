@@ -18,7 +18,15 @@ ComponentDefinition(definition, instance, interfaceDefinitions) ::= <<
 <endif>
 <endif>
 
+<if (definition.astDecorations.("definition-is-factorized"))>
+/* Start component factory methods */
+
 <ComponentFactoryMethod(definition=definition)>
+
+/* End component factory methods */
+<else>
+/* No component factory methods: optimized */
+<endif>
 
 <if (definition.astNodeTypes.("controller"))>
 /* Start implementation of controllers */
@@ -65,8 +73,6 @@ __component_<definition.name;format="toCName">_<itfName><if (index)>_<index><end
 // Component Factory methods
 
 ComponentFactoryMethod(definition) ::= <<
-
-#ifndef __MIND_NO_FACTORY
 
 #include "memory/api/Allocator.itf.h"
 
@@ -151,8 +157,6 @@ error0:
 <endif>
 <endif>
 }
-
-#endif /* __MIND_NO_FACTORY */
 
 >>
 

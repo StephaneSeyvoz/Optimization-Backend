@@ -1,0 +1,23 @@
+
+import fractal.api.Factory;
+import fractal.api.Component;
+import fractal.api.AttributeController;
+
+// Hard-write CALL_PTR in the component to
+// target interface instance ("s") from definition type ("singlestaticcallptr.factory.selfcall.Server")
+// the instances can be different though: the optimization just replaces the function call
+@FreezeCallPointer(toItf="singlestaticcallptr.factory.selfcall.Server.s")
+primitive singlestaticcallptr.factory.selfcall.Client {
+  
+  provides Main as entryPoint;
+  
+  requires optional Component as compCtrl;
+  requires optional AttributeController as attrCtrl;
+
+// we don't need to require the service as we'll exclusively do CALL_PTRs
+//  requires optional Service as s;
+  requires optional GetServicePointer as getServicePtrItf;
+  requires Factory as f;
+  
+  source client.c;
+}

@@ -22,10 +22,16 @@
 
 package org.ow2.mind.adl.ast;
 
+import java.util.Map;
+
+import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.Loader;
 import org.objectweb.fractal.adl.Node;
 import org.ow2.mind.adl.annotation.predefined.GarbageUnusedInternals;
 import org.ow2.mind.adl.annotation.predefined.Static;
 import org.ow2.mind.adl.annotation.predefined.StaticBindings;
+import org.ow2.mind.adl.ast.ASTHelper.DefinitionDecoration;
 import org.ow2.mind.annotation.AnnotationHelper;
 
 /**
@@ -37,13 +43,13 @@ public class OptimASTHelper extends ASTHelper {
 	protected OptimASTHelper(){
 		super();
 	}
-	
+
 	/**
 	 * The name of the decoration used to indicate if a binding is static.
 	 * This decoration should only be used by StringTemplate.
 	 */
 	public static final String STATIC_DECORATION_NAME = "is-static";
-	
+
 	/**
 	 * Returns <code>true</code> if the given definition has the {@link Static}
 	 * decoration.
@@ -55,7 +61,7 @@ public class OptimASTHelper extends ASTHelper {
 	public static boolean isStatic(final Node node) {
 		return AnnotationHelper.getAnnotation(node, Static.class) != null;
 	}
-	
+
 	/**
 	 * Sets the {@value #STATIC_DECORATION_NAME} decoration to
 	 * <code>true</code> on the given definition.
@@ -65,13 +71,13 @@ public class OptimASTHelper extends ASTHelper {
 	public static void setStaticDecoration(Node node) {
 		node.astSetDecoration(STATIC_DECORATION_NAME, Boolean.TRUE);
 	}
-	
+
 	/**
 	 * The name of the decoration used to indicate if a component's bindings are static.
 	 * This decoration should only be used by StringTemplate.
 	 */
 	public static final String STATICBINDINGS_DECORATION_NAME = "has-static-bindings";
-	
+
 	/**
 	 * Returns <code>true</code> if the given definition has the {@link StaticBindings}
 	 * decoration.
@@ -83,7 +89,7 @@ public class OptimASTHelper extends ASTHelper {
 	public static boolean hasStaticBindings(final Node node) {
 		return AnnotationHelper.getAnnotation(node, StaticBindings.class) != null;
 	}
-	
+
 	/**
 	 * Sets the {@value #STATICBINDINGS_DECORATION_NAME} decoration to
 	 * <code>true</code> on the given definition.
@@ -99,7 +105,7 @@ public class OptimASTHelper extends ASTHelper {
 	 * This decoration should only be used by StringTemplate.
 	 */
 	public static final String PARENTSTATICBINDINGS_DECORATION_NAME = "parent-has-static-bindings";
-	
+
 	/**
 	 * Returns <code>true</code> if the given definition parent has the {@link StaticBindings}
 	 * decoration.
@@ -114,7 +120,7 @@ public class OptimASTHelper extends ASTHelper {
 			return result.equals(Boolean.TRUE);
 		else return false;
 	}
-	
+
 	/**
 	 * Sets the {@value #PARENTSTATICBINDINGS_DECORATION_NAME} decoration to
 	 * <code>true</code> on the given definition.
@@ -124,13 +130,13 @@ public class OptimASTHelper extends ASTHelper {
 	public static void setParentStaticBindingsDecoration(Node node) {
 		node.astSetDecoration(PARENTSTATICBINDINGS_DECORATION_NAME, Boolean.TRUE);
 	}
-	
+
 	/**
 	 * The name of the decoration used to indicate if a component's bindings are static.
 	 * This decoration should only be used by StringTemplate.
 	 */
 	public static final String GARBAGEUNUSEDINTERNALS_DECORATION_NAME = "garbage-unused-internals";
-	
+
 	/**
 	 * Returns <code>true</code> if the given definition has the {@link GarbageUnusedInternals}
 	 * decoration.
@@ -142,7 +148,7 @@ public class OptimASTHelper extends ASTHelper {
 	public static boolean areGarbagedUnusedInternals(final Node node) {
 		return AnnotationHelper.getAnnotation(node, GarbageUnusedInternals.class) != null;
 	}
-	
+
 	/**
 	 * Sets the {@value #GARBAGEUNUSEDINTERNALS_DECORATION_NAME} decoration to
 	 * <code>true</code> on the given definition.
@@ -152,5 +158,26 @@ public class OptimASTHelper extends ASTHelper {
 	public static void setGarbageUnusedInternals(Node node) {
 		node.astSetDecoration(GARBAGEUNUSEDINTERNALS_DECORATION_NAME, Boolean.TRUE);
 	}
-	
+
+	// ---------------------------------------------------------------------------
+	// Factory helper methods
+	// ---------------------------------------------------------------------------
+
+	public static final String DEFINITION_IS_FACTORIZED = "definition-is-factorized";
+
+	public static void setInstantiatedDefinitionAsFactorized(
+			final Definition definition) {
+		definition.astSetDecoration(
+				DEFINITION_IS_FACTORIZED,
+				true);
+	}
+
+	public static boolean isDefinitionFactorized(
+			final Definition definition, final Loader loaderItf,
+			final Map<Object, Object> context) throws ADLException {
+		final Boolean isFactorizedDefinitionDecoration = (Boolean) definition
+				.astGetDecoration(DEFINITION_IS_FACTORIZED);
+		return (isFactorizedDefinitionDecoration == null) ? false : isFactorizedDefinitionDecoration.booleanValue();
+	}
+
 }
