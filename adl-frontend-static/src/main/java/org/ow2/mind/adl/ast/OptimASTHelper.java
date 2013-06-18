@@ -29,9 +29,9 @@ import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Loader;
 import org.objectweb.fractal.adl.Node;
 import org.ow2.mind.adl.annotation.predefined.GarbageUnusedInternals;
+import org.ow2.mind.adl.annotation.predefined.Inline;
 import org.ow2.mind.adl.annotation.predefined.Static;
 import org.ow2.mind.adl.annotation.predefined.StaticBindings;
-import org.ow2.mind.adl.ast.ASTHelper.DefinitionDecoration;
 import org.ow2.mind.annotation.AnnotationHelper;
 
 /**
@@ -70,6 +70,44 @@ public class OptimASTHelper extends ASTHelper {
 	 */
 	public static void setStaticDecoration(Node node) {
 		node.astSetDecoration(STATIC_DECORATION_NAME, Boolean.TRUE);
+	}
+	
+	/**
+	 * The name of the decoration used to indicate if a binding's methods 
+	 * should be inlined.
+	 */
+	public static final String INLINE_DECORATION_NAME = "is-inline";
+
+	/**
+	 * Returns <code>true</code> if the given definition has the {@link Inline}
+	 * decoration.
+	 * 
+	 * @param def a definition.
+	 * @return <code>true</code> if the given definition has the {@link Inline}
+	 *         decoration.
+	 */
+	public static boolean isInline(final Node node) {
+		return AnnotationHelper.getAnnotation(node, Inline.class) != null;
+	}
+
+	/**
+	 * Sets the {@value #INLINE_DECORATION_NAME} decoration to
+	 * <code>true</code> on the given definition.
+	 * 
+	 * @param def a definition.
+	 */
+	public static void setInlineDecoration(Node node) {
+		node.astSetDecoration(INLINE_DECORATION_NAME, Boolean.TRUE);
+	}
+	
+	/**
+	 * Get the {@value #INLINE_DECORATION_NAME} decoration to
+	 * <code>true</code> from the given definition.
+	 * 
+	 * @param def a definition.
+	 */
+	public static Object getInlineDecoration(Node node) {
+		return node.astGetDecoration(INLINE_DECORATION_NAME);
 	}
 
 	/**

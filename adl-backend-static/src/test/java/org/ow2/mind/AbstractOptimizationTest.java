@@ -36,7 +36,7 @@ public abstract class AbstractOptimizationTest extends AbstractFunctionalTest {
 		}
 		runner.context.put(BasicOutputFileLocator.OUTPUT_DIR_CONTEXT_KEY, buildDir);
 		ForceRegenContextHelper.setForceRegen(runner.context, force);
-		ForceRegenContextHelper.setKeepTemp(runner.context, false);
+		ForceRegenContextHelper.setKeepTemp(runner.context, true);
 		ForceRegenContextHelper.setNoBinaryAST(runner.context, false);
 	}
 

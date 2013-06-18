@@ -297,5 +297,41 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
+	
+	/**
+	 * The most basic test.
+	 */
+	@Test(groups = {"optimizations"})
+	public void basicInlineTest()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "inline.Helloworld";
+
+		List<String> flags = new ArrayList<String>();
+
+		final Definition d = runner.load(adlName);
+		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
+		if (runAnno != null) {
+			runner.addCFlags(flags);
+
+			final String adl;
+			adl = (runAnno.addBootstrap)
+					? "GenericApplication" + "<" + adlName + ">"
+							: adlName;
+
+			File exeFile = runner.compile(adl, runAnno.executableName);
+			final int r = runner.run(exeFile, (String[]) null);
+
+			assertEquals(r, 0, "Unexpected return value");
+
+		} else {
+			if (logger.isLoggable(Level.FINE))
+				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
+		}
+
+	}
 }
 

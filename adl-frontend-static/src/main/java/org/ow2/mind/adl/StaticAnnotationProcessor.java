@@ -22,6 +22,8 @@
 
 package org.ow2.mind.adl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -198,15 +200,42 @@ AbstractADLLoaderAnnotationProcessor {
 
 			// Propagating the decorations only when everything is certain to be optimized
 			if (isSourceSingleton && isTargetSingleton) {
-				if (!fromComponent.equals("this"))
+				if (!fromComponent.equals("this")) {
 					// Decorate the client interface for later optimization
 					OptimASTHelper.setStaticDecoration(currentClientItf);
+					
+					// optimize further on ?
+					if (OptimASTHelper.isInline(binding))
+						OptimASTHelper.setInlineDecoration(currentClientItf);
+				}
 
-				if (!toComponent.equals("this"))
+				if (!toComponent.equals("this")) {
 					// Decorate the server interface for later optimization
 					OptimASTHelper.setStaticDecoration(currentServerItf);
+					
+					// optimize further on ?
+					if (OptimASTHelper.isInline(binding) && !fromComponent.equals("this")) { 
+						OptimASTHelper.setInlineDecoration(currentServerItf);
+					
+						// in CPL-Preproc we will only have server info,
+						// so we need to provide a way to go up the bindings
+						// for the clients to be optimized
+						List<Interface> newBindingSources = null;
+						Object oldBindingSources = currentServerItf.astGetDecoration("inline-sources");
+						if (oldBindingSources == null)
+							newBindingSources = new ArrayList<Interface>();
+						else newBindingSources = (List<Interface>) oldBindingSources; // TODO add check
+							
+						newBindingSources.add(currentClientItf);
+						currentServerItf.astSetDecoration("inline-sources", newBindingSources);
+					}
+				}
 
 				OptimASTHelper.setStaticDecoration(binding);
+				
+				// optimize further on ?
+				if (OptimASTHelper.isInline(binding))
+					OptimASTHelper.setInlineDecoration(binding);
 
 				logger.info("In composite " + definition.getName() + ", binding from " + fromComponent + "." + fromInterface + " to " + toComponent + "." + toInterface + " optimization check result: OK");
 			}

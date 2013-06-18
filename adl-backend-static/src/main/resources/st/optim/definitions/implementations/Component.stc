@@ -103,6 +103,20 @@ OptimizedMethodDecls1(definition, instance, interfaceDefinitions, itf, index, is
   <! Here it doesnt matter if the caller is singleton and static or not !>
   <interfaceDefinitions.(itf.signature).methods:StaticDefinitionBindingOptimizedMethodDecl(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal);separator="\n">
 <endif>
+<if (itf.astDecorations.("is-inline"))>
+/* Start inlined methods declaration for def: <definition.name> itf:<itf.name> */
+  <if (itf.astDecorations.("inline-methods-bodies"))>
+  /* inline-methods-bodies found */
+  <itf.astDecorations.("inline-methods-bodies"):FullWriteInlinedMethods(text=it);separator="\n">
+  <else>
+  /* SSZ Dirty Debug: did not find inline-methods-bodies on the node */
+  <endif>
+/* End inlined methods declaration */
+<endif>
+>>
+
+FullWriteInlinedMethods(text) ::= <<
+<text>
 >>
 
 SingleStaticCallPointerMethodDecls(definition, isInternal) ::= <<
