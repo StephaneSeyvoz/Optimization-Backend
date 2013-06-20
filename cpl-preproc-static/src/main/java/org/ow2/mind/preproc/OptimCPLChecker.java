@@ -195,7 +195,7 @@ public class OptimCPLChecker extends CPLChecker {
       // declaration in the .inc file
 
       // For debug purposes
-      logger.info("CPLChecker - Inline - METH(" + itfName.getText() + ", "
+      logger.info("OptimCPLChecker - Inline - METH(" + itfName.getText() + ", "
           + methName.getText() + ") body content:");
       logger.info(body.toString());
 

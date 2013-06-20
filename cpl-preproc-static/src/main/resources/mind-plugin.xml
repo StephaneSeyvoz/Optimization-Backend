@@ -24,11 +24,6 @@
     id="org.ow2.mind.preproc.optim"
     name="The Optimization-Oriented MIND preprocessor plugin.">
 
-<!-- 
-    <extension-point
-        id="cpl-parser"
-        dtd="dtd/CPLParser.dtd" />  -->
-
 	<extension point="org.ow2.mind.preproc.cpl-parser">
     	<factory class="org.ow2.mind.preproc.OptimCPLPreprocessorFactory"/>
   	</extension>
