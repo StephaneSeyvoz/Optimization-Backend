@@ -22,6 +22,7 @@
 
 package org.ow2.mind.preproc;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,9 +66,10 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 		return new OptimMPPCommand(definition, context);
 	}
 
-	protected class OptimMPPCommand extends BasicMPPCommand implements MPPCommand {
+	public class OptimMPPCommand extends BasicMPPCommand implements MPPCommand {
 
-		protected OptimCPLChecker                cplChecker;
+		protected OptimCPLChecker 				cplChecker;
+		protected File 							inlineOutputFile;
 		
 		OptimMPPCommand(final Definition definition,
 				final Map<Object, Object> context) {
@@ -104,6 +106,7 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 
 			PrintStream outPS = null;
 			PrintStream headerOutPS = null;
+			PrintStream inlineOutPS = null;
 			try {
 				try {
 					outputFile.getParentFile().mkdirs();
@@ -123,6 +126,17 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 					}
 					mpp.setHeaderOutputStream(headerOutPS);
 				}
+				
+				if (inlineOutputFile != null) {
+					try {
+						inlineOutputFile.getParentFile().mkdirs();
+						inlineOutPS = new PrintStream(
+								new FileOutputStream(inlineOutputFile));
+					} catch (final FileNotFoundException e) {
+						throw new CompilerError(GenericErrors.INTERNAL_ERROR, e, "IO error");
+					}
+					mpp.setInlineOutputStream(inlineOutPS);
+				}
 
 				mpp.setSingletonMode(singletonMode);
 
@@ -132,6 +146,9 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 					logger.fine("MPP: inputFile=" + inputFile.getPath() + " outputFile="
 							+ outputFile.getPath() + " singletonMode=" + singletonMode);
 
+				if (logger.isLoggable(Level.FINE) && inlineOutputFile != null)
+					logger.fine("MPP: inlineOutputFile=" + inlineOutputFile.getPath());
+				
 				final int nbErrors = errorManagerItf.getErrors().size();
 				try {
 					mpp.preprocess();
@@ -146,7 +163,18 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 			} finally {
 				if (outPS != null) outPS.close();
 				if (headerOutPS != null) headerOutPS.close();
+				if (inlineOutPS != null) inlineOutPS.close();
 			}
+		}
+
+		/**
+		 * Inspired from the headerOutputFile code.
+		 * Except our header is specialized for static inline functions.
+		 * @param cSourceOutputFile
+		 */
+		public OptimMPPCommand setInlineOutputFile(File inlineOutputFile) {
+			this.inlineOutputFile = inlineOutputFile;
+			return this;
 		}
 	}
 }

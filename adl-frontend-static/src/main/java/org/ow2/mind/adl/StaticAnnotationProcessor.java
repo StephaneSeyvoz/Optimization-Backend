@@ -205,8 +205,14 @@ AbstractADLLoaderAnnotationProcessor {
 					OptimASTHelper.setStaticDecoration(currentClientItf);
 					
 					// optimize further on ?
-					if (OptimASTHelper.isInline(binding))
+					if (OptimASTHelper.isInline(binding)) {
 						OptimASTHelper.setInlineDecoration(currentClientItf);
+						
+						// In the OptimizedDefinitionCompiler we want to know if
+						// the current definition (server) will have to generate
+						// a <Definition.name>.inline file
+						OptimASTHelper.setInlineDecoration(currentServerDef);
+					}
 				}
 
 				if (!toComponent.equals("this")) {

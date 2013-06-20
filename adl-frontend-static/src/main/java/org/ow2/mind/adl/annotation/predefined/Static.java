@@ -34,6 +34,11 @@ import org.ow2.mind.adl.StaticAnnotationProcessor;
 public class Static implements Annotation {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4235614542560118182L;
+
+	/**
 	 * The Static annotation is used to specify that a given binding will be optimized
 	 * and it's CALLs in the CPL are replaced by direct function calls to the server (no more "this" context
 	 * pointer and function pointer dereferencing).

@@ -111,6 +111,16 @@ public class OptimASTHelper extends ASTHelper {
 	}
 
 	/**
+	 * Get the {@value #INLINE_DECORATION_NAME} decoration to
+	 * <code>true</code> from the given definition.
+	 * 
+	 * @param def a definition.
+	 */
+	public static boolean hasInlineDecoration(Node node) {
+		return  (getInlineDecoration(node) != null) ? ((Boolean) getInlineDecoration(node)) : false;
+	}
+	
+	/**
 	 * The name of the decoration used to indicate if a component's bindings are static.
 	 * This decoration should only be used by StringTemplate.
 	 */

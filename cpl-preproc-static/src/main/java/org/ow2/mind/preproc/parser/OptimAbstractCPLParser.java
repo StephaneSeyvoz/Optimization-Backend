@@ -22,6 +22,8 @@
 
 package org.ow2.mind.preproc.parser;
 
+import java.io.PrintStream;
+
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
 import org.ow2.mind.preproc.CPLChecker;
@@ -29,19 +31,24 @@ import org.ow2.mind.preproc.OptimCPLChecker;
 
 public abstract class OptimAbstractCPLParser extends AbstractCPLParser {
 
-  protected OptimCPLChecker   cplChecker    = null;
-	
-  public OptimAbstractCPLParser(final TokenStream input,
-      final RecognizerSharedState state) {
-    super(input, state);
-  }
+	protected OptimCPLChecker   cplChecker  = null;
+	protected PrintStream 		inlineOut 	= null;
 
-  public OptimAbstractCPLParser(final TokenStream input) {
-    super(input);
-  }
+	public OptimAbstractCPLParser(final TokenStream input,
+			final RecognizerSharedState state) {
+		super(input, state);
+	}
 
-  public void setCplChecker(final OptimCPLChecker cplChecker) {
-    this.cplChecker = cplChecker;
-  }
+	public OptimAbstractCPLParser(final TokenStream input) {
+		super(input);
+	}
+
+	public void setCplChecker(final OptimCPLChecker cplChecker) {
+		this.cplChecker = cplChecker;
+	}
+
+	public void setInlineOutputStream(PrintStream out) {
+		this.inlineOut = out;
+	}
 
 }

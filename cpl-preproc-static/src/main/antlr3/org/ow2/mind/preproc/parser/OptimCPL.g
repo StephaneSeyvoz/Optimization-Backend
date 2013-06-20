@@ -218,11 +218,12 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
          '}' { body.append("}"); }
           
       )? { $res.append(body.toString());
-           try {
-            cplChecker.storeServerMethDefIfInlineAnno($id, itfIdx, $meth, getSourceFile(), body);
-           } catch (ADLException e2) {
+           //try {
+            //cplChecker.storeServerMethDefIfInlineAnno($id, itfIdx, $meth, getSourceFile(), body);
+            if (inlineOut != null) inlineOut.println(body.toString());              
+           //} catch (ADLException e2) {
             // do nothing
-           }
+           //}
          }
     )?
     ;

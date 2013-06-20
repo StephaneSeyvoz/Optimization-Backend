@@ -3,12 +3,9 @@ package org.ow2.mind;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
 import org.ow2.mind.io.BasicOutputFileLocator;
-import org.testng.annotations.BeforeMethod;
 
 public abstract class AbstractOptimizationTest extends AbstractFunctionalTest {
 

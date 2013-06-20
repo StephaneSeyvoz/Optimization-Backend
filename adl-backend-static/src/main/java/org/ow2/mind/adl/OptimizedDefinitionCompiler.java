@@ -49,6 +49,7 @@ import org.ow2.mind.compilation.CompilerCommand;
 import org.ow2.mind.compilation.PreprocessorCommand;
 import org.ow2.mind.io.IOErrors;
 import org.ow2.mind.preproc.MPPCommand;
+import org.ow2.mind.preproc.OptimMPPWrapper.OptimMPPCommand;
 import org.ow2.mind.st.BackendFormatRenderer;
 
 public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
@@ -179,6 +180,20 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				cppCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
 						DefinitionIncSourceGenerator.getIncFileName(definition), context));
 
+				// SSZ
+				// For inline support
+				if (mppCommand instanceof OptimMPPCommand && OptimASTHelper.hasInlineDecoration(definition)) {
+					
+					// here the cast is forced because we need to access a method that is not
+					// available in the standard MPPCommand interface
+					OptimMPPCommand optimMppCommand = (OptimMPPCommand) mppCommand;
+					
+					optimMppCommand.setInlineOutputFile(outputFileLocatorItf.getCSourceOutputFile(
+							fullyQualifiedNameToPath(definition.getName(), ".inline"),
+							context));
+				}
+				//
+				
 				// SSZ : BEGIN MODIFICATION
 
 				// Original macro : replaced by our instance-oriented one
@@ -315,7 +330,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				final CompilerCommand gccCommand = compilationCommandFactory
 						.newCompilerCommand(definition, additionalCompilationUnit, mppFile,
 								true, null, null, objectFile, context);
-
+				
 				// SSZ : BEGIN MODIFICATION
 				// This optimization-based modification is based on the predicate that EVERY COMPONENT
 				// is singleton
