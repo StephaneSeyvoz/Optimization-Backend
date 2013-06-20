@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
@@ -182,6 +183,8 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 
 				// SSZ
 				// For inline support
+				
+				// server side
 				if (mppCommand instanceof OptimMPPCommand && OptimASTHelper.hasInlineDecoration(definition)) {
 					
 					// here the cast is forced because we need to access a method that is not
@@ -192,6 +195,17 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 							fullyQualifiedNameToPath(definition.getName(), ".inline"),
 							context));
 				}
+				
+				// client side
+				
+				// TODO: add a check
+				List<Definition> targetInlineDefinitions = (List<Definition>) definition.astGetDecoration("inline-target-defs");
+				if (targetInlineDefinitions != null)
+					// for all targets concerned by an inline binding, -include the according .inline file
+					for (Definition currInlineDef : targetInlineDefinitions)
+						gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
+								fullyQualifiedNameToPath(currInlineDef.getName(), ".inline"),
+								context));
 				//
 				
 				// SSZ : BEGIN MODIFICATION

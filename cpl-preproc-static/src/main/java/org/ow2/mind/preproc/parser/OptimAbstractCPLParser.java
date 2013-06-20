@@ -26,7 +26,6 @@ import java.io.PrintStream;
 
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
-import org.ow2.mind.preproc.CPLChecker;
 import org.ow2.mind.preproc.OptimCPLChecker;
 
 public abstract class OptimAbstractCPLParser extends AbstractCPLParser {

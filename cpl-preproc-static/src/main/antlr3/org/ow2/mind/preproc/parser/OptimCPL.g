@@ -17,7 +17,7 @@
  * Contact: mind@ow2.org
  *
  * Authors: Matthieu ANNE
- * Contributors: Olivier Lobry, Matthieu Leclercq
+ * Contributors: Olivier Lobry, Matthieu Leclercq, Stephane Seyvoz
  */
  
 grammar OptimCPL;
@@ -166,7 +166,7 @@ protected methDef returns [StringBuilder res]
 	;
 		
 protected serverMethDef returns [StringBuilder res = new StringBuilder()]
-@init{String tmp = ""; String itfIdx = null; StringBuilder body = new StringBuilder();}
+@init{String tmp = ""; String itfIdx = null; StringBuilder body = new StringBuilder(); String inlinePrefix = null; }
   : METH ws1=ws* '(' ws2=ws* id=ID ws3=ws* ( '[' ws4=ws* INT ws5=ws* ']' ws6=ws* { itfIdx=$INT.text; } )? ',' ws7=ws* meth=ID ws8=ws* ')' ws9=ws*
       (
         e = ws* ')' { tmp += wstext($e.text) + ")"; }
@@ -192,7 +192,7 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
       }
     }
     (
-      paramsDef ws10=ws* { body.append($paramsDef.res).append(wstext($ws10.text)); }
+      paramsDef ws10=ws* { $res.append($paramsDef.res).append(wstext($ws10.text)); }
       
       (
          '{'
@@ -218,12 +218,17 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
          '}' { body.append("}"); }
           
       )? { $res.append(body.toString());
-           //try {
-            //cplChecker.storeServerMethDefIfInlineAnno($id, itfIdx, $meth, getSourceFile(), body);
-            if (inlineOut != null) inlineOut.println(body.toString());              
-           //} catch (ADLException e2) {
+           try {
+            if (inlineOut != null) {
+              inlinePrefix = cplChecker.computeInlinePrefix($id, itfIdx, $meth, getSourceFile());
+              if (inlinePrefix != null) {
+                inlineOut.print(inlinePrefix);
+                inlineOut.println(body.toString());
+              }
+            }              
+           } catch (ADLException e2) {
             // do nothing
-           //}
+           }
          }
     )?
     ;
@@ -621,6 +626,7 @@ protected paramsDef returns [StringBuilder res = new StringBuilder()]
 	| '(' inParamsDef ')'        
 	  {
 	     $res.append(" PARAM_DECL_BEGIN ").append($inParamsDef.res).append(" PARAM_DECL_END ");
+	     cplChecker.setInlineParams($inParamsDef.res);
 	  }
 	;
 protected inParamsDef returns [StringBuilder res = new StringBuilder()] 

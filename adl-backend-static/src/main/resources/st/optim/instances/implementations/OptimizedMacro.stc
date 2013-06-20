@@ -216,8 +216,13 @@ SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData)
 <else>
     <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
+      <if (itf.astDecorations.("is-inline"))>
+// Optimized binding (simple static binding)
+<SingletonCALLStaticInlineBinding(definition=definition, itf=itf, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)))>
+      <else>
 // Optimized binding (simple static binding)
 <SingletonCALLStaticBinding(definition=definition, itf=itf, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)))>
+      <endif>
     <else>
       <if (itf.astDecorations.("target-is-single-itf"))>
 // Optimized binding (single interface)
@@ -233,6 +238,11 @@ SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::
 SingletonCALLStaticBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
 #define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(
 #define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName() 
+>>
+
+SingletonCALLStaticInlineBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName##_inline(
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName##_inline() 
 >>
 
 SingletonStandardCALL(definition, itf) ::= <<

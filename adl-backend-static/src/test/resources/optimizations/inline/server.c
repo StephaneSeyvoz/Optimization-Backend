@@ -32,5 +32,5 @@ static int i = 0;
 
 // void println(string msg)
 int METH(s, increment)(int i) {
-  return i++;
+  return i + 1;
 }

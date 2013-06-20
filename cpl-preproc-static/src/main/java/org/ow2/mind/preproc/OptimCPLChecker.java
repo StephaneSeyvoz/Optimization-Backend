@@ -22,511 +22,136 @@
 
 package org.ow2.mind.preproc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 
 import org.antlr.runtime.Token;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
-import org.objectweb.fractal.adl.error.BasicErrorLocator;
-import org.objectweb.fractal.adl.error.NodeErrorLocator;
 import org.objectweb.fractal.adl.interfaces.Interface;
-import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeInterface;
-import org.objectweb.fractal.adl.types.TypeInterfaceUtil;
-import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.adl.ast.ASTHelper;
-import org.ow2.mind.adl.ast.Data;
-import org.ow2.mind.adl.ast.DataField;
-import org.ow2.mind.adl.ast.ImplementationContainer;
-import org.ow2.mind.adl.ast.Source;
 import org.ow2.mind.adl.idl.InterfaceDefinitionDecorationHelper;
-import org.ow2.mind.adl.membrane.ast.Controller;
-import org.ow2.mind.adl.membrane.ast.ControllerContainer;
-import org.ow2.mind.adl.membrane.ast.ControllerInterface;
 import org.ow2.mind.error.ErrorManager;
+import org.ow2.mind.idl.ast.ArrayOf;
+import org.ow2.mind.idl.ast.ConstantDefinition;
+import org.ow2.mind.idl.ast.EnumDefinition;
+import org.ow2.mind.idl.ast.EnumReference;
 import org.ow2.mind.idl.ast.IDLASTHelper;
 import org.ow2.mind.idl.ast.InterfaceDefinition;
 import org.ow2.mind.idl.ast.Method;
+import org.ow2.mind.idl.ast.PointerOf;
+import org.ow2.mind.idl.ast.PrimitiveType;
+import org.ow2.mind.idl.ast.StructDefinition;
+import org.ow2.mind.idl.ast.StructReference;
+import org.ow2.mind.idl.ast.Type;
+import org.ow2.mind.idl.ast.TypeDefReference;
+import org.ow2.mind.idl.ast.TypeDefinition;
+import org.ow2.mind.idl.ast.UnionDefinition;
+import org.ow2.mind.idl.ast.UnionReference;
 
 public class OptimCPLChecker extends CPLChecker {
 
-  public OptimCPLChecker(final ErrorManager errorManager,
-      final Definition definition, final Map<Object, Object> context) {
-    
-	super(errorManager, definition, context);
-  }
-
-  public void prvDecl(final String structContent, final String sourceFile) {
-    prvDeclared = true;
-  }
-
-  // returns 'true' is the accessed field is a DataField declared in definition.
-  public boolean prvAccess(final Token fieldName, final String sourceFile)
-      throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return false;
-    }
-    if (definition instanceof ImplementationContainer) {
-      for (final DataField dataField : ((ImplementationContainer) definition)
-          .getDataFields()) {
-        if (fieldName.getText().equals(dataField.getName())) {
-          return true;
-        }
-      }
-      // field name not found in DataFields
-      if (data != null) {
-        // component also declare a PRIVATE structure. assumes that field is in
-        // this structure
-        return false;
-      }
-      // component does not have PRIVATE structure, the field name is invalid.
-      errorManager.logError(MPPErrors.UNKNOWN_DATAFIELD,
-          locator(fieldName, sourceFile), fieldName.getText());
-    }
-    return false;
-  }
-
-  public void serverMethDef(final Token itfName, final String itfIdx,
-      final Token methName, final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    if (data != null && !prvDeclared) {
-      errorManager.logError(MPPErrors.MISSING_PRIVATE_DECLARATION, (data
-          .getPath() == null)
-          ? new NodeErrorLocator(data)
-          : new BasicErrorLocator(data.getPath(), -1, -1), data.getPath());
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-    if (!TypeInterfaceUtil.isServer(itf)) {
-      errorManager.logError(MPPErrors.INVALID_CLIENT_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText(), methName.getText());
-      return;
-    }
-
-    // assume that itfDef is already loaded
-    final InterfaceDefinition itfDef = InterfaceDefinitionDecorationHelper
-        .getResolvedInterfaceDefinition((TypeInterface) itf, null, null);
-    if (IDLASTHelper.getMethod(itfDef, methName.getText()) == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_METHOD,
-          locator(methName, sourceFile), itfName.getText(), methName.getText());
-    }
-
-    // -------------------------
-    // Missing methods checking
-
-    // to avoid rewriting the grammar
-    StringBuilder idxSB = null;
-    Integer idxInt = null;
-    if (itfIdx != null) idxSB = new StringBuilder().append(itfIdx);
-
-    checkIdx(itf, itfName, idxSB, sourceFile);
-
-    if (itfIdx != null) {
-      try {
-        idxInt = Integer.parseInt(itfIdx);
-      } catch (final NumberFormatException e) {
-        // ignore, idx is not a number literal
-      }
-    }
-
-    if (!TypeInterfaceUtil.isCollection(itf))
-      ImplementedMethodsHelper.addImplementedMethod(itf, methName.getText());
-    else
-      ImplementedMethodsHelper.addCollectionImplementedMethod(itf, idxInt,
-          methName.getText());
-    // -------------------------
-
-  }
-
-  // SSZ - BEGIN Inline Optim
-  /**
-   * @param itfName
-   * @param itfIdx
-   * @param methName
-   * @param sourceFile
-   * @param body
-   * @throws ADLException
-   */
-  @SuppressWarnings("unchecked")
-  public void storeServerMethDefIfInlineAnno(final Token itfName,
-      final String itfIdx, final Token methName, final String sourceFile,
-      final StringBuilder body) throws ADLException {
-
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    // all previous checks from serverMethDef have already been done
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-
-    if (itfIdx != null) {
-      logger.severe("Cannot inline collection methods ! - Skip");
-      return;
-    }
-
-    // ----------------------------------------
-    // Inline checking and method body storage
-
-    final Object isInline = itf.astGetDecoration("is-inline");
-
-    if ((isInline != null) && (isInline instanceof Boolean)
-        && ((Boolean) isInline).equals(Boolean.TRUE)) {
-
-      // Then we need to remember the method body for its inline variation
-      // declaration in the .inc file
-
-      // For debug purposes
-      logger.info("OptimCPLChecker - Inline - METH(" + itfName.getText() + ", "
-          + methName.getText() + ") body content:");
-      logger.info(body.toString());
-
-      // already loaded and checked by serverMethDef
-      final InterfaceDefinition itfDef = InterfaceDefinitionDecorationHelper
-          .getResolvedInterfaceDefinition((TypeInterface) itf, null, null);
-      final Method currMethod = IDLASTHelper.getMethod(itfDef,
-          methName.getText());
-      if (currMethod == null) {
-        errorManager.logError(MPPErrors.UNKNOWN_METHOD,
-            locator(methName, sourceFile), itfName.getText(),
-            methName.getText());
-      }
-
-      List<String> fullInlineMethodsImpls = null;
-
-      // TODO: the currMethod.getType.toString() is bad: fix and find the good
-      // string
-      final String newInlineMethodBody = currMethod.getType().toString()
-          + " __component_" + definition.getName().replace(".", "_") + "_"
-          + itfName.getText() + "_" + methName.getText() + "-inline"
-          + body.toString();
-
-      boolean isFirst = true;
-
-      final Object bindingSources = itf.astGetDecoration("inline-sources");
-      if (bindingSources instanceof List) { // should be anyway...
-        final List<Interface> bindingSourcesList = (List<Interface>) bindingSources;
-        for (final Interface currSourceItf : bindingSourcesList) {
-
-          // as all will reference the same List, we want to "add" to be done
-          // only once but the list to be used everywhere
-          if (isFirst) {
-            final Object methBodiesObject = currSourceItf
-                .astGetDecoration("inline-methods-bodies");
-            if (methBodiesObject == null)
-              fullInlineMethodsImpls = new ArrayList<String>();
-            else if (methBodiesObject instanceof List)
-              fullInlineMethodsImpls = (List<String>) methBodiesObject;
-            else
-              return; // TODO: LOG ERROR
-
-            fullInlineMethodsImpls.add(newInlineMethodBody);
-
-            isFirst = false;
-          }
-
-          currSourceItf.astSetDecoration("inline-methods-bodies",
-              fullInlineMethodsImpls);
-        }
-      }
-
-      @SuppressWarnings("unused")
-      final Object bindingSources2 = itf.astGetDecoration("inline-sources");
-    }
-  }
-
-  // SSZ: END Inline Optim
-
-  public void itfMethCall(final Token itfName, final Token methName,
-      final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-
-    // assume that itfDef is already loaded
-    final InterfaceDefinition itfDef = InterfaceDefinitionDecorationHelper
-        .getResolvedInterfaceDefinition((TypeInterface) itf, null, null);
-    if (IDLASTHelper.getMethod(itfDef, methName.getText()) == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_METHOD,
-          locator(methName, sourceFile), itfName.getText(), methName.getText());
-    }
-  }
-
-  public void attAccess(final Token attributeName, final String sourceFile)
-      throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    if (ASTHelper.getAttribute(definition, attributeName.getText()) == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_ATTRIBUTE,
-          locator(attributeName, sourceFile), attributeName.getText());
-    }
-  }
-
-  public void collItfMethCall(final Token itfName, final Token methName,
-      final StringBuilder idx, final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-
-    // assume that itfDef is already loaded
-    final InterfaceDefinition itfDef = InterfaceDefinitionDecorationHelper
-        .getResolvedInterfaceDefinition((TypeInterface) itf, null, null);
-    if (IDLASTHelper.getMethod(itfDef, methName.getText()) == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_METHOD,
-          locator(methName, sourceFile), itfName.getText(), methName.getText());
-    }
-
-    checkIdx(itf, itfName, idx, sourceFile);
-  }
-
-  public void getMyItf(final Token itfName, final StringBuilder idx,
-      final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-
-    checkIdx(itf, itfName, idx, sourceFile);
-  }
-
-  public void bindMyItf(final Token itfName, final StringBuilder idx,
-      final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-
-    checkIdx(itf, itfName, idx, sourceFile);
-  }
-
-  public void isBound(final Token itfName, final StringBuilder idx,
-      final String sourceFile) throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-
-    checkIdx(itf, itfName, idx, sourceFile);
-  }
-
-  public void getCollectionSize(final Token itfName, final String sourceFile)
-      throws ADLException {
-    if (definition == null) {
-      // Add this condition so that the testNG will not throw exceptions
-      // (stand-alone node)
-      return;
-    }
-
-    final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
-    if (itf == null) {
-      errorManager.logError(MPPErrors.UNKNOWN_INTERFACE,
-          locator(itfName, sourceFile), itfName.getText());
-      return;
-    }
-  }
-
-  protected void checkIdx(final Interface itf, final Token itfToken,
-      final StringBuilder idx, final String sourceFile) throws ADLException {
-    if (idx == null) {
-      if (TypeInterfaceUtil.isCollection(itf)) {
-        errorManager.logError(MPPErrors.INVALID_INTERFACE_MISSING_INDEX,
-            locator(itfToken, sourceFile), itf.getName());
-      }
-    } else {
-      if (!TypeInterfaceUtil.isCollection(itf)) {
-        errorManager.logError(MPPErrors.INVALID_INTERFACE_NOT_A_COLLECTION,
-            locator(itfToken, sourceFile), itf.getName());
-      }
-
-      if (idx.length() <= 2) {
-        return;
-      }
-      final String index = idx.substring(1, idx.length() - 1).trim();
-      try {
-        final int i = Integer.parseInt(index);
-        if (i < 0 || i >= ASTHelper.getNumberOfElement(itf)) {
-          errorManager.logError(MPPErrors.INVALID_INDEX,
-              locator(itfToken, sourceFile), itf.getName(), index);
-        }
-      } catch (final NumberFormatException e) {
-        // ignore, idx is not a number literal
-      }
-    }
-  }
-
-  protected BasicErrorLocator locator(final Token token, final String sourceFile) {
-    return new BasicErrorLocator(sourceFile, token.getLine(),
-        token.getCharPositionInLine());
-  }
-
-  protected BasicErrorLocator locatorNoLine(final String sourceFile) {
-    return new BasicErrorLocator(sourceFile, -1, -1);
-  }
-
-  public void postParseChecks(final String sourceFile) throws ADLException {
-
-    // this means we aren't in standard compilation
-    // probably CPL-Preproc direct parser tests
-    if (definition == null) return;
-
-    // handling membrane of composites
-    if (!ASTHelper.isPrimitive(definition)) return;
-
-    // mark file as visited
-    final Source source = ImplementedMethodsHelper.getDefinitionSourceFromPath(
-        (ImplementationContainer) definition, sourceFile, context);
-
-    // TODO: handle inline C code !!
-    if (source == null) return;
-
-    ImplementedMethodsHelper.setSourceVisited(source);
-
-    // was it the last one ? if yes, we run a full methods check
-    if (definition instanceof ImplementationContainer
-        && definition instanceof InterfaceContainer)
-      if (ImplementedMethodsHelper
-          .haveAllSourcesBeenVisited((ImplementationContainer) definition)) {
-
-        final Map<Interface, List<String>> allUnimplementedMethods = new HashMap<Interface, List<String>>();
-        final Map<Interface, Map<Integer, List<String>>> allCollectionUnimplementedMethods = new HashMap<Interface, Map<Integer, List<String>>>();
-
-        logger
-            .fine("All of "
-                + definition.getName()
-                + " sources visited - Now checking if all provided methods were implemented...");
-
-        for (final Interface currItf : ((InterfaceContainer) definition)
-            .getInterfaces())
-          if ((currItf instanceof TypeInterface)
-              && ((TypeInterface) currItf).getRole().equals(
-                  TypeInterface.SERVER_ROLE)
-              && !isControllerInterface(currItf.getName())) {
-
-            if (!TypeInterfaceUtil.isCollection(currItf)) {
-              final List<String> unimplementedMethodsList = ImplementedMethodsHelper
-                  .getInterfaceUnimplementedMethods(currItf);
-              if (!unimplementedMethodsList.isEmpty())
-                allUnimplementedMethods.put(currItf, unimplementedMethodsList);
-            } else {
-              final Map<Integer, List<String>> unimplementedMethodsMap = ImplementedMethodsHelper
-                  .getCollectionInterfaceUnimplementedMethods(currItf);
-              if (!unimplementedMethodsMap.isEmpty()) {
-                allCollectionUnimplementedMethods.put(currItf,
-                    unimplementedMethodsMap);
-              }
-            }
-
-          }
-
-        if (allUnimplementedMethods.isEmpty()
-            && allCollectionUnimplementedMethods.isEmpty())
-          logger.fine("All methods were correctly implemented.");
-        else if (!allUnimplementedMethods.isEmpty()) {
-          final Set<Interface> interfaces = allUnimplementedMethods.keySet();
-          final Interface itf0 = (Interface) interfaces.toArray()[0];
-
-          // Show missing methods from the first concerned interface
-          errorManager.logError(MPPErrors.MISSING_METHOD_DECLARATION,
-          /* locatorNoLine(sourceFile), */definition.getName(), itf0.getName(),
-              allUnimplementedMethods.get(itf0));
-        } else if (!allCollectionUnimplementedMethods.isEmpty()) {
-          final Set<Interface> interfaces = allCollectionUnimplementedMethods
-              .keySet();
-          final Interface itf0 = (Interface) interfaces.toArray()[0];
-
-          final Map<Integer, List<String>> unimplMethsByIdxMap = allCollectionUnimplementedMethods
-              .get(itf0);
-          final Set<Integer> indexes = unimplMethsByIdxMap.keySet();
-          final Integer idx0 = (Integer) indexes.toArray()[0];
-
-          // Show missing methods from the first concerned interface
-          errorManager.logError(MPPErrors.MISSING_COLL_METHOD_DECLARATION,
-          /* locatorNoLine(sourceFile), */definition.getName(), itf0.getName(),
-              idx0.toString(), unimplMethsByIdxMap.get(idx0));
-        }
-      }
-  }
-
-  private boolean isControllerInterface(final String currItf) {
-    /*
-     * Check if we host controllers (METH-s will be generated so they can't be
-     * found in Source-s) Inspired from
-     * AbstractControllerADLLoaderAnnotationProcessor
-     */
-    if (definition instanceof ControllerContainer) {
-      for (final Controller ctrl : ((ControllerContainer) definition)
-          .getControllers()) {
-        for (final ControllerInterface ctrlItf : ctrl.getControllerInterfaces()) {
-          if (ctrlItf.getName().equals(currItf)) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
+	protected String inlineParams = null;
+	final protected String staticInlinePrefix = "static inline";
+
+	public OptimCPLChecker(final ErrorManager errorManager,
+			final Definition definition, final Map<Object, Object> context) {
+
+		super(errorManager, definition, context);
+	}
+
+	/**
+	 * @param itfName
+	 * @param itfIdx
+	 * @param methName
+	 * @param sourceFile
+	 * @param body
+	 * @throws ADLException
+	 */
+	//@SuppressWarnings("unchecked")
+	public String computeInlinePrefix(final Token itfName,
+			final String itfIdx, final Token methName, final String sourceFile) throws ADLException {
+
+		if (definition == null) {
+			// Add this condition so that the testNG will not throw exceptions
+			// (stand-alone node)
+			return null;
+		}
+
+		// all previous checks from serverMethDef have already been done
+		final Interface itf = ASTHelper.getInterface(definition, itfName.getText());
+
+		if (itfIdx != null) {
+			logger.severe("Cannot inline collection methods ! - Skip");
+			return null;
+		}
+
+		// ----------------------------------------
+		// Inline checking and method body storage
+
+		// Then we need to remember the method body for its inline variation
+		// declaration in the .inc file
+
+		// already loaded and checked by serverMethDef
+		final InterfaceDefinition itfDef = InterfaceDefinitionDecorationHelper
+				.getResolvedInterfaceDefinition((TypeInterface) itf, null, null);
+		final Method currMethod = IDLASTHelper.getMethod(itfDef,
+				methName.getText());
+		if (currMethod == null) {
+			errorManager.logError(MPPErrors.UNKNOWN_METHOD,
+					locator(methName, sourceFile), itfName.getText(),
+					methName.getText());
+		}
+
+		// Care: this method is a prototype
+		String typeString = typeToString(currMethod.getType());
+
+		final String methodSymbol = "__component_" + definition.getName().replace(".", "_") + "_"
+          + itfName.getText() + "_" + methName.getText() + "_inline";
+		
+		String methodSymbolAndParams = staticInlinePrefix + " " + typeString + " " + methodSymbol + " (" + (inlineParams != null ? inlineParams : "") + ")";
+
+		// cleanup
+		inlineParams = null;
+
+		return methodSymbolAndParams;
+	}
+
+	public void setInlineParams(StringBuilder inlineParams) {
+		this.inlineParams = inlineParams.toString();
+	}
+
+	public String getInlineParams() {
+		return inlineParams;
+	}
+
+	protected String typeToString(Type type) {
+		if (type instanceof EnumDefinition) {
+			return ((EnumDefinition) type).getName();
+		} else if (type instanceof EnumReference) {
+			return ((EnumReference) type).getName();
+		} else if (type instanceof StructDefinition) {
+			return ((StructDefinition) type).getName();
+		} else if (type instanceof StructReference) {
+			return ((StructReference) type).getName();
+		} else if (type instanceof UnionDefinition) {
+			return ((UnionDefinition) type).getName();
+		} else if (type instanceof UnionReference) {
+			return ((UnionReference) type).getName();
+		} else if (type instanceof TypeDefinition) {
+			return ((TypeDefinition) type).getName();
+		} else if (type instanceof TypeDefReference) {
+			return ((TypeDefReference) type).getName();
+		} else if (type instanceof ConstantDefinition) {
+			return ((ConstantDefinition) type).getName();
+		} else if (type instanceof PrimitiveType) {
+			return ((PrimitiveType) type).getName();
+		} else if (type instanceof ArrayOf) {
+			// TODO:see IDL2C.stc arrayOfVarName for cleaner handling
+			return typeToString(((ArrayOf) type).getType()) + " * "; 
+		} else if (type instanceof PointerOf) {
+			return typeToString(((ArrayOf) type).getType()) + " * ";
+		} else return ""; // TODO: check even if this should never happen, or raise an error
+	}
+
 }

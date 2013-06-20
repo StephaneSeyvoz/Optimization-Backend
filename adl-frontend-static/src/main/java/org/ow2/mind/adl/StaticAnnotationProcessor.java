@@ -208,10 +208,16 @@ AbstractADLLoaderAnnotationProcessor {
 					if (OptimASTHelper.isInline(binding)) {
 						OptimASTHelper.setInlineDecoration(currentClientItf);
 						
-						// In the OptimizedDefinitionCompiler we want to know if
-						// the current definition (server) will have to generate
-						// a <Definition.name>.inline file
-						OptimASTHelper.setInlineDecoration(currentServerDef);
+						// We need for the client to know which target <Definition.name>.inline
+						// files to -include (in the OptimizedDefinitionCompiler)
+						List<Definition> inlineTargetDefinitions = null;
+						Object oldInlineTargetDefinitions = currentServerItf.astGetDecoration("inline-target-defs");
+						if (oldInlineTargetDefinitions == null)
+							inlineTargetDefinitions = new ArrayList<Definition>();
+						else inlineTargetDefinitions = (List<Definition>) oldInlineTargetDefinitions; // TODO add check
+							
+						inlineTargetDefinitions.add(currentServerDef);
+						currentClientDef.astSetDecoration("inline-target-defs", inlineTargetDefinitions);
 					}
 				}
 
@@ -221,19 +227,13 @@ AbstractADLLoaderAnnotationProcessor {
 					
 					// optimize further on ?
 					if (OptimASTHelper.isInline(binding) && !fromComponent.equals("this")) { 
+						
 						OptimASTHelper.setInlineDecoration(currentServerItf);
-					
-						// in CPL-Preproc we will only have server info,
-						// so we need to provide a way to go up the bindings
-						// for the clients to be optimized
-						List<Interface> newBindingSources = null;
-						Object oldBindingSources = currentServerItf.astGetDecoration("inline-sources");
-						if (oldBindingSources == null)
-							newBindingSources = new ArrayList<Interface>();
-						else newBindingSources = (List<Interface>) oldBindingSources; // TODO add check
-							
-						newBindingSources.add(currentClientItf);
-						currentServerItf.astSetDecoration("inline-sources", newBindingSources);
+						
+						// In the OptimizedDefinitionCompiler we want to know if
+						// the current definition (server) will have to generate
+						// a <Definition.name>.inline file
+						OptimASTHelper.setInlineDecoration(currentServerDef);
 					}
 				}
 
