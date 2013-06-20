@@ -87,7 +87,7 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<groups>${test.groups}</groups>
+					<groups>${test.groups}, optimizations</groups>
 					<systemPropertyVariables>
 						<default.file.level>FINEST</default.file.level>
 						<loggers.outfile>${project.build.testOutputDirectory}/test-log.txt</loggers.outfile>

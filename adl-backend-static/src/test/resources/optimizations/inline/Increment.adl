@@ -33,7 +33,6 @@
  * "helloworld.Client" and "helloworld.Server".
  */
 @Singleton
-@Run(addBootstrap=true)
 composite inline.Increment {
 
   provides Main as main;
