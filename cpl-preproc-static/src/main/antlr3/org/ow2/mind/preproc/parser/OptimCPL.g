@@ -20,7 +20,7 @@
  * Contributors: Olivier Lobry, Matthieu Leclercq
  */
  
-grammar CPL;
+grammar OptimCPL;
 
 options {
 	output = template;
@@ -96,7 +96,7 @@ tokens{
 @members{
 	
 	String getSourceFile() {
-		return ((CPLLexer) input.getTokenSource()).getSourceFileName();
+		return ((OptimCPLLexer) input.getTokenSource()).getSourceFileName();
 	}
 	
 	public void displayRecognitionError(String[] tokenNames,

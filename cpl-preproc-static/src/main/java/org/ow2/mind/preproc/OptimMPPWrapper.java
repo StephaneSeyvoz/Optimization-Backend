@@ -22,14 +22,10 @@
 
 package org.ow2.mind.preproc;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +41,6 @@ import org.objectweb.fractal.adl.error.GenericErrors;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.error.ErrorManager;
 import org.ow2.mind.plugin.PluginManager;
-import org.ow2.mind.preproc.BasicMPPWrapper.BasicMPPCommand;
 import org.ow2.mind.preproc.parser.AbstractCPLParser;
 import org.ow2.mind.preproc.parser.OptimAbstractCPLParser;
 
@@ -72,9 +67,8 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 
 	protected class OptimMPPCommand extends BasicMPPCommand implements MPPCommand {
 
-		private List<File>                  inputFiles;
-		private List<File>                  outputFiles;
-
+		protected OptimCPLChecker                cplChecker;
+		
 		OptimMPPCommand(final Definition definition,
 				final Map<Object, Object> context) {
 
@@ -153,10 +147,6 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 				if (outPS != null) outPS.close();
 				if (headerOutPS != null) headerOutPS.close();
 			}
-		}
-
-		public String getDescription() {
-			return "MPP: " + outputFile.getPath();
 		}
 	}
 }
