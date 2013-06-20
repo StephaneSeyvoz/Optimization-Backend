@@ -28,9 +28,7 @@
  */
 interface inline.Service {
 
-  void print(string msg);
- 
-  void println(string msg);
-
+	int increment(int i);
+  
 };
 

@@ -24,59 +24,13 @@
 
 #include <stdio.h>
 
-// -----------------------------------------------------------------------------
-// Constructor implementation
-// -----------------------------------------------------------------------------
-
-CONSTRUCTOR() {
-  // initialize the "count" private data
-  PRIVATE.count = 0;
-}
+static int i = 0;
 
 // -----------------------------------------------------------------------------
 // Implementation of the s interface with signature helloworld.Service.
 // -----------------------------------------------------------------------------
 
-// void print(string msg)
-void METH(s, print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
-  string h = ATTR(header);
-
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
-  int c = PRIVATE.count;
-
-  // Use printf to print message.
-  printf("%s(count=%d) %s", h, c, msg);
-
-  // increment the invocation counter.
-  PRIVATE.count ++;
-}
-
 // void println(string msg)
-void METH(s, println)(string msg) {
-  printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
-}
-
-// void print(string msg)
-void METH(s2, print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
-  string h = ATTR(header);
-
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
-  int c = PRIVATE.count;
-
-  // Use printf to print message.
-  printf("%s(count=%d) %s", h, c, msg);
-
-  // increment the invocation counter.
-  PRIVATE.count ++;
-}
-
-// void println(string msg)
-void METH(s2, println)(string msg) {
-  printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
+int METH(s, increment)(int i) {
+  return i++;
 }

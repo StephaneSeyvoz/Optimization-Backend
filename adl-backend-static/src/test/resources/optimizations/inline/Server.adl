@@ -36,10 +36,6 @@
 primitive inline.Server {
   
   provides Service as s ;
-  provides Service as s2 ;
   
-  attribute string header = "-> ";
-
-  data serverData.c;
   source server.c;
 }

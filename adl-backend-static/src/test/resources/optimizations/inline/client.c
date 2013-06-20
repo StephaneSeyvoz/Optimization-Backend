@@ -29,17 +29,9 @@
 // int main(int argc, string[] argv)
 int METH(main, main) (int argc, char *argv[]) {
 
-  // call the 'print' method of the 's' client interface.
-  CALL(s, print)("hello world !");
+  int i = -1;
 
-  // call again the same interface to look at invocation count
-  CALL(s, println)("goodbye world");
-  
-  // call the 'print' method of the 's2' client interface.
-  CALL(s2, print)("hello world !");
+  i += CALL(s, increment)(i);
 
-  // call again the same interface to look at invocation count
-  CALL(s2, println)("goodbye world");
-
-  return 0;
+  return i;
 }

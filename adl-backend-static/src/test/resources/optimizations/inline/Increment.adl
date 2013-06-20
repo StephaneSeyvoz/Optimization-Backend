@@ -22,11 +22,27 @@
  * Authors: Matthieu Leclercq
  */
 
-// -----------------------------------------------------------------------------
-// Declaration of private data of the "helloworld.Server" component.
-// -----------------------------------------------------------------------------
+/**
+ * The "helloworld.Helloworld" composite provides an interface whose signature 
+ * (i.e. its type) is defined in the "boot.Main" IDL and whose name is 
+ * "entryPoint". This interface is the entry point of the application; it will 
+ * be called by the bootstrap component when the application is launched.
+ *
+ * This composite also contains two sub-components called "clientSubComp" and 
+ * "serverSubComp" that are defines respectively in ADLs called 
+ * "helloworld.Client" and "helloworld.Server".
+ */
+@Singleton
+@Run(addBootstrap=true)
+composite inline.Increment {
 
-struct {
-  // declares an invocation counter.
-  int count;
-} PRIVATE;
+  provides Main as main;
+  contains Client as clientSubComp;
+  contains Server as serverSubComp;
+
+  binds this.main to clientSubComp.main;
+  
+  @Static
+  @Inline
+  binds clientSubComp.s to serverSubComp.s;
+}

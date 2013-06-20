@@ -308,7 +308,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 				"common", "optimizations");
 
 		initContext(true);
-		String adlName = "inline.Helloworld";
+		String adlName = "inline.Increment";
 
 		List<String> flags = new ArrayList<String>();
 
