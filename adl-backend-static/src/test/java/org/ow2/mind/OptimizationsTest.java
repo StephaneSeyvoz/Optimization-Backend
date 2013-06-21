@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 public class OptimizationsTest extends AbstractOptimizationTest {
 
 	protected static Logger logger = FractalADLLogManager.getLogger("optimizations-test");
-	
+
 	@Override
 	protected void initPath() {
 		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
@@ -84,7 +84,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 				final Definition d = runner.load(adlName);
 				final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
-				
+
 				// Only add the test case to the list if it's @Run-annotated
 				// (useless test case otherwise : gain some execution time !)
 				if (runAnno != null)
@@ -180,7 +180,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		}
 
 	}
-	
+
 	/**
 	 * The most basic test.
 	 */
@@ -239,7 +239,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
-	
+
 	/**
 	 * Same as partialAlternateOptimizationsTest() but with internal data garbaging (recursively on the whole architecture).
 	 */
@@ -261,7 +261,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
-	
+
 	/**
 	 * Testing @Single with @StaticDefinitionsBindingsList and @StaticDefinitionsBinding
 	 */
@@ -273,13 +273,13 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		initContext(true);
 		String adlName = "GenericApplication<" + "definitionbinding.factory.selfcall.Helloworld" + ">";
-		
+
 		File exeFile = runner.compile(adlName, null);
 		final int r = runner.run(exeFile, (String[]) null);
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
-	
+
 	/**
 	 * Testing @SingleStaticCallPointer
 	 */
@@ -291,13 +291,13 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		initContext(true);
 		String adlName = "GenericApplication<" + "singlestaticcallptr.factory.selfcall.Helloworld" + ">";
-		
+
 		File exeFile = runner.compile(adlName, null);
 		final int r = runner.run(exeFile, (String[]) null);
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
-	
+
 	/**
 	 * The most basic test.
 	 */
@@ -308,29 +308,12 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 				"common", "optimizations");
 
 		initContext(true);
-		String adlName = "inline.Increment";
+		String adlName = "GenericApplication" + "<" + "inline.Increment" + ">";
 
-		List<String> flags = new ArrayList<String>();
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
 
-		final Definition d = runner.load(adlName);
-		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
-		if (runAnno != null) {
-			runner.addCFlags(flags);
-
-			final String adl;
-			adl = (runAnno.addBootstrap)
-					? "GenericApplication" + "<" + adlName + ">"
-							: adlName;
-
-			File exeFile = runner.compile(adl, runAnno.executableName);
-			final int r = runner.run(exeFile, (String[]) null);
-
-			assertEquals(r, 0, "Unexpected return value");
-
-		} else {
-			if (logger.isLoggable(Level.FINE))
-				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
-		}
+		assertEquals(r, 0, "Unexpected return value");
 
 	}
 }
