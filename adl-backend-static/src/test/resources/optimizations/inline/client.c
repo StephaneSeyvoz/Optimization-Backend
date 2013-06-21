@@ -31,7 +31,7 @@ int METH(main, main) (int argc, char *argv[]) {
 
   int i = -1;
 
-  i += CALL(s, increment)(i);
+  i = CALL(s, increment)(i);
 
   return i;
 }
