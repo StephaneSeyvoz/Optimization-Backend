@@ -235,7 +235,7 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
 
 protected curlies returns [StringBuilder res = new StringBuilder()] :
   '{' { $res.append("{"); }
-    ( curlies
+    ( nestedC = curlies { $res.append($nestedC.res); }
       | methDef    { $res.append($methDef.res); }
       | methCall    { $res.append($methCall.res); }
       | attAccess     { $res.append($attAccess.res); }
