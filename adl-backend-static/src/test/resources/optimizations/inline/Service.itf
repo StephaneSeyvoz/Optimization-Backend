@@ -29,6 +29,7 @@
 interface inline.Service {
 
 	int increment(int i);
+	int decrement(int i);
   
 };
 

@@ -29,9 +29,13 @@
 // int main(int argc, string[] argv)
 int METH(main, main) (int argc, char *argv[]) {
 
-  int i = -1;
+  int i = 0;
 
   i = CALL(s, increment)(i);
+  i = CALL(s, decrement)(i);
+
+  i = CALL(s2, increment)(i);
+  i = CALL(s2, decrement)(i);
 
   return i;
 }

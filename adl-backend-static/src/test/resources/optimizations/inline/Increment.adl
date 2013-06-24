@@ -44,4 +44,8 @@ composite inline.Increment {
   @Static
   @Inline
   binds clientSubComp.s to serverSubComp.s;
+  
+  @Static
+  @Inline
+  binds clientSubComp.s2 to serverSubComp.s2;
 }

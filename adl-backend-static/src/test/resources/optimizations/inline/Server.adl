@@ -36,6 +36,7 @@
 primitive inline.Server {
   
   provides Service as s ;
+  provides Service as s2 ;
   
   source server.c;
 }
