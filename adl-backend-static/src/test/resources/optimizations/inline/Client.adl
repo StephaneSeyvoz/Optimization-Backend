@@ -33,8 +33,8 @@
 primitive inline.Client {
   
   provides Main as main;
-  requires Service as s;
-  requires Service as s2;
+  requires Service as s; 
+  requires Service as s2; 
   
   source client.c;
 }

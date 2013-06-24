@@ -198,9 +198,9 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
          '{'
           {
             if (!singletonMode) 
-              body.append("{ CHECK_CONTEXT_PTR "); 
+              $res.append("{ CHECK_CONTEXT_PTR "); 
             else
-              body.append("{");
+              $res.append("{");
             if (headerOut != null) headerOut.println("#define INTERFACE_METHOD_" + $id.text + "_" + $meth.text + "_IMPLEMENTED"); 
           }
           
@@ -223,6 +223,7 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
               inlinePrefix = cplChecker.computeInlinePrefix($id, itfIdx, $meth, getSourceFile());
               if (inlinePrefix != null) {
                 inlineOut.print(inlinePrefix);
+                inlineOut.print("{");
                 inlineOut.println(body.toString());
               }
             }              

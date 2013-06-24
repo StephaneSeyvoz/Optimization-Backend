@@ -299,7 +299,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	}
 
 	/**
-	 * The most basic test.
+	 * Test if @Static @Inline work well.
 	 */
 	@Test(groups = {"optimizations"})
 	public void basicInlineTest()
@@ -309,6 +309,25 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		initContext(true);
 		String adlName = "GenericApplication" + "<" + "inline.Increment" + ">";
+
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+
+	}
+	
+	/**
+	 * The most basic test.
+	 */
+	@Test /* (groups = {"optimizations"}) */
+	public void inlineDefinitionBindingTest()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication" + "<" + "inline.definitionbinding.IncrementDefinitionBinding" + ">";
 
 		File exeFile = runner.compile(adlName, null);
 		final int r = runner.run(exeFile, (String[]) null);
