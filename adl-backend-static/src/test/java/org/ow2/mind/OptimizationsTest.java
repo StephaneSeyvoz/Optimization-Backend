@@ -299,7 +299,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	}
 
 	/**
-	 * Test if @Static @Inline work well.
+	 * Test if @Static @Inline works well.
 	 */
 	@Test(groups = {"optimizations"})
 	public void basicInlineTest()
@@ -318,9 +318,9 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	}
 	
 	/**
-	 * The most basic test.
+	 * Test if @StaticDefinitionBindingList({@StaticDefinitionBinding(fromItf=..., toItf=..., inline=true)}) works well.
 	 */
-	@Test /* (groups = {"optimizations"}) */
+	@Test(groups = {"optimizations"})
 	public void inlineDefinitionBindingTest()
 			throws Exception {
 		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
