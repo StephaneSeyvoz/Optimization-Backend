@@ -13,7 +13,6 @@ install:
   - "mvn -U clean -PCI-profile"
   - "cd ../cpl-preproc-static"
   - "mvn -U clean -PCI-profile"
-  - "cd .."
   - "cd ../adl-backend-static"
   - "mvn -U clean -PCI-profile"
   - "cd .."
@@ -23,4 +22,4 @@ script:
   - "cd cpl-preproc-static"
   - "mvn -U install -PCI-profile"
   - "cd ../adl-backend-static"
-  - "mvn -U verify -PCI-profile"
+  - "mvn -U install -PCI-profile"
