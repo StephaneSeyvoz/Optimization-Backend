@@ -27,6 +27,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,13 +72,24 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 
 		protected OptimCPLChecker 				cplChecker;
 		protected File 							inlineOutputFile;
-		
+
 		OptimMPPCommand(final Definition definition,
 				final Map<Object, Object> context) {
 
 			super(definition, context);
 
 			this.cplChecker = new OptimCPLChecker(errorManagerItf, definition, context);
+		}
+
+		public void prepare() {
+			inputFiles = Arrays.asList(inputFile);
+			
+			outputFiles = new ArrayList<File>();
+			outputFiles.add(outputFile);
+			if (headerOutputFile != null)
+				outputFiles.add(headerOutputFile);
+			if (inlineOutputFile != null)
+				outputFiles.add(inlineOutputFile);
 		}
 
 		public boolean exec() throws ADLException, InterruptedException {
@@ -97,7 +110,7 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 			if (!(basicMpp instanceof OptimAbstractCPLParser)) {
 				return super.exec();
 			}
-			
+
 			final OptimAbstractCPLParser mpp = (OptimAbstractCPLParser) ExtensionHelper.getParser(pluginManagerItf,
 					tokens, context);
 
@@ -126,7 +139,7 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 					}
 					mpp.setHeaderOutputStream(headerOutPS);
 				}
-				
+
 				if (inlineOutputFile != null) {
 					try {
 						inlineOutputFile.getParentFile().mkdirs();
@@ -136,6 +149,11 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 						throw new CompilerError(GenericErrors.INTERNAL_ERROR, e, "IO error");
 					}
 					mpp.setInlineOutputStream(inlineOutPS);
+					
+					//
+					inlineOutPS.println("#define __COMPONENT_IN_" + definition.getName().toUpperCase().replace(".", "_"));
+					inlineOutPS.println("#include \"" + definition.getName().replace(".", "/") + ".adl.h\"");
+					//
 				}
 
 				mpp.setSingletonMode(singletonMode);
@@ -148,7 +166,7 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 
 				if (logger.isLoggable(Level.FINE) && inlineOutputFile != null)
 					logger.fine("MPP: inlineOutputFile=" + inlineOutputFile.getPath());
-				
+
 				final int nbErrors = errorManagerItf.getErrors().size();
 				try {
 					mpp.preprocess();

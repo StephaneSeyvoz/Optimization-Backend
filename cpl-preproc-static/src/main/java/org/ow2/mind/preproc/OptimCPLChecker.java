@@ -51,7 +51,6 @@ import org.ow2.mind.idl.ast.UnionReference;
 
 public class OptimCPLChecker extends CPLChecker {
 
-	protected String inlineParams = null;
 	final protected String staticInlinePrefix = "static inline";
 
 	public OptimCPLChecker(final ErrorManager errorManager,
@@ -109,20 +108,9 @@ public class OptimCPLChecker extends CPLChecker {
 		final String methodSymbol = "__component_" + definition.getName().replace(".", "_") + "_"
           + itfName.getText() + "_" + methName.getText() + "_inline";
 		
-		String methodSymbolAndParams = staticInlinePrefix + " " + typeString + " " + methodSymbol + " (" + (inlineParams != null ? inlineParams : "") + ")";
-
-		// cleanup
-		inlineParams = null;
+		String methodSymbolAndParams = staticInlinePrefix + " " + typeString + " " + methodSymbol;
 
 		return methodSymbolAndParams;
-	}
-
-	public void setInlineParams(StringBuilder inlineParams) {
-		this.inlineParams = inlineParams.toString();
-	}
-
-	public String getInlineParams() {
-		return inlineParams;
 	}
 
 	protected String typeToString(Type type) {

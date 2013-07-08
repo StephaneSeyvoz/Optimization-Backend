@@ -219,8 +219,8 @@ MultiCALLStaticDefinitionBinding(definition, interfaceDefinitions, itf, targetit
  * Same as MultiCALLStaticDefinitionBinding except this time suffix by inline to use the static inline clone of the target method
  */
 MultiCALLStaticInlineDefinitionBinding(definition, interfaceDefinitions, itf, targetitf) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) <targetitf>_##methName##_inline(
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) <targetitf>_##methName##_inline() 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) <targetitf>_##methName##_inline(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) <targetitf>_##methName##_inline(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
