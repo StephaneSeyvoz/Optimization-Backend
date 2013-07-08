@@ -192,15 +192,15 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
       }
     }
     (
-      paramsDef ws10=ws* { $res.append($paramsDef.res).append(wstext($ws10.text)); }
+      paramsDef ws10=ws* { body.append($paramsDef.res).append(wstext($ws10.text)); }
       
       (
          '{'
           {
             if (!singletonMode) 
-              $res.append("{ CHECK_CONTEXT_PTR "); 
+              body.append("{ CHECK_CONTEXT_PTR "); 
             else
-              $res.append("{");
+              body.append("{");
             if (headerOut != null) headerOut.println("#define INTERFACE_METHOD_" + $id.text + "_" + $meth.text + "_IMPLEMENTED"); 
           }
           
@@ -223,7 +223,6 @@ protected serverMethDef returns [StringBuilder res = new StringBuilder()]
               inlinePrefix = cplChecker.computeInlinePrefix($id, itfIdx, $meth, getSourceFile());
               if (inlinePrefix != null) {
                 inlineOut.print(inlinePrefix);
-                inlineOut.print("{");
                 inlineOut.println(body.toString());
               }
             }              
@@ -385,6 +384,20 @@ protected structDecl returns [StringBuilder res = new StringBuilder()]
                   $res.append(wstext($ws2.text)).append(" PRIVATE_DATA_T");
                   $res.append(str);
                   $res.append(";");
+                  
+                  // FIXME: leads to type redefinition, try to include in a different way ?
+                  // inline optimization: need the typedef in local scope
+                  if (inlineOut != null) {
+                    inlineOut.print("typedef struct");
+                    inlineOut.print(wstext($ws1.text));
+                    inlineOut.print("{");
+                    inlineOut.print(" COMP_DATA; ");
+                    inlineOut.print(structContent);
+                    inlineOut.print(wstext($ws2.text));
+                    inlineOut.print(" PRIVATE_DATA_T");
+                    inlineOut.print(str);
+                    inlineOut.println(";");
+                  }
                 }
               } else {
                 if (singletonMode) {
@@ -627,7 +640,6 @@ protected paramsDef returns [StringBuilder res = new StringBuilder()]
 	| '(' inParamsDef ')'        
 	  {
 	     $res.append(" PARAM_DECL_BEGIN ").append($inParamsDef.res).append(" PARAM_DECL_END ");
-	     cplChecker.setInlineParams($inParamsDef.res);
 	  }
 	;
 protected inParamsDef returns [StringBuilder res = new StringBuilder()] 
@@ -646,10 +658,16 @@ protected params returns [StringBuilder res = new StringBuilder()]
     ;
 
 protected inParams  returns [StringBuilder res = new StringBuilder()] 
-    : ( '(' ws* ')'              { $res.append("(").append(wstext($ws.text)).append(")");}
-        |'(' ip = inParams ')'  { $res.append("(").append($ip.res).append(")"); }
-        | expr                  { $res.append($expr.res); }
-        | e = ~('(' | ')')      { $res.append($e.text); }
+    : ( 
+        expr                      { $res.append($expr.res); }
+        | e = ~('(' | ')')        { $res.append($e.text); }
+        | (
+            '(' 
+                (
+                  ws* ')'             { $res.append("(").append(wstext($ws.text)).append(")"); }
+                  | ip = inParams ')' { $res.append("(").append($ip.res).append(")"); }
+                )
+          )
       )+
     ;
 
