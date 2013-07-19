@@ -403,7 +403,12 @@ IS_BOUND(definition) ::= <<
 #define IS_BOUND(itfName) IS_BOUND_##itfName
 <definition.interfaces:IS_BOUND_INTERFACE(definition=definition, itf=it); separator="\n">
 <else>
+	<if (definition.astDecorations.("static-in-parent"))>
+#define IS_BOUND(itfName) IS_BOUND_##itfName
+<definition.interfaces:IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it); separator="\n">
+	<else>
 #define IS_BOUND(itfName) IS_BOUND_PTR(GET_MY_INTERFACE(itfName))
+	<endif>
 <endif>
 >>
 
@@ -412,6 +417,14 @@ IS_BOUND_INTERFACE(definition, itf) ::= <<
 #define IS_BOUND_<itf.name> 1
 <else>
 #define IS_BOUND_<itf.name> 0
+<endif>
+>>
+
+IS_BOUND_INTERFACE_STATIC(definition, itf) ::= <<
+<if (itf.astDecorations.("is-static"))>
+#define IS_BOUND_<itf.name> 1
+<else>
+#define IS_BOUND_<itf.name> IS_BOUND_PTR(GET_MY_INTERFACE(<itf.name>))
 <endif>
 >>
 
