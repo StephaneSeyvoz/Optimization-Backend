@@ -25,7 +25,12 @@
     name="The Optimization-Oriented MIND preprocessor plugin.">
 
 	<extension point="org.ow2.mind.preproc.cpl-parser">
-    	<factory class="org.ow2.mind.preproc.OptimCPLPreprocessorFactory"/>
+    	<factory class="org.ow2.mind.preproc.OptimCPLPreprocessorFactory">
+    		<enableWhen>
+			<cmdOption
+				id="org.ow2.mind.adl-backend-static.Optim" />
+			</enableWhen>
+		</factory>
   	</extension>
 
     <extension
