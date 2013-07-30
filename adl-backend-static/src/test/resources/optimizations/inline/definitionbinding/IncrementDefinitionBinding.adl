@@ -1,0 +1,18 @@
+
+import memory.Malloc;
+
+@Singleton
+@StaticDefinitionsBindingsList({@StaticDefinitionBinding(fromItf = "inline.definitionbinding.Client.s", toItf = "inline.definitionbinding.Server.s", inline=true)})
+composite inline.definitionbinding.IncrementDefinitionBinding {
+
+  provides Main as main;
+  contains Client as clientSubComp;
+  
+  contains Factory<Server> as serverFactory;
+  contains Malloc as allocator;
+  
+  binds this.main to clientSubComp.entryPoint;
+  
+  binds clientSubComp.f to serverFactory.factory;
+  binds serverFactory.allocator to allocator.allocator;
+}

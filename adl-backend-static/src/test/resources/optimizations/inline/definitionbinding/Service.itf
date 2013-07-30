@@ -1,0 +1,8 @@
+
+interface inline.definitionbinding.Service {
+
+	int increment(int i);
+	int decrement(int i);
+
+};
+

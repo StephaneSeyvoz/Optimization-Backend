@@ -1,0 +1,10 @@
+
+@controller.Component
+primitive inline.definitionbinding.Server {
+  
+  @Single
+  provides inline.definitionbinding.Service as s ;
+  
+  data serverData.c;
+  source server.c;
+}
