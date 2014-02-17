@@ -13,9 +13,7 @@ install:
   - "mvn -U clean -PCI-profile"
   - "cd ../adl-frontend-static"
   - "mvn -U install -PCI-profile"
-  - "cd .."
-  - "git clone http://github.com/StephaneSeyvoz/single-interface-plugin.git"
-  - "cd single-interface-plugin"
+  - "cd ../single-interface-plugin"
   - "mvn -U install -PCI-profile"
   - "cd .."
 script:
