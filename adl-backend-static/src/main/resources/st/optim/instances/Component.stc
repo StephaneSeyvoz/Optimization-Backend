@@ -90,14 +90,14 @@ DeclareDependencies(definition, instance) ::= <<
 DeclareComponentInstance(instance) ::= <<
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 #ifndef INSTANCE_<instance.decorations.("instance-name"); format="toCName">_DECLARED
-<instance.definition.name;format="toUpperCName">_DECLARE_INSTANCE(<instance.decorations.("instance-name"); format="toCName">);
+<instance.definition.name;format="toUpperCName">_DECLARE_INSTANCE(<instance.decorations.("instance-name"); format="toCName">)
 #define INSTANCE_<instance.decorations.("instance-name"); format="toCName">_DECLARED
 #endif
 
 <else>
 /*
 #ifndef INSTANCE_<instance.decorations.("instance-name"); format="toCName">_DECLARED
-<instance.definition.name;format="toUpperCName">_DECLARE_INSTANCE(<instance.decorations.("instance-name"); format="toCName">);
+<instance.definition.name;format="toUpperCName">_DECLARE_INSTANCE(<instance.decorations.("instance-name"); format="toCName">)
 #define INSTANCE_<instance.decorations.("instance-name"); format="toCName">_DECLARED
 */
 <endif>
@@ -110,7 +110,7 @@ DeclarePrivateData(definition, instance) ::= <<
 <if (definition.data)>
 /* Duplicate-definition fix for some families of compilers such as IAR */
 #ifndef INSTANCE_<instance.decorations.("instance-name"); format="toCName">__PRIVATEDATA_DECLARED
-<instance.definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(<instance.decorations.("instance-name"); format="toCName">_private_data);
+<instance.definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(<instance.decorations.("instance-name"); format="toCName">_private_data)
 #define INSTANCE_<instance.decorations.("instance-name"); format="toCName">_PRIVATEDATA_DECLARED
 #endif
 <endif>
@@ -149,7 +149,7 @@ InitInstance(definition, instance) ::= <<
   <AddSubComponentValues(definition=definition, instance=instance)>
   <AddAttributeValues(definition=definition, instance=instance)>
   <AddControllersValues(definition=definition, instance=instance)>
-);
+)
 <endif>
 <! SSZ : END MODIFICATION !>
 >>
