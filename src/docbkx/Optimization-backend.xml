@@ -218,6 +218,17 @@
         definition as value result in a singleton definition.</para>
       </note>
 
+      <example>
+        <title>@Singleton overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AtSingleton.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
       <formalpara>
         <title>Usage condition</title>
 
@@ -229,7 +240,8 @@
       <formalpara>
         <title>Consequences</title>
 
-        <para>Each component annoted with @Singleton are uniques.</para>
+        <para>The annotated component can't be instantiated several
+        time.</para>
       </formalpara>
 
       <formalpara>
@@ -241,7 +253,18 @@
       <formalpara>
         <title>Example</title>
 
-        <para>...</para>
+        <para>The <code>@Singleton</code> annotation is described in the file
+        <code>adl-backend-static/src/test/resources/optimizations/optimizations/GenericApplicationS.adl</code></para>
+
+        <example>
+          <title>The @Singleton annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationS.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
       </formalpara>
     </section>
 
@@ -266,22 +289,37 @@
         </para>
       </formalpara>
 
-      <para>The <classname>StaticBindins</classname> annotation specifies that
-      all binding in the composite are statics.&productName;</para>
+      <para>The <classname>StaticBindings</classname> annotation specifies that
+      all binding in the composite are statics.</para>
 
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>...</para>
+        <para>Remove all metadata in the server interfaces.</para>
+      </note>
+	  <note>
+        <para>This annotation generalize the <classname>Static</classname> annotation for all bindings 
+		inside the composite.</para>
       </note>
 
-      <formalpara><title>Usage condition</title><para>All sub-components are
-      <classname>singleton</classname>.</para> Sub-component can be
-      instantiated outside the composite<classname/>
-      .<para>...</para></formalpara>
+	  <example>
+        <title>@StaticBindings overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AtStaticBindings.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+	  
+      <formalpara>
+		  <title>Usage condition</title>
+			  <para>All sub-components must be <classname>singleton</classname>.</para> 
+	  </formalpara>
 
       <formalpara>
-        <title>Constraints</title>
+        <title>Consequences</title>
 
         <para>Remove all possibility of dynamic binding for the selected
         composite.</para>
@@ -291,7 +329,7 @@
         <title>Gains</title>
 
         <para>This annocation allows to reduce the memory application's
-        footprint and increase call indirections.</para>
+        footprint and reduce call time.</para>
       </formalpara>
 
       <formalpara>
@@ -310,6 +348,7 @@
         <title>Annotation fields</title>
 
         <para>recursive:{true,false}</para>
+		<para>This option allows to propagate the annotation in all sub-composites.</para>
       </formalpara>
 
       <formalpara>
@@ -322,28 +361,42 @@
         </para>
       </formalpara>
 
-      <para>The <classname>GarbageUsunedµInternal</classname> annotation
-      allows to remove residual generated code in conjonction with the usage
-      of the annocation
-      <classname>StaticBindings</classname>.&productName;</para>
+      <para>The <classname>GarbageUsunedInternal</classname> annotation
+      allows to remove residual generated code in conjunction with the usage
+      of the annotation
+      <classname>StaticBindings</classname>.</para>
 
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>This remove unsused code for composite and primitive
+        <para>This remove unused code for composite and primitive
         definitions</para>
       </note>
-
-      <note>
-        <para>This remove unsused code for composite and primitive
-        definitions.</para>
+	  <note>
+        <para>This annotation is destined to be merged with the <classname>StaticBindings</classname> annotation.</para>
       </note>
+	  
+	  <example>
+        <title>@GarbageUnusedInternal overview</title>
 
-      <formalpara><title>Usage condition</title><para>Unusable if there's
-      collection.</para><classname/> .<para>...</para></formalpara>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AtGarbageUnusedInternal.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+	  
+      <formalpara>
+	  <title>Usage condition</title>
+	  <para>No collection in the composite allowed.</para>
+	  <para>No unbound interface allowed.</para>
+	  <para>[TO BE CHECKED] Allows only one required controller.</para>
+	  <para>[TO BE CHECKED] Allows only one provided controller.</para>
+	  </formalpara>
 
       <formalpara>
-        <title>Constraints</title>
+        <title>Consequences</title>
 
         <para>Remove all possibility of dynamic binding for the selected
         composite.</para>
@@ -352,8 +405,8 @@
       <formalpara>
         <title>Gains</title>
 
-        <para>This annocation allows to reduce the memory application's
-        footprint and increase call indirections.</para>
+        <para>This annotation allows to reduce the memory application's
+        footprint.</para>
       </formalpara>
 
       <formalpara>
