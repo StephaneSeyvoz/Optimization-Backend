@@ -30,11 +30,9 @@ import org.objectweb.fractal.adl.Node;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
 import org.ow2.mind.adl.annotation.predefined.GarbageUnusedInternals;
-import org.ow2.mind.adl.annotation.predefined.Static;
-import org.ow2.mind.adl.annotation.predefined.StaticBindings;
-import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.ComponentContainer;
+import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.annotation.Annotation;
 import org.ow2.mind.annotation.AnnotationHelper;
 

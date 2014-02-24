@@ -50,7 +50,7 @@ public class StaticBindings implements Annotation {
 	 * Doing the same as Singleton, but maybe this is an error. Actuel target is Definition but
 	 * could (should ?) be Component ?
 	 */
-	private static final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.DEFINITION, ADLAnnotationTarget.COMPONENT};
+	private final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.DEFINITION, ADLAnnotationTarget.COMPONENT};
 	
 	public static final String VALUE = "@StaticBindings";
 	

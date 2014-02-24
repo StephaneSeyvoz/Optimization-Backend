@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 public class OptimizationsTest extends AbstractOptimizationTest {
 
 	protected static Logger logger = FractalADLLogManager.getLogger("optimizations-test");
-	
+
 	@Override
 	protected void initPath() {
 		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
@@ -68,7 +68,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		setup();
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		// GarbageUnusedInternals <=> GUI, StaticBindings <=> SB, r = recursive
 		String annotationCombinations[] = { "", "GUI", "GUIr", "S", "SB", "SBGUI", "SBGUIr", "SBr", "SBrGUI", "SBrGUIr"} ;
@@ -85,7 +84,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 				final Definition d = runner.load(adlName);
 				final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
-				
+
 				// Only add the test case to the list if it's @Run-annotated
 				// (useless test case otherwise : gain some execution time !)
 				if (runAnno != null)
@@ -181,7 +180,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		}
 
 	}
-	
+
 	/**
 	 * The most basic test.
 	 */
@@ -195,7 +194,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "helloworld.Helloworld";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		final Definition d = runner.load(adlName);
 		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
@@ -233,7 +231,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "partial.HelloworldApplicationSB_HWnoSB_sHWSB";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		runner.addCFlags(flags);
 
@@ -242,7 +239,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		assertEquals(r, 0, "Unexpected return value");
 	}
-	
+
 	/**
 	 * Same as partialAlternateOptimizationsTest() but with internal data garbaging (recursively on the whole architecture).
 	 */
@@ -256,7 +253,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = "partial.HelloworldApplicationSBGUIr_HWnoSB_sHWSB";
 
 		List<String> flags = new ArrayList<String>();
-		flags.add("-D__MIND_NO_FACTORY");
 
 		runner.addCFlags(flags);
 
@@ -264,6 +260,80 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		final int r = runner.run(exeFile, (String[]) null);
 
 		assertEquals(r, 0, "Unexpected return value");
+	}
+
+	/**
+	 * Testing @Single with @StaticDefinitionsBindingsList and @StaticDefinitionsBinding
+	 */
+	@Test(groups = {"optimizations"})
+	public void staticDefinitionBindingsTestWithSelfCall()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication<" + "definitionbinding.factory.selfcall.Helloworld" + ">";
+
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+	}
+
+	/**
+	 * Testing @SingleStaticCallPointer
+	 */
+	@Test(groups = {"optimizations"})
+	public void staticFreezeCallPointerTestWithSelfCall()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication<" + "singlestaticcallptr.factory.selfcall.Helloworld" + ">";
+
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+	}
+
+	/**
+	 * Test if @Static @Inline works well.
+	 */
+	//@Test(groups = {"optimizations"})
+	public void basicInlineTest()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication" + "<" + "inline.Increment" + ">";
+
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+
+	}
+	
+	/**
+	 * Test if @StaticDefinitionBindingList({@StaticDefinitionBinding(fromItf=..., toItf=..., inline=true)}) works well.
+	 */
+	//@Test(groups = {"optimizations"})
+	public void inlineDefinitionBindingTest()
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", "optimizations");
+
+		initContext(true);
+		String adlName = "GenericApplication" + "<" + "inline.definitionbinding.IncrementDefinitionBinding" + ">";
+
+		File exeFile = runner.compile(adlName, null);
+		final int r = runner.run(exeFile, (String[]) null);
+
+		assertEquals(r, 0, "Unexpected return value");
+
 	}
 }
 

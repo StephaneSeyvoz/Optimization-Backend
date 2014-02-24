@@ -1,0 +1,17 @@
+
+import memory.Malloc;
+
+@Singleton
+composite singlestaticcallptr.factory.selfcall.Helloworld {
+
+  provides Main as main;
+  contains Client as clientSubComp;
+  
+  contains Factory<Server> as serverFactory;
+  contains Malloc as allocator;
+  
+  binds this.main to clientSubComp.entryPoint;
+  
+  binds clientSubComp.f to serverFactory.factory;
+  binds serverFactory.allocator to allocator.allocator;
+}

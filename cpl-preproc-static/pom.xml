@@ -1,0 +1,83 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.ow2.mind</groupId>
+    <artifactId>mind-compiler</artifactId>
+    <version>2.1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.ow2.mind</groupId>
+  <artifactId>cpl-preproc-static</artifactId>
+  <version>2.1-SNAPSHOT</version>
+  <name>Optimization-Oriented Mind Preprocessor</name>
+  <description>An alternative CPL-Preproc allowing to track methods of @Inline bindings.</description>
+  
+  <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>common-backend</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr-runtime</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+        <dependency>
+        	<groupId>${project.groupId}</groupId>
+        	<artifactId>plugin-loader</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>${project.groupId}</groupId>
+        	<artifactId>adl-frontend</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>${project.groupId}</groupId>
+        	<artifactId>idl-frontend</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>${project.groupId}</groupId>
+        	<artifactId>cpl-preproc</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr3-maven-plugin</artifactId>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build test jar</id>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <groups>${test.groups}</groups>
+                    <systemPropertyVariables>
+                        <default.file.level>FINEST</default.file.level>
+                        <loggers.outfile>${project.build.testOutputDirectory}/test-log.txt</loggers.outfile>
+                        <mind.test.cflags>-g -Wall -Werror -Wredundant-decls
+                            -Wunreachable-code -Wstrict-prototypes
+                            -Wwrite-strings</mind.test.cflags>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+  
+</project>

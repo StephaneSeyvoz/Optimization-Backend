@@ -21,14 +21,10 @@
  */
 package org.ow2.mind.adl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
@@ -37,20 +33,18 @@ import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeInterface;
 import org.ow2.mind.adl.ast.ASTHelper;
-import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.ast.AttributeContainer;
 import org.ow2.mind.adl.ast.Binding;
 import org.ow2.mind.adl.ast.BindingContainer;
 import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.ComponentContainer;
 import org.ow2.mind.adl.ast.ImplementationContainer;
-import org.ow2.mind.adl.graph.ComponentGraph;
+import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.graph.BindingInstantiator.BindingDescriptor;
+import org.ow2.mind.adl.graph.ComponentGraph;
 import org.ow2.mind.adl.membrane.ast.ControllerContainer;
 import org.ow2.mind.compilation.CompilationCommand;
 import org.ow2.mind.inject.InjectDelegate;
-
-import com.google.inject.Inject;
 
 /**
  * @author Stephane Seyvoz, Assystem

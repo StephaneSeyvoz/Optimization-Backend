@@ -47,9 +47,9 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 			final Binder binder) {
 
 		/*
-		 * SSZ: We use an OptimAnnotation to differenciate THIS MultiBinder from the standard MultiBinder.
-		 * Otherwise, the Google Guice MultiBinder API (at least in version 2.0) gives you the already created
-		 * DefinitionSourceGenerator MultiBinder already populated with the Standard backend Module.
+		 * SSZ: We use an OptimAnnotation to differentiate THIS MultiBinder from the standard MultiBinder.
+		 * Otherwise, the Google Guice MultiBinder API (at least in version 2.0) gives you the 
+		 * DefinitionSourceGenerator that the MultiBinder already populated in the Standard backend Module.
 		 * This means the "addBinding" calls results were concatenated, leading to queue the optimization backend
 		 * source generation tasks in the delegation chain, meaning our code generation would be called first,
 		 * then OVERWRITTEN by the standard backend source generators afterwards (first in the delegation chain = last called, like a stack).
@@ -77,7 +77,7 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 		setBinder.addBinding().to(OptimizedDefinitionHeaderSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedDefinitionIncSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedImplementationHeaderSourceGenerator.class);
-		setBinder.addBinding().to(DefinitionMacroSourceGenerator.class);
+		setBinder.addBinding().to(OptimizedDefinitionMacroSourceGenerator.class);
 		setBinder.addBinding().to(OptimizedMembraneSourceGenerator.class);
 		setBinder.addBinding().to(IDLDefinitionSourceGenerator.class);
 		setBinder.addBinding().to(GenericDefinitionNameSourceGenerator.class);
@@ -96,6 +96,12 @@ public class ADLStaticBackendModule extends AbstractMindModule {
 						OptimizedDefinitionIncSourceGenerator.DEFAULT_TEMPLATE);
 	}
 
+	protected void configureDefinitionMacroSourceGenerator() {
+	    bind(String.class).annotatedWith(
+	        Names.named(OptimizedDefinitionMacroSourceGenerator.TEMPLATE_NAME)).toInstance(
+	        OptimizedDefinitionMacroSourceGenerator.DEFAULT_TEMPLATE);
+	  }
+	
 	protected void configureMembraneSourceGenerator() {
 		bind(String.class).annotatedWith(
 				Names.named(OptimizedMembraneSourceGenerator.TEMPLATE_NAME)).toInstance(

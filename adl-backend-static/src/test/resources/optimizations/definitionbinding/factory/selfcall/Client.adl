@@ -1,0 +1,16 @@
+
+import fractal.api.Factory;
+import fractal.api.Component;
+import fractal.api.AttributeController;
+
+primitive definitionbinding.factory.selfcall.Client {
+  
+  provides Main as entryPoint;
+  
+  requires optional Component as compCtrl;
+  requires optional AttributeController as attrCtrl;
+  requires optional Service as s;
+  requires Factory as f;
+  
+  source client.c;
+}

@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
@@ -49,6 +50,7 @@ import org.ow2.mind.compilation.CompilerCommand;
 import org.ow2.mind.compilation.PreprocessorCommand;
 import org.ow2.mind.io.IOErrors;
 import org.ow2.mind.preproc.MPPCommand;
+import org.ow2.mind.preproc.OptimMPPWrapper.OptimMPPCommand;
 import org.ow2.mind.st.BackendFormatRenderer;
 
 public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
@@ -178,7 +180,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 
 				cppCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
 						DefinitionIncSourceGenerator.getIncFileName(definition), context));
-
+				
 				// SSZ : BEGIN MODIFICATION
 
 				// Original macro : replaced by our instance-oriented one
@@ -192,29 +194,81 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				ComponentGraph topLevelGraph = (ComponentGraph) context.get("topLevelGraph");
 				ComponentGraph instanceGraph = (ComponentGraph) context.get("currentInstanceGraph");
 
+				File macroFile = null;
+				
 				if (topLevelGraph == null)
-					gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
+					macroFile = outputFileLocatorItf.getCSourceOutputFile(
 							DefinitionMacroSourceGenerator.getMacroFileName(definition),
-							context));
+							context);
 				else {
-					// Useless but I had to put something there
+					// TODO: explain
 					Collection<ComponentGraph> instances = new ArrayList<ComponentGraph>();
 					instances.add(instanceGraph);
 
-					gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
+					macroFile = outputFileLocatorItf.getCSourceOutputFile(
 							InstanceMacroSourceGenerator
-							.getMacroFileName(new InstancesDescriptor(topLevelGraph.getDefinition(), instanceGraph.getDefinition(), instances)), context));
+							.getMacroFileName(new InstancesDescriptor(topLevelGraph.getDefinition(), instanceGraph.getDefinition(), instances)), context);
 					//topLevelGraph = null;
 					//instanceGraph = null;
 					//instances = null;
-
 				}
+				gccCommand.addIncludeFile(macroFile);
 				// SSZ : END MODIFICATION
 
 				gccCommand.setAllDependenciesManaged(true);
 
+				// SSZ
+				// For inline support
+				
+				PreprocessorCommand inlineCppCommand = null;
+				String inlineSuffix = "_inline";
+				
+				// server side
+				if (mppCommand instanceof OptimMPPCommand && OptimASTHelper.hasInlineDecoration(definition)) {
+					
+					// here the cast is forced because we need to access a method that is not
+					// available in the standard MPPCommand interface
+					OptimMPPCommand optimMppCommand = (OptimMPPCommand) mppCommand;
+					
+					File inlineOutputHeaderFile = outputFileLocatorItf.getCSourceOutputFile(
+							fullyQualifiedNameToPath(definition.getName(), inlineSuffix, ".h"),
+							context);
+					
+					optimMppCommand.setInlineOutputFile(inlineOutputHeaderFile);
+					
+					// we need to expand macros of the inlined methods in their "server" context
+					// before inclusion in the client (to avoid macros inconsistency)
+					
+					final File inlineCppFile = outputFileLocatorItf
+							.getCSourceOutputFile(
+									fullyQualifiedNameToPath(definition.getName(), inlineSuffix, ".cpp.h"),
+									context);
+					
+					inlineCppCommand = compilationCommandFactory
+							.newPreprocessorCommand(definition, null, inlineOutputHeaderFile, null, null,
+									inlineCppFile, context);
+					
+					inlineCppCommand.addIncludeFile(macroFile);
+				}
+				
+				// client side
+				
+				// TODO: add a check
+				List<Definition> targetInlineDefinitions = (List<Definition>) definition.astGetDecoration("inline-target-defs");
+				if (targetInlineDefinitions != null)
+					// for all targets concerned by an inline binding, -include the according .inline file
+					for (Definition currInlineDef : targetInlineDefinitions)
+						gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
+								fullyQualifiedNameToPath(currInlineDef.getName(), inlineSuffix, ".cpp.h"),
+								context));
+				//
+				
 				compilationTasks.add(cppCommand);
 				compilationTasks.add(mppCommand);
+				
+				if (inlineCppCommand != null)
+					compilationTasks.add(inlineCppCommand);
+				
 				compilationTasks.add(gccCommand);
 			}
 		}
@@ -315,7 +369,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				final CompilerCommand gccCommand = compilationCommandFactory
 						.newCompilerCommand(definition, additionalCompilationUnit, mppFile,
 								true, null, null, objectFile, context);
-
+				
 				// SSZ : BEGIN MODIFICATION
 				// This optimization-based modification is based on the predicate that EVERY COMPONENT
 				// is singleton

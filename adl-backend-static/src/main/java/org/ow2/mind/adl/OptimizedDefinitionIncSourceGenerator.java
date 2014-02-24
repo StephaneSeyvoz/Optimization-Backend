@@ -38,7 +38,6 @@ import org.objectweb.fractal.adl.types.TypeInterface;
 import org.ow2.mind.SourceFileWriter;
 import org.ow2.mind.adl.graph.ComponentGraph;
 import org.ow2.mind.adl.idl.InterfaceDefinitionDecorationHelper;
-import org.ow2.mind.idl.IDLLoader;
 import org.ow2.mind.idl.ast.InterfaceDefinition;
 import org.ow2.mind.io.IOErrors;
 

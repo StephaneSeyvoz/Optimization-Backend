@@ -22,25 +22,20 @@
 
 package org.ow2.mind.adl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
-import org.objectweb.fractal.adl.NodeUtil;
-import org.objectweb.fractal.adl.interfaces.Interface;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
-import org.ow2.mind.adl.annotation.predefined.Singleton;
 import org.ow2.mind.adl.annotation.predefined.Static;
 import org.ow2.mind.adl.annotation.predefined.StaticBindings;
-import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.ast.Binding;
 import org.ow2.mind.adl.ast.BindingContainer;
 import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.ComponentContainer;
-import org.ow2.mind.adl.ast.DefinitionReference;
+import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.membrane.ast.Controller;
 import org.ow2.mind.adl.membrane.ast.ControllerContainer;
 import org.ow2.mind.adl.membrane.ast.ControllerInterface;
@@ -69,21 +64,6 @@ AbstractADLLoaderAnnotationProcessor {
 	 * The current binding server component definition.
 	 */
 	private Definition currentServerDef = null;
-
-	/**
-	 * The current server interface involved in the binding.
-	 */
-	private Interface currentServerItf;
-
-	/**
-	 * The current client interface involved in the binding.
-	 */
-	private Interface currentClientItf;
-
-	/**
-	 * The definition where the binding is currently processed.
-	 */
-	private Definition currentDefinition;
 
 	public Definition processAnnotation(Annotation annotation, Node node,
 			Definition definition, ADLLoaderPhase phase,

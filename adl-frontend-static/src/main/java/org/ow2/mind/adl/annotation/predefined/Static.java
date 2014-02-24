@@ -26,6 +26,7 @@ import org.ow2.mind.adl.annotation.ADLAnnotationTarget;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.ADLLoaderProcessor;
 import org.ow2.mind.annotation.Annotation;
+import org.ow2.mind.annotation.AnnotationElement;
 import org.ow2.mind.annotation.AnnotationTarget;
 import org.ow2.mind.adl.StaticAnnotationProcessor;
 
@@ -33,13 +34,25 @@ import org.ow2.mind.adl.StaticAnnotationProcessor;
 public class Static implements Annotation {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4235614542560118182L;
+
+	/**
 	 * The Static annotation is used to specify that a given binding will be optimized
 	 * and it's CALLs in the CPL are replaced by direct function calls to the server (no more "this" context
 	 * pointer and function pointer dereferencing).
 	 */
-	private static final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
+	private final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
 
 	public static final String VALUE = "@Static";
+	
+	/**
+	 * More fault-tolerant configuration argument to allow skipping optimizing when not possible,
+	 * instead of raising a blocking error.
+	 */
+	@AnnotationElement(hasDefaultValue=true)
+	public boolean ifPossible = true;
 	
 	public AnnotationTarget[] getAnnotationTargets() {
 		return ANNOTATION_TARGETS;

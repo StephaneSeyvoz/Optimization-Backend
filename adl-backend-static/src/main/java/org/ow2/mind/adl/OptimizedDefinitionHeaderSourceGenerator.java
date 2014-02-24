@@ -26,22 +26,14 @@ import static org.ow2.mind.PathHelper.fullyQualifiedNameToPath;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.CompilerError;
 import org.objectweb.fractal.adl.Definition;
 import org.ow2.mind.SourceFileWriter;
-import org.ow2.mind.adl.ast.MindInterface;
 import org.ow2.mind.adl.graph.ComponentGraph;
-import org.ow2.mind.adl.membrane.ast.Controller;
-import org.ow2.mind.adl.membrane.ast.ControllerContainer;
-import org.ow2.mind.adl.membrane.ast.ControllerInterface;
 import org.ow2.mind.io.IOErrors;
 
 import com.google.inject.Inject;

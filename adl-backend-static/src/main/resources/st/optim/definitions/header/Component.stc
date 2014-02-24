@@ -313,6 +313,11 @@ ComponentTypeDef(definition) ::= <<
 typedef struct {
   COMP_DATA;
 } PRIVATE_DATA_T;
+
+/* Duplicate-definition fix for some families of compilers such as IAR */
+#define INSTANCE___component_<definition.name;format="toCName">_PRIVATEDATA_DECLARED
+extern SINGLETON_PRIVATE_DATA_T __component_<definition.name;format="toCName">_singleton_instance_private_data;
+
         <endif>
     <elseif (definition.data.path)>
 /* Include data file */
@@ -321,6 +326,11 @@ typedef struct {
 typedef struct {
   COMP_DATA;
 } PRIVATE_DATA_T;
+
+/* Duplicate-definition fix for some families of compilers such as IAR */
+#define INSTANCE___component_<definition.name;format="toCName">_PRIVATEDATA_DECLARED
+extern SINGLETON_PRIVATE_DATA_T __component_<definition.name;format="toCName">_singleton_instance_private_data;
+
       <endif>
     <else>
 /* No private data */
@@ -381,28 +391,33 @@ ComponentVTableDecl(definition) ::= <<
 ServerInterfaceVTableDecl(definition, itf) ::= <<
 <! SSZ : BEGIN MODIFICATION !>
 <if(isServer.(itf.role))>
-<if (itf.numberOfElement)>
+  <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):{index | extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf,index=index)>;};separator="\n">
-<else>
-  <! Optimization : Here we check if bindings from our instance are static !>
-  <if (definition.astDecorations.("parent-has-static-bindings"))>
-    <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-      <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
+  <else>
+    <if (itf.astDecorations.("single-itf"))>
+// Optimized with @Single: Removed reference as the VTable has already been garbaged anyway
+// extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+    <else>
+      <! Optimization : Here we check if bindings from our instance are static !>
+      <if (definition.astDecorations.("parent-has-static-bindings"))>
+        <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
+        <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
 // No optimization : default behavior 7
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      <else>
-      	<if (itf.astDecorations.("controller-interface"))>
+        <else>
+          <if (itf.astDecorations.("controller-interface"))>
 // No optimization : Parent has @StaticBindings but binding destination is a controller
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      	<else>
+      	  <else>
 // Optimized : Removed reference as the VTable has already been garbaged anyway
 // extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+      	  <endif>
       	<endif>
-      <endif>
-  <else>
+      <else>
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
+      <endif>
+    <endif>
   <endif>
-<endif>
 <endif>
 <! SSZ : END MODIFICATION !>
 >>
@@ -421,6 +436,9 @@ extern <ComponentTypeName(definitionName=definition.name)> instance_name;
 <InitializeInterfaces(definition=definition, instance=instance)><InitializeComponents(definition=definition)><InitializeControllerStructures(definition=definition)><InitializeAttributes(definition=definition)>  } \
 };
 
+/* Duplicate-definition fix for some families of compilers such as IAR */
+#define <definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(private_name) \
+SINGLETON_PRIVATE_DATA_T private_name;
 
 int __component_<definition.name;format="toCName">_factory(void **instance, void *allocItf <ComponentFactoryParameters(definition=definition)>);
 int __component_<definition.name;format="toCName">_destroy(void *instance, void *allocItf);
@@ -628,9 +646,9 @@ InitializeClientInterface(definition, itf) ::= <<
 
 InitializeServerInterface(definition, itf) ::= <<
 <if (itf.numberOfElement)>
-{<itf.astDecorations.("collectionIndexes"):{ {&instance_name, &<vTableInstanceName(definition=definition,itf=itf, index=it)>, <isBoundValue(definition=definition, itf=itf, index=it)>}}; separator=", ">}
+{<itf.astDecorations.("collectionIndexes"):{ {&instance_name, <if (itf.astDecorations.("single-itf"))>/* @Single interface optimization */ 0, <else>&<vTableInstanceName(definition=definition,itf=itf, index=it)>, <endif><isBoundValue(definition=definition, itf=itf, index=it)>}}; separator=", ">}
 <else>
-{&instance_name, &<vTableInstanceName(definition=definition,itf=itf)>, <isBoundValue(definition=definition, itf=itf)>}
+{&instance_name, <if (itf.astDecorations.("single-itf"))>/* @Single interface optimization */ 0, <else>&<vTableInstanceName(definition=definition,itf=itf)>, <endif><isBoundValue(definition=definition, itf=itf)>}
 <endif>
 >>
 

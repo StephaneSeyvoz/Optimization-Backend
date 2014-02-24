@@ -29,7 +29,6 @@ import org.ow2.mind.adl.annotation.ADLLoaderProcessor;
 import org.ow2.mind.annotation.Annotation;
 import org.ow2.mind.annotation.AnnotationElement;
 import org.ow2.mind.annotation.AnnotationTarget;
-import java.lang.Override;
 
 @ADLLoaderProcessor(processor = GarbageUnusedInternalsProcessor.class, phases = {
 	ADLLoaderPhase.AFTER_CHECKING, ADLLoaderPhase.AFTER_TEMPLATE_INSTANTIATE})
@@ -48,7 +47,7 @@ public class GarbageUnusedInternals implements Annotation {
 	public boolean recursive = false;
 	
 	// Check if it should not be on COMPONENT
-	private static final AnnotationTarget[] ANNOTATION_TARGET = {
+	private final AnnotationTarget[] ANNOTATION_TARGET = {
 	      ADLAnnotationTarget.DEFINITION};
 	
 	public static final String VALUE = "@GarbageUnusedInternals";
