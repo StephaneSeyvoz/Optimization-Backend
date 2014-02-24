@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"./dtd/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "./shared.ent">
+%myents;
+]>
+<book status="draft" version="0.1" xmlns="http://docbook.org/ns/docbook">
+  <bookinfo>
+    <title>Optimization backend</title>
+
+    <author>
+      <firstname>Yves Teissier</firstname>
+
+      <surname/>
+
+      <affiliation>
+        <orgname/>
+      </affiliation>
+    </author>
+
+    <pubdate>21/02/2014</pubdate>
+  </bookinfo>
+
+  <chapter>
+    <title>Document history</title>
+
+    <table frame="all">
+      <title>Document history</title>
+
+      <tgroup align="left" cols="4" colsep="0.2" rowsep="1">
+        <thead>
+          <row>
+            <entry>Version</entry>
+
+            <entry>Date</entry>
+
+            <entry>Author</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>0.1</entry>
+
+            <entry>21/02/2014</entry>
+
+            <entry>Yves Teissier</entry>
+
+            <entry>Document creation</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </chapter>
+
+  <chapter>
+    <title>Introduction</title>
+
+    <section>
+      <para>From the origine the mindc compiler has been build in order to
+      allow to generate code in an objective of flexibility. The downside of
+      this choice is the inflation of the generated code and a loss of
+      performances.</para>
+
+      <para>In the embedded software world it's append regurlary that we have
+      to integrate software on some very constraints devices (low RAM and low
+      flash). We have the advantages of fractal in term of architecture while
+      keeping the performance of the pure C.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Goal of this document</title>
+
+    <section>
+      <para>This document is intended to developers who wish to reduce the
+      memory foot print of their embedded applications and gain performance
+      for some specific features.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Optimization technical</title>
+
+    <section>
+      <para>The way used to optimized the generated code is the usage of ADL
+      annotations. These annotations are associated to specific key work of
+      the MIND language.</para>
+
+      <para>The developper has to identify the code part to be optimized
+      following requirements.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Annotation list</title>
+
+    <section id="optim-annot-static">
+      <title>
+        <classname>@Static</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>No field</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>Binding</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>Static</classname> annotation allows to perform a
+      single direct call between a client and a server interface.</para>
+
+      <para>This annotation must be attached to a binding definition.</para>
+
+      <example>
+        <title>@Static overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AtStatic.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>Both client and server must be
+        <classname>singleton</classname></para>
+
+        <para>If one of them is not a singleton than the static annotation has
+        no effect and a warning is generated in the compilation time.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>The binding between the client A and the server B can't be
+        removed.</para>
+
+        <para>Another client A' still have the possibility to be bound to the
+        server B.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This annotation mainly reduce the call time between a client and
+        a server interface.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>The <code>@Static</code> annotation is described in the file
+        <code>adl-backend-static/src/test/resources/optimizations/inline/Increment.adl</code></para>
+
+        <example>
+          <title>The @Static annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/inline/Increment.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-singleton">
+      <title>
+        <classname>@Singleton</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>No field</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>Definition</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>Singleton</classname> annotation specifies that the
+      definition can be instantiated only a single time in a given
+      application. An error is reported by the &productName; toolchain if a
+      definition with this annotation is instantiated more that once in an
+      application.</para>
+
+      <note>
+        <para>Composite definition that contains at least on singleton
+        sub-component are implicitly declared singleton. It is recommended to
+        add explicitly the <classname>Singleton</classname> annotation on such
+        composite definition.</para>
+      </note>
+
+      <note>
+        <para>Instantiating a generic definition by passing a singleton
+        definition as value result in a singleton definition.</para>
+      </note>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>No condition</para>
+
+        <para/>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>Each component annoted with @Singleton are uniques.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>Some gain in memory stack.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>...</para>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-singleton">
+      <title>
+        <classname>@StaticBindings</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>No field</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>Composite definition</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>StaticBindins</classname> annotation specifies that
+      all binding in the composite are statics.&productName;</para>
+
+      <para>This annotation is used on composite definition.</para>
+
+      <note>
+        <para>...</para>
+      </note>
+
+      <formalpara><title>Usage condition</title><para>All sub-components are
+      <classname>singleton</classname>.</para> Sub-component can be
+      instantiated outside the composite<classname/>
+      .<para>...</para></formalpara>
+
+      <formalpara>
+        <title>Constraints</title>
+
+        <para>Remove all possibility of dynamic binding for the selected
+        composite.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This annocation allows to reduce the memory application's
+        footprint and increase call indirections.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>...</para>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-singleton">
+      <title>
+        <classname>@GarbageUnusedInternal</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>recursive:{true,false}</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>Composite definition</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>GarbageUsunedµInternal</classname> annotation
+      allows to remove residual generated code in conjonction with the usage
+      of the annocation
+      <classname>StaticBindings</classname>.&productName;</para>
+
+      <para>This annotation is used on composite definition.</para>
+
+      <note>
+        <para>This remove unsused code for composite and primitive
+        definitions</para>
+      </note>
+
+      <note>
+        <para>This remove unsused code for composite and primitive
+        definitions.</para>
+      </note>
+
+      <formalpara><title>Usage condition</title><para>Unusable if there's
+      collection.</para><classname/> .<para>...</para></formalpara>
+
+      <formalpara>
+        <title>Constraints</title>
+
+        <para>Remove all possibility of dynamic binding for the selected
+        composite.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This annocation allows to reduce the memory application's
+        footprint and increase call indirections.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>...</para>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-singleton">
+      <title>
+        <classname>@Inline</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>No field</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>binding</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>Inline</classname> annotation allows to remove
+      residual generated code in conjonction with the usage of the annocation
+      <classname>StaticBindings</classname>.&productName;</para>
+
+      <para>This annotation is used on composite definition.</para>
+
+      <note>
+        <para>This remove unsused code for composite and primitive
+        definitions.</para>
+      </note>
+
+      <note>
+        <para>This remove unsused code for composite and primitive
+        definitions.</para>
+      </note>
+
+      <formalpara><title>Usage condition</title><para>Unusable if there's
+      collection.</para><classname/> .<para>...</para></formalpara>
+
+      <formalpara>
+        <title>Constraints</title>
+
+        <para>Remove all possibility of dynamic binding for the selected
+        composite.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This annocation allows to reduce the memory application's
+        footprint and increase call indirections.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>...</para>
+      </formalpara>
+    </section>
+  </chapter>
+</book>
