@@ -88,8 +88,8 @@
 				</externalSettings>
 			</storageModule>
 		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.710216493">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.710216493" moduleId="org.eclipse.cdt.core.settings" name="BaseApplication">
+		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1472376418">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1472376418" moduleId="org.eclipse.cdt.core.settings" name="Ext">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -102,23 +102,23 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.710216493" name="BaseApplication" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.710216493." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.409773461" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.2091785848" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.1124527138" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1472376418" name="Ext" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
+					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1472376418." name="/" resourcePath="">
+						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.369241960" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
+							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.808333964" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
+							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.1752673134" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="/static/target"/>
 								</outputEntries>
 							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.670981795" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.optimization.level.356492563" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.215718754" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1856756928" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
+								<option id="gnu.cpp.compiler.option.optimization.level.119171198" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
+								<option id="gnu.cpp.compiler.option.debugging.level.1111041721" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
 							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1740338097" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.optimization.level.1908947858" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
-								<option id="gnu.c.compiler.option.debugging.level.1343324552" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.906805989" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1870353636" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
+								<option id="gnu.c.compiler.option.optimization.level.2033103997" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
+								<option id="gnu.c.compiler.option.debugging.level.1597333169" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1816750003" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="&quot;METH(interface,method ...)=method##interface&quot;"/>
 									<listOptionValue builtIn="false" value="IS_BOUND(interface)=(interface!=0)"/>
 									<listOptionValue builtIn="false" value="GET_COLLECTION_SIZE(interface)=0"/>
@@ -132,359 +132,19 @@
 									<listOptionValue builtIn="false" value="&quot;CALL_PTR(interface,method ...)=method##interface&quot;"/>
 									<listOptionValue builtIn="false" value="METH_PTR(methodPointer)=methodPointer"/>
 								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.253622837" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1219585104" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.338746234" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1359867507" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1624847072" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
+								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1767966394" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.972166796" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1971650406" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1367001584" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1685220801" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
+							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1004771248" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2045239911" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.39004503" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="runtime"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
-					<externalSetting>
-						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
-					</externalSetting>
-				</externalSettings>
-			</storageModule>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.746399470">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.746399470" moduleId="org.eclipse.cdt.core.settings" name="StaticBindingApplication">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.746399470" name="StaticBindingApplication" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.746399470." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.111137876" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1017946776" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.869467191" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="/static/target"/>
-								</outputEntries>
-							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.982141665" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.optimization.level.1107872688" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.564690498" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
-							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1452269429" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.optimization.level.1176348290" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
-								<option id="gnu.c.compiler.option.debugging.level.1854762741" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1691385519" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="&quot;METH(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="IS_BOUND(interface)=(interface!=0)"/>
-									<listOptionValue builtIn="false" value="GET_COLLECTION_SIZE(interface)=0"/>
-									<listOptionValue builtIn="false" value="&quot;CALL(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="PRIVATE=__private__"/>
-									<listOptionValue builtIn="false" value="ATTR(attribute)=attribute"/>
-									<listOptionValue builtIn="false" value="&quot;CONSTRUCTOR()=void _constructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;DESTRUCTOR()=void _destructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="GET_MY_INTERFACE(interface)=interface"/>
-									<listOptionValue builtIn="false" value="IS_BOUND_PTR(intertface_pointer)=(intertface_pointer!=0)"/>
-									<listOptionValue builtIn="false" value="&quot;CALL_PTR(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="METH_PTR(methodPointer)=methodPointer"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1871192329" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.632799174" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1329669608" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1586684789" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.353364852" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.959133216" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1756827048" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="runtime"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
-					<externalSetting>
-						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
-					</externalSetting>
-				</externalSettings>
-			</storageModule>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.767932687">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.767932687" moduleId="org.eclipse.cdt.core.settings" name="StaticBindingsApplication">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.767932687" name="StaticBindingsApplication" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.767932687." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.1127275685" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.647491727" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.364624351" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="/static/target"/>
-								</outputEntries>
-							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.76318115" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.optimization.level.1960426102" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.138886193" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
-							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1713904522" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.optimization.level.897518173" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
-								<option id="gnu.c.compiler.option.debugging.level.640974282" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.2082633765" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="&quot;METH(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="IS_BOUND(interface)=(interface!=0)"/>
-									<listOptionValue builtIn="false" value="GET_COLLECTION_SIZE(interface)=0"/>
-									<listOptionValue builtIn="false" value="&quot;CALL(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="PRIVATE=__private__"/>
-									<listOptionValue builtIn="false" value="ATTR(attribute)=attribute"/>
-									<listOptionValue builtIn="false" value="&quot;CONSTRUCTOR()=void _constructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;DESTRUCTOR()=void _destructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="GET_MY_INTERFACE(interface)=interface"/>
-									<listOptionValue builtIn="false" value="IS_BOUND_PTR(intertface_pointer)=(intertface_pointer!=0)"/>
-									<listOptionValue builtIn="false" value="&quot;CALL_PTR(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="METH_PTR(methodPointer)=methodPointer"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.814339028" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.391078375" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.193215639" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.785756908" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1284415597" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1241110869" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.654270803" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="runtime"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
-					<externalSetting>
-						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
-					</externalSetting>
-				</externalSettings>
-			</storageModule>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964" moduleId="org.eclipse.cdt.core.settings" name="StaticBindingExt">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964" name="StaticBindingExt" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.598169016" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1119867412" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.932438679" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="/static/target"/>
-								</outputEntries>
-							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1059726523" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.optimization.level.1027215304" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.1633269533" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
-							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1263560430" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.optimization.level.824882370" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
-								<option id="gnu.c.compiler.option.debugging.level.913554545" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1216457663" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="&quot;METH(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="IS_BOUND(interface)=(interface!=0)"/>
-									<listOptionValue builtIn="false" value="GET_COLLECTION_SIZE(interface)=0"/>
-									<listOptionValue builtIn="false" value="&quot;CALL(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="PRIVATE=__private__"/>
-									<listOptionValue builtIn="false" value="ATTR(attribute)=attribute"/>
-									<listOptionValue builtIn="false" value="&quot;CONSTRUCTOR()=void _constructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;DESTRUCTOR()=void _destructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="GET_MY_INTERFACE(interface)=interface"/>
-									<listOptionValue builtIn="false" value="IS_BOUND_PTR(intertface_pointer)=(intertface_pointer!=0)"/>
-									<listOptionValue builtIn="false" value="&quot;CALL_PTR(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="METH_PTR(methodPointer)=methodPointer"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.474980864" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1801090426" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.580035620" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1248258760" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.66223031" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1547598745" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.850825411" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
-						</toolChain>
-					</folderInfo>
-					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="runtime"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
-					</sourceEntries>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
-					<externalSetting>
-						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
-					</externalSetting>
-				</externalSettings>
-			</storageModule>
-		</cconfiguration>
-		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964.681764790">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964.681764790" moduleId="org.eclipse.cdt.core.settings" name="StaticBindingsExt">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.ow2.mindEd.ide.MindcErrorParser" id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964.681764790" name="StaticBindingsExt" parent="cdt.managedbuild.config.gnu.mingw.exe.debug">
-					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.425038498.1017141964.681764790." name="/" resourcePath="">
-						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.mingw.base.1889715068" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
-							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.561618349" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${project_loc}" cleanBuildTarget="CONFIGURATION=${ConfigName} clean" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="org.eclipse.cdt.build.core.settings.default.builder.416585094" incrementalBuildTarget="CONFIGURATION=${ConfigName} all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="/static/target"/>
-								</outputEntries>
-							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1223514586" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.optimization.level.1826580862" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.2008962219" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level"/>
-							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.2087648811" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.optimization.level.944758393" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level"/>
-								<option id="gnu.c.compiler.option.debugging.level.1152667551" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.87779705" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="&quot;METH(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="IS_BOUND(interface)=(interface!=0)"/>
-									<listOptionValue builtIn="false" value="GET_COLLECTION_SIZE(interface)=0"/>
-									<listOptionValue builtIn="false" value="&quot;CALL(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="PRIVATE=__private__"/>
-									<listOptionValue builtIn="false" value="ATTR(attribute)=attribute"/>
-									<listOptionValue builtIn="false" value="&quot;CONSTRUCTOR()=void _constructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;DESTRUCTOR()=void _destructor_()&quot;"/>
-									<listOptionValue builtIn="false" value="GET_MY_INTERFACE(interface)=interface"/>
-									<listOptionValue builtIn="false" value="IS_BOUND_PTR(intertface_pointer)=(intertface_pointer!=0)"/>
-									<listOptionValue builtIn="false" value="&quot;CALL_PTR(interface,method ...)=method##interface&quot;"/>
-									<listOptionValue builtIn="false" value="METH_PTR(methodPointer)=methodPointer"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.933092520" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.288672158" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1942673765" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.846790484" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.mingw.base.1065711413" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.791942107" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1702163669" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1870898662" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>

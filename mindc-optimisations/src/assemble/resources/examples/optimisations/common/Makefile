@@ -30,7 +30,7 @@ endif
 sourcePathArg=
 ifdef sourcePath
 	ifneq ($(sourcePath), "")
-		sourcePathArg=--src-path="$(subst :,$(PATH_SEPARATOR),$(subst ::,:,$(sourcePath)))$(PATH_SEPARATOR)$(dependenciesDir)"
+		sourcePathArg=--src-path="$(subst :,$(PATH_SEPARATOR),$(subst ::,:,$(sourcePath)))"
 	endif
 endif
 
@@ -133,13 +133,12 @@ docOutputDir=$(confOutputDirVar)/doc
 graphOutputDir=$(confOutputDirVar)/graph
 testBinOutputDir=$(confOutputDirVar)/test-binaries
 testDocOutputDir=$(confOutputDirVar)/test-doc
-dependenciesDir=$(confOutputDirVar)/dependencies/
 
 # The real build command.
 
 all: build
 ifdef targetComponent
-	@if test ! -x $(MINDC); \
+	if test ! -x $(MINDC); \
         then @echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \
     	else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
     fi
@@ -149,7 +148,7 @@ endif
 
 graph: build_graph
 ifdef targetComponent
-	@if test ! -x $(MINDC); \
+	if test ! -x $(MINDC); \
         then @echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \
     	else $(MINDC) --check-adl $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(graphOutputDir) 'dot.DumpComponentDot<'$(targetComponent)'>' ;\
     fi
@@ -166,20 +165,16 @@ test: build_test
 
 # Output folder handling.
 
-dep:
-	@mkdir -p $(dependenciesDir)
-	@cp -r ../common/src/main/mind/* $(dependenciesDir)
-
-build: dep
+build:
 	mkdir -p $(binOutputDir)
 	
-build_doc: dep
+build_doc:
 	mkdir -p $(docOutputDir)
 	
-build_test: dep
+build_test:
 	mkdir -p $(testBinOutputDir)
 	
-build_graph: dep
+build_graph:
 	mkdir -p $(graphOutputDir)
 
 clean:

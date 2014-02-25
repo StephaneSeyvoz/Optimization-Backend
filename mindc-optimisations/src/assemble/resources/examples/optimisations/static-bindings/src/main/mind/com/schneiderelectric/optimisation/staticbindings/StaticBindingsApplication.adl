@@ -11,7 +11,7 @@
 //Will garbage unused data resulting from the '@StaticBindings' optimisation  
 @GarbageUnusedInternals 
 @Singleton
-composite com.schneiderelectric.optimisation.staticbinding.StaticBindingsApplication {
+composite com.schneiderelectric.optimisation.staticbindings.StaticBindingsApplication {
  	contains boot.Bootstrap as bootstrap; 
  	/**
  	 * As both @component boot.Bootstrap and @component com.schneiderelectric.optimisation.common.SingletonComponent are singletons,
