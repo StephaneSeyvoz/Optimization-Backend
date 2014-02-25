@@ -5,7 +5,7 @@
  */
  
 @Singleton
-primitive com.schneiderelectric.optimisation.staticbinding.SingletonComponent {
+primitive com.schneiderelectric.optimisation.common.SingletonComponent {
 /**
  * The @interface boot.Main#methods#main method of this interface will print :
  * <br/> - The current method name.
@@ -20,7 +20,7 @@ primitive com.schneiderelectric.optimisation.staticbinding.SingletonComponent {
  * 
  * Finally return the sum of the @component this#interfaces#firstClientInterface @component this#interfaces#secondClientInterface interface return code.
  */
- 	provides boot.Main as serverInterface; 	
+ 	provides boot.Main as serverInterface;
  	requires boot.Main as firstClientInterface;
 /**
  * This interface is optional. 
