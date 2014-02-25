@@ -59,15 +59,20 @@
     <title>Introduction</title>
 
     <section>
-      <para>From the origine the mindc compiler has been build in order to
-      allow to generate code in an objective of flexibility. The downside of
-      this choice is the inflation of the generated code and a loss of
-      performances.</para>
+      <para>From the origin the &productName; compiler has been built in order
+      to allow maximum flexibility. The downside of this choice is the
+      inflation of the generated code and a loss of performances.</para>
 
-      <para>In the embedded software world it's append regurlary that we have
+      <para>In the embedded software world it's append regularly that we have
       to integrate software on some very constraints devices (low RAM and low
-      flash). We have the advantages of fractal in term of architecture while
-      keeping the performance of the pure C.</para>
+      flash).</para>
+
+      <para>By applying optimization we keep the advantages of fractal
+      architecture while keeping the performance of the pure C.</para>
+
+      <note>
+        <para>sss.</para>
+      </note>
     </section>
   </chapter>
 
@@ -85,17 +90,17 @@
     <title>Optimization technical</title>
 
     <section>
-      <para>The way used to optimized the generated code is the usage of ADL
-      annotations. These annotations are associated to specific key work of
-      the MIND language.</para>
+      <para>The way provided by the &productName; compiler to optimize the
+      application is ADL annotations. These annotations are associated to
+      specific key work of the MIND language.</para>
 
-      <para>The developper has to identify the code part to be optimized
+      <para>The developer has to identify the code part to be optimized
       following requirements.</para>
     </section>
   </chapter>
 
   <chapter>
-    <title>Annotation list</title>
+    <title>Annotations</title>
 
     <section id="optim-annot-static">
       <title>
@@ -268,7 +273,7 @@
       </formalpara>
     </section>
 
-    <section id="optim-annot-singleton">
+    <section id="optim-annot-StaticBindings">
       <title>
         <classname>@StaticBindings</classname>
       </title>
@@ -289,20 +294,21 @@
         </para>
       </formalpara>
 
-      <para>The <classname>StaticBindings</classname> annotation specifies that
-      all binding in the composite are statics.</para>
+      <para>The <classname>StaticBindings</classname> annotation specifies
+      that all binding in the composite are statics.</para>
 
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>Remove all metadata in the server interfaces.</para>
-      </note>
-	  <note>
-        <para>This annotation generalize the <classname>Static</classname> annotation for all bindings 
-		inside the composite.</para>
+        <para>Remove all meta data in the server interfaces.</para>
       </note>
 
-	  <example>
+      <note>
+        <para>This annotation generalize the <classname>Static</classname>
+        annotation for all bindings inside the composite.</para>
+      </note>
+
+      <example>
         <title>@StaticBindings overview</title>
 
         <mediaobject>
@@ -312,11 +318,13 @@
           </imageobject>
         </mediaobject>
       </example>
-	  
+
       <formalpara>
-		  <title>Usage condition</title>
-			  <para>All sub-components must be <classname>singleton</classname>.</para> 
-	  </formalpara>
+        <title>Usage condition</title>
+
+        <para>All sub-components must be
+        <classname>singleton</classname>.</para>
+      </formalpara>
 
       <formalpara>
         <title>Consequences</title>
@@ -328,18 +336,26 @@
       <formalpara>
         <title>Gains</title>
 
-        <para>This annocation allows to reduce the memory application's
+        <para>This annotation allows to reduce the memory application's
         footprint and reduce call time.</para>
       </formalpara>
 
       <formalpara>
         <title>Example</title>
 
-        <para>...</para>
+        <example>
+          <title>The @StaticDefinitionBindingsList annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationSB.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
       </formalpara>
     </section>
 
-    <section id="optim-annot-singleton">
+    <section id="optim-annot-GarbageUnusedInternal">
       <title>
         <classname>@GarbageUnusedInternal</classname>
       </title>
@@ -348,7 +364,9 @@
         <title>Annotation fields</title>
 
         <para>recursive:{true,false}</para>
-		<para>This option allows to propagate the annotation in all sub-composites.</para>
+
+        <para>This option allows to propagate the annotation in all
+        sub-composites.</para>
       </formalpara>
 
       <formalpara>
@@ -361,39 +379,45 @@
         </para>
       </formalpara>
 
-      <para>The <classname>GarbageUsunedInternal</classname> annotation
-      allows to remove residual generated code in conjunction with the usage
-      of the annotation
-      <classname>StaticBindings</classname>.</para>
+      <para>The <classname>GarbageUsunedInternal</classname> annotation allows
+      to remove residual generated code in conjunction with the usage of the
+      annotation <classname>StaticBindings</classname>.</para>
 
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>This remove unused code for composite and primitive
-        definitions</para>
+        <para>This remove unused code for composite and primitive definitions
+        (remote the totality of the membrane code).</para>
       </note>
-	  <note>
-        <para>This annotation is destined to be merged with the <classname>StaticBindings</classname> annotation.</para>
+
+      <note>
+        <para>This annotation is destined to be merged with the
+        <classname>StaticBindings</classname> annotation.</para>
       </note>
-	  
-	  <example>
+
+      <example>
         <title>@GarbageUnusedInternal overview</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" fileref="images/AtGarbageUnusedInternal.png"
+            <imagedata align="center"
+                       fileref="images/AtGarbageUnusedInternal.png"
                        format="PNG" scale="50"/>
           </imageobject>
         </mediaobject>
       </example>
-	  
+
       <formalpara>
-	  <title>Usage condition</title>
-	  <para>No collection in the composite allowed.</para>
-	  <para>No unbound interface allowed.</para>
-	  <para>[TO BE CHECKED] Allows only one required controller.</para>
-	  <para>[TO BE CHECKED] Allows only one provided controller.</para>
-	  </formalpara>
+        <title>Usage condition</title>
+
+        <para>No collection in the composite allowed.</para>
+
+        <para>No unbound interface allowed.</para>
+
+        <para>[TO BE CHECKED] Allows only one required controller.</para>
+
+        <para>[TO BE CHECKED] Allows only one provided controller.</para>
+      </formalpara>
 
       <formalpara>
         <title>Consequences</title>
@@ -412,13 +436,268 @@
       <formalpara>
         <title>Example</title>
 
+        <example>
+          <title>The @GarbageUnusedInternal annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationGUI.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-StaticDefinitionBindingsList">
+      <title>
+        <classname>@StaticDefinitionBindingsList</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>@StaticDefinitionsBindingsList({@StaticDefinitionBinding(fromItf
+            = "&lt;client interface&gt;", toItf = "server
+            interface")})</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>Composite definition</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>StaticDefinitionBindingsList</classname> annotation
+      allows to connect explicitly one or several client interface of a
+      component to a server interface of a component definition.</para>
+
+      <note>
+        <para>The call function is bloked on a component definition.</para>
+      </note>
+
+      <note>
+        <para>The client component and the server component are not necessary
+        singleton.</para>
+      </note>
+
+      <note>
+        <para>The server component type can be instanciated several time in
+        the composite.</para>
+      </note>
+
+      <example>
+        <title>@StaticDefinitionBindingsList overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="images/AtStaticDefinitionBindingsList.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>The server component is not
+        <classname>singleton</classname>.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>Remove all possibility of dynamic binding for the selected
+        binding.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This annotation allows to call time of the specified
+        binding.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <example>
+          <title>The @StaticDefinitionBindingsList annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/definitionbinding/factory/selfcall/Helloworld.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-FreezeCallPointer">
+      <title>
+        <classname>@FreezeCallPointer</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>@FreezeCallPointer(toItf="server interface")</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>primitive</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>FreezeCallPointer</classname> annotation allows to
+      call an explicite server interface via an interface pointer (macro
+      CALL_PTR).</para>
+
+      <note>
+        <para>...</para>
+      </note>
+
+      <note>
+        <para>...</para>
+      </note>
+
+      <example>
+        <title>@FreezeCallPointer overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AtFreezeCallPointer.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>No declaration of the server interface in the client ADL
+        component.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>The client interface can't be bound to another server interface.
+        The binding is frozen.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>The compiler does direct call to the server interface. This
+        reduce the call time.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <example>
+          <title>The @FreezeCallPointer annotation</title>
+
+          <programlisting language="adl" linenumbering="unnumbered">
+			<?db-font-size 75% ?>
+			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/singlestaticcallptr/factory/selfcall/Client.adl"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
+        </example>
+      </formalpara>
+    </section>
+
+    <section id="optim-annot-Single">
+      <title>
+        <classname>@Single</classname>
+      </title>
+
+      <formalpara>
+        <title>Annotation fields</title>
+
+        <para>No field</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Annotation targets</title>
+
+        <para>
+          <simplelist type="inline">
+            <member>binding</member>
+          </simplelist>
+        </para>
+      </formalpara>
+
+      <para>The <classname>Single</classname> annotation allows to ...</para>
+
+      <note>
+        <para>...</para>
+      </note>
+
+      <note>
+        <para>...</para>
+      </note>
+
+      <example>
+        <title>@Single overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="images/AtGarbageUnusedInternal.png"
+                       format="PNG" scale="50"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>....</para>
+
+        <para/>
+
+        <para/>
+
+        <para/>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>...</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>...</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
         <para>...</para>
       </formalpara>
     </section>
 
-    <section id="optim-annot-singleton">
+    <section id="optim-annot-Inline">
       <title>
-        <classname>@Inline</classname>
+        <classname>@Inline [TODO]</classname>
       </title>
 
       <formalpara>
@@ -438,18 +717,18 @@
       </formalpara>
 
       <para>The <classname>Inline</classname> annotation allows to remove
-      residual generated code in conjonction with the usage of the annocation
+      residual generated code in conjunction with the usage of the annotation
       <classname>StaticBindings</classname>.&productName;</para>
 
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>This remove unsused code for composite and primitive
+        <para>This remove unused code for composite and primitive
         definitions.</para>
       </note>
 
       <note>
-        <para>This remove unsused code for composite and primitive
+        <para>This remove unused code for composite and primitive
         definitions.</para>
       </note>
 
@@ -466,7 +745,7 @@
       <formalpara>
         <title>Gains</title>
 
-        <para>This annocation allows to reduce the memory application's
+        <para>This annotation allows to reduce the memory application's
         footprint and increase call indirections.</para>
       </formalpara>
 
