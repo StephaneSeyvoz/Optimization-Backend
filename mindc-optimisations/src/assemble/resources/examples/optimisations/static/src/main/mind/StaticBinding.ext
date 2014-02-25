@@ -1,0 +1,24 @@
+/**
+ * This will add the '@Singleton' annotation to all 
+ * primitive definition used in the build 
+ */
+@Singleton
+primitive **.* {
+}
+
+/**
+ * This will add the '@Singleton' annotation to all 
+ * composite definition used in the build 
+ */
+@Singleton
+composite **.* {
+}
+
+/**
+ * This will add the '@Static' annotation to all 
+ * bindings described in the build.
+ */
+composite **.* {
+	@Static
+	binds *.* to *.*;
+}

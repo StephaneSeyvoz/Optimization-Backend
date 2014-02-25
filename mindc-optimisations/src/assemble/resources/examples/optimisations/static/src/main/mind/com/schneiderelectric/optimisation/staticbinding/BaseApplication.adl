@@ -27,7 +27,7 @@ composite com.schneiderelectric.optimisation.staticbinding.BaseApplication {
 	binds singletonComp.firstClientInterface to firstMultiInstanciableComp.serverInterface;
 	/**
 	 * Simply print a message on the screen.
-	 * This component is multi-instenciable
+	 * This component is multi-instanciable
 	 */
 	contains MultiInstanciableComponent as firstMultiInstanciableComp;
 }
