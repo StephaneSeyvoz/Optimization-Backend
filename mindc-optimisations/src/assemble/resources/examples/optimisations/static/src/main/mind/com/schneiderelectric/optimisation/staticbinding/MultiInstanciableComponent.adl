@@ -1,0 +1,16 @@
+/**
+ * This component is part of the example demonstrating the usage of the '@Static' optimization.
+ * 
+ * It is a multi-instanciable component (NOT a singleton).
+ */
+primitive com.schneiderelectric.optimisation.staticbinding.MultiInstanciableComponent {
+/**
+ * The only method of this interface will only print :
+ * <br/> - The current method name.
+ * <br/> - The current interface name.
+ * <br/> - The current definition.
+ * <br/>And return a success code.
+ */
+ 	provides boot.Main as serverInterface;
+  	source MultiInstanciableComponent.c;
+}

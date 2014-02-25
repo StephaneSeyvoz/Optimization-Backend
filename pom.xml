@@ -27,6 +27,11 @@
             <email>yteissier@assystem.com</email>
             <organization>Assystem</organization>
         </contributor>
+        		<contributor>
+            <name>Julien Tous</name>
+            <email>julien.tous@orange.com</email>
+            <organization>Orange</organization>
+        </contributor>
 	</contributors>
 
 	<modules>
@@ -34,6 +39,7 @@
 		<module>single-interface-plugin</module>
 		<module>cpl-preproc-static</module>
 		<module>adl-backend-static</module>
+        <module>mindc-optimisation</module>
 	</modules>
 	
 	<build>
