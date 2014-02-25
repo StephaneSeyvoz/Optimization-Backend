@@ -1,0 +1,31 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+        <format>tar.gz</format>
+        <format>tar.bz2</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <dependencySets>
+
+        <dependencySet>
+            <outputDirectory>ext</outputDirectory>
+            <includes>
+                <include>${project.groupId}:single-interface-plugin</include>
+                <include>${project.groupId}:cpl-preproc-static</include>
+                <include>${project.groupId}:adl-backend-static</include>
+                <include>${project.groupId}:adl-frontend-static</include>
+            </includes>
+            <fileMode>0644</fileMode>
+        </dependencySet>
+
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>src/assemble/resources/examples</directory>
+            <filtered>false</filtered>
+            <outputDirectory>examples</outputDirectory>
+            <fileMode>0644</fileMode>
+        </fileSet>
+    </fileSets>
+</assembly>
