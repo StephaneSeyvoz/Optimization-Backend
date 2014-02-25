@@ -1,0 +1,32 @@
+/**
+ * This component is part of the example demonstrating the usage of the '@StaticBindings' optimization.
+ * It is the optimized version of the @component BaseApplication component.
+ * 
+ * Only the differences with he @component BaseApplication component are documented here.
+ * Considere having a look at the @component BaseApplication documentation for more.
+ */
+
+//Will try to apply the the same optimization as '@Static' everywhere 
+@StaticBindings
+//Will garbage unused data resulting from the '@StaticBindings' optimisation  
+@GarbageUnusedInternals 
+@Singleton
+composite com.schneiderelectric.optimisation.staticbinding.StaticBindingsApplication {
+ 	contains boot.Bootstrap as bootstrap; 
+ 	/**
+ 	 * As both @component boot.Bootstrap and @component com.schneiderelectric.optimisation.staticbinding.SingletonComponent are singletons,
+ 	 * This binding will be optimized in the same way as if '@Static' would have been used.
+ 	 */
+	binds bootstrap.entryPoint to singletonComp.serverInterface;
+	contains SingletonComponent as singletonComp;
+	/**
+	 * @component com.schneiderelectric.optimisation.staticbinding.MultiInstanciableComponent is not a singleton.
+	 * To allow usage of '@StaticBindings' we must 'singleton-ize' it. 
+	 */
+	binds singletonComp.firstClientInterface to firstMultiInstanciableComp.serverInterface;
+	/**
+	 * 'Singleton-ization' of @component com.schneiderelectric.optimisation.staticbinding.MultiInstanciableComponent
+	 * by anonymous inheritance.
+	 */
+	contains MultiInstanciableComponent as firstMultiInstanciableComp @Singleton primitive{};
+}

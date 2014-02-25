@@ -1,0 +1,24 @@
+/**
+ * This will add the '@Singleton' annotation to all 
+ * primitive definition used in the build 
+ */
+@Singleton
+primitive **.* {
+}
+
+/**
+ * This will add the '@Singleton' annotation to all 
+ * composite definition used in the build 
+ */
+@Singleton
+composite **.* {
+}
+
+/**
+ * This will add both '@StaticBindings' and '@GarbageUnusedInternals'
+ * annotations to all composite used the build
+ */
+@StaticBindings
+@GarbageUnusedInternals
+composite **.* {
+}
