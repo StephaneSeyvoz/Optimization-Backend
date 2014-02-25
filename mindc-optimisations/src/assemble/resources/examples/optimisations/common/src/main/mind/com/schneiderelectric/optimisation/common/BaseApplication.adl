@@ -10,7 +10,7 @@
 //  
 @Singleton
 
-composite com.schneiderelectric.optimisation.staticbinding.BaseApplication {
+composite com.schneiderelectric.optimisation.common.BaseApplication {
  	/**
  	 * Initialize everything necessary to enter the component world.
  	 * <br/>
