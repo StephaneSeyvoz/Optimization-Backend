@@ -4,6 +4,14 @@
 <!ENTITY % myents SYSTEM "./shared.ent">
 %myents;
 ]>
+
+<xsl:param name="programlisting.fontsize">10pt</xsl:param>
+<xsl:attribute-set name="monospace.verbatim.properties">
+ <xsl:attribute name="font-size">
+   <xsl:call-template name="programlisting.fontsize"/>
+ </xsl:attribute>
+</xsl:attribute-set>
+
 <book status="draft" version="0.1" xmlns="http://docbook.org/ns/docbook">
   <bookinfo>
     <title>Optimization backend</title>
@@ -71,7 +79,19 @@
       architecture while keeping the performance of the pure C.</para>
 
       <note>
-        <para>sss.</para>
+        <para>Optimizations allows to remove the overhead but break the
+        separation between definitions and the instances.</para>
+
+        <para>We have to do hypothesis about the instantiation context of a
+        definition in order to optimize a client interface invocation.</para>
+      </note>
+
+      <note>
+        <para>There an opposition between the optimization and the separed
+        compilation.</para>
+
+        <para>A definition compiled with some optimizations can't be reused in
+        any case.</para>
       </note>
     </section>
   </chapter>
@@ -91,11 +111,60 @@
 
     <section>
       <para>The way provided by the &productName; compiler to optimize the
-      application is ADL annotations. These annotations are associated to
-      specific key work of the MIND language.</para>
+      application is ADL annotations and compilation flags.</para>
+
+      <para>Annotations are associated to specific key work of the MIND
+      language.</para>
 
       <para>The developer has to identify the code part to be optimized
       following requirements.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Compilation flags</title>
+
+    <section id="optim-annot-nofactory">
+      <title>
+        <classname>__MIND_NO_FACTORY</classname>
+      </title>
+
+      <formalpara>
+        <title>Flag target</title>
+
+		<para>This flag allows to remove unused factory code.</para>
+		
+        <para>This flag has to be added to the cflags variable in the
+        <code>Default.properties</code> file.  </para>
+
+        <para><code>( cFlags = -D__MIND_NO_FACTORY )</code></para>
+
+      </formalpara>
+
+      <formalpara>
+        <title>Usage condition</title>
+
+        <para>The factory interface is not used.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Consequences</title>
+
+        <para>Dynamic component instantiation is no more possible.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Gains</title>
+
+        <para>This flag reduce the generated code size and binary foot
+        print.</para>
+      </formalpara>
+
+      <formalpara>
+        <title>Example</title>
+
+        <para>[TODO]</para>
+      </formalpara>
     </section>
   </chapter>
 
@@ -118,7 +187,7 @@
 
         <para>
           <simplelist type="inline">
-            <member>Binding</member>
+            <member>binding</member>
           </simplelist>
         </para>
       </formalpara>
@@ -170,14 +239,17 @@
         <title>Example</title>
 
         <para>The <code>@Static</code> annotation is described in the file
-        <code>adl-backend-static/src/test/resources/optimizations/inline/Increment.adl</code></para>
+        <code>mindc-optimisations\src\assemble\resources\examples\optimisations\static\src\main\mind\com\schneiderelectric\optimisation\staticbinding/StaticBindingApplication.adl</code></para>
+
+        <para>The binding between the client interface of the component
+        bootStrap and the server interface of the component <code>SingletonComponent</code> is static.</para>
 
         <example>
           <title>The @Static annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/inline/Increment.adl"
+			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 			</programlisting>
         </example>
@@ -259,14 +331,17 @@
         <title>Example</title>
 
         <para>The <code>@Singleton</code> annotation is described in the file
-        <code>adl-backend-static/src/test/resources/optimizations/optimizations/GenericApplicationS.adl</code></para>
+        <code>mindc-optimisations\src\assemble\resources\examples\optimisations\common\src\main\mind\com\schneiderelectric\optimisation\common/SingletonComponent.adl</code></para>
+
+        <para>The following code come from the same application as the
+        previous one.</para>
 
         <example>
           <title>The @Singleton annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationS.adl"
+			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 			</programlisting>
         </example>
@@ -295,7 +370,7 @@
       </formalpara>
 
       <para>The <classname>StaticBindings</classname> annotation specifies
-      that all binding in the composite are statics.</para>
+      that all bindings in the composite are statics.</para>
 
       <para>This annotation is used on composite definition.</para>
 
@@ -304,8 +379,14 @@
       </note>
 
       <note>
-        <para>This annotation generalize the <classname>Static</classname>
-        annotation for all bindings inside the composite.</para>
+        <para>Equivalent to the generalization of the
+        <classname>Static</classname> annotation for all bindings inside the
+        composite.</para>
+      </note>
+
+      <note>
+        <para>If there's no attribute, no controller and no sub-components
+        then all the "glue" is removed.</para>
       </note>
 
       <example>
@@ -338,17 +419,26 @@
 
         <para>This annotation allows to reduce the memory application's
         footprint and reduce call time.</para>
+
+        <para>The footprint gain depends from the user code. The code is
+        little more than the gain is large.</para>
       </formalpara>
 
       <formalpara>
         <title>Example</title>
 
+        <para>This example illustrate the usage of the
+        <classname>StaticBindings</classname> annotation.</para>
+
+        <para>All bindings in the composite
+        <code>StaticBindingsApplication</code> are statical.</para>
+
         <example>
-          <title>The @StaticDefinitionBindingsList annotation</title>
+          <title>The @StaticBindings annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationSB.adl"
+			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 			</programlisting>
         </example>
@@ -379,7 +469,7 @@
         </para>
       </formalpara>
 
-      <para>The <classname>GarbageUsunedInternal</classname> annotation allows
+      <para>The <classname>GarbageUnusedInternal</classname> annotation allows
       to remove residual generated code in conjunction with the usage of the
       annotation <classname>StaticBindings</classname>.</para>
 
@@ -439,9 +529,15 @@
         <example>
           <title>The @GarbageUnusedInternal annotation</title>
 
+          <para>Same as the previous example.</para>
+
+          <para>The <classname>GarbageUnusedInternal</classname> annotation is
+          used in conjunction with the <classname>StaticBindings</classname>
+          annotation.</para>
+
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../adl-backend-static/src/test/resources/optimizations/GenericApplicationGUI.adl"
+			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 			</programlisting>
         </example>
@@ -460,7 +556,7 @@
           <simplelist type="inline">
             <member>@StaticDefinitionsBindingsList({@StaticDefinitionBinding(fromItf
             = "&lt;client interface&gt;", toItf = "server
-            interface")})</member>
+            interface")},{...})</member>
           </simplelist>
         </para>
       </formalpara>
@@ -480,7 +576,7 @@
       component to a server interface of a component definition.</para>
 
       <note>
-        <para>The call function is bloked on a component definition.</para>
+        <para>The call function is blocked on a component definition.</para>
       </note>
 
       <note>
@@ -563,12 +659,8 @@
       </formalpara>
 
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
-      call an explicite server interface via an interface pointer (macro
+      call an explicit server interface via an interface pointer (macro
       CALL_PTR).</para>
-
-      <note>
-        <para>...</para>
-      </note>
 
       <note>
         <para>...</para>
@@ -623,7 +715,7 @@
 
     <section id="optim-annot-Single">
       <title>
-        <classname>@Single</classname>
+        <classname>@Single [TO BE CHECKED]</classname>
       </title>
 
       <formalpara>
@@ -645,11 +737,11 @@
       <para>The <classname>Single</classname> annotation allows to ...</para>
 
       <note>
-        <para>...</para>
+        <para>[TODO]</para>
       </note>
 
       <note>
-        <para>...</para>
+        <para>[TODO]</para>
       </note>
 
       <example>
@@ -667,7 +759,7 @@
       <formalpara>
         <title>Usage condition</title>
 
-        <para>....</para>
+        <para>[TODO]</para>
 
         <para/>
 
@@ -679,7 +771,7 @@
       <formalpara>
         <title>Consequences</title>
 
-        <para>...</para>
+        <para>[TODO]</para>
       </formalpara>
 
       <formalpara>
@@ -691,7 +783,7 @@
       <formalpara>
         <title>Example</title>
 
-        <para>...</para>
+        <para>[TODO]</para>
       </formalpara>
     </section>
 
@@ -732,27 +824,22 @@
         definitions.</para>
       </note>
 
-      <formalpara><title>Usage condition</title><para>Unusable if there's
-      collection.</para><classname/> .<para>...</para></formalpara>
-
       <formalpara>
-        <title>Constraints</title>
+        <title>Usage conditions</title>
 
-        <para>Remove all possibility of dynamic binding for the selected
-        composite.</para>
+        <para>[TODO]</para>
       </formalpara>
 
       <formalpara>
         <title>Gains</title>
 
-        <para>This annotation allows to reduce the memory application's
-        footprint and increase call indirections.</para>
+        <para>[TODO]</para>
       </formalpara>
 
       <formalpara>
         <title>Example</title>
 
-        <para>...</para>
+        <para>[TODO]</para>
       </formalpara>
     </section>
   </chapter>
