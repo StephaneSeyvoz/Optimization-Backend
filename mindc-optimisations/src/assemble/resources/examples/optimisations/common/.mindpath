@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mindpath>
 	<mindpathentry kind="SOURCE" path="/common/src"/>
-	<mindpathentry kind="SOURCE" path="/common/runtime"/>
+	<mindpathentry kind="SOURCE" path="/common/src/main/mind"/>
+	<mindpathentry kind="SOURCE" path="/common/src/test/mind"/>
+	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
 </mindpath>

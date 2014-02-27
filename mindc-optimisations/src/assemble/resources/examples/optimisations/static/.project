@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>common</project>
+		<project>RUNTIME</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -36,11 +37,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>runtime</name>
-			<type>2</type>
-			<location>/usr/local/mind/runtime</location>
-		</link>
-	</linkedResources>
 </projectDescription>
