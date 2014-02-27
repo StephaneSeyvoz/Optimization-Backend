@@ -158,7 +158,7 @@ else
 endif
 
 doc: build_doc
-	$(MINDOC) $(subst $(PATH_SEPARATOR),$(space),$(subst :,$(PATH_SEPARATOR),$(sourcePath))) $(RUNTIME_PATH) -d $(docOutputDir)
+	$(MINDOC) $(subst $(PATH_SEPARATOR),$(space),$(subst :,$(PATH_SEPARATOR),$(sourcePath))) $(dependenciesDir) $(RUNTIME_PATH) -d $(docOutputDir)
 
 # here we reuse the same flags as the common build ones
 test: build_test

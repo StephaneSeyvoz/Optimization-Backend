@@ -1,5 +1,5 @@
 /**
- * This component is part of the example demonstrating the usage of the '@Static' optimization.
+ * This component is part of the example demonstrating the usage of the optimization annotations.
  * It is the non optimized example application (hence the name BaseApplication).
  */
  
