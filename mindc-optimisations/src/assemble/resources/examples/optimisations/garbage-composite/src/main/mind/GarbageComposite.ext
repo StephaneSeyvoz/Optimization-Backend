@@ -1,0 +1,7 @@
+/**
+ * This rule will apply the '@GarbageComposite' annotation to every component. 
+ * (Although it really is useful only on the 'top level' component)  
+ */
+@GarbageComposite
+composite **.* {
+}
