@@ -3,8 +3,10 @@
  */
 
 @StaticDefinitionsBindingsList({
-@StaticDefinitionBinding(fromItf="com.schneiderelectric.optimisation.common.SingletonComponent.clientInterface",toItf="com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serverInterface"),
-@StaticDefinitionBinding(fromItf="boot.Bootstrap.entryPoint",toItf="com.schneiderelectric.optimisation.common.SingletonComponent.serverInterface")
+@StaticDefinitionBinding(fromItf="com.schneiderelectric.optimisation.common.SingletonComponent.clientInterface",
+toItf="com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serverInterface"),
+@StaticDefinitionBinding(fromItf="boot.Bootstrap.entryPoint",
+toItf="com.schneiderelectric.optimisation.common.SingletonComponent.serverInterface")
 })
 composite com.schneiderelectric.optimisation.common.MultiInstanceApplication {
 }
