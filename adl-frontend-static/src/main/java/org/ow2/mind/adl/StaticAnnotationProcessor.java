@@ -119,12 +119,6 @@ AbstractADLLoaderAnnotationProcessor {
 				else {
 					//get the client interface involved in the binding
 					currentClientItf = OptimASTHelper.getInterface(definition, fromInterface);
-					// we can't optimize collections
-					if (TypeInterfaceUtil.isCollection(currentClientItf)) {
-						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + fromInterface + " (source) is a collection element");
-						return null;
-					}
-
 					isSourceSingleton = true;
 				}
 			} else {
@@ -134,12 +128,6 @@ AbstractADLLoaderAnnotationProcessor {
 				currentClientDef = OptimASTHelper.getResolvedComponentDefinition(currentClientCpt, loaderItf, context);
 				//get the client interface involved in the binding
 				currentClientItf = OptimASTHelper.getInterface(currentClientDef, fromInterface);
-
-				// we can't optimize collections
-				if (TypeInterfaceUtil.isCollection(currentClientItf)) {
-					logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + fromInterface + " (source) is a collection element");
-					return null;
-				}
 
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentClientDef))
@@ -165,12 +153,6 @@ AbstractADLLoaderAnnotationProcessor {
 				else {
 					//get the client interface involved in the binding
 					currentServerItf = OptimASTHelper.getInterface(definition, toInterface);
-					// we can't optimize collections
-					if (TypeInterfaceUtil.isCollection(currentServerItf)) {
-						logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + toInterface + " (target) is a collection element");
-						return null;
-					}
-
 					isTargetSingleton = true;
 				}
 			} else {
@@ -180,11 +162,6 @@ AbstractADLLoaderAnnotationProcessor {
 				currentServerDef = OptimASTHelper.getResolvedComponentDefinition(currentServerCpt, loaderItf, context);
 				//get the server interface involved in the binding
 				currentServerItf = OptimASTHelper.getInterface(currentServerDef, toInterface);
-
-				if (TypeInterfaceUtil.isCollection(currentServerItf)) {
-					logger.info("In definition " + definition.getName() + ", could not optimize '" + fromComponent + "." + fromInterface + " -> " + toComponent + "." + toInterface + "', since " + toInterface + " (target) is a collection element");
-					return null;
-				}
 
 				// logError raises an exception and quits
 				if (!OptimASTHelper.isSingleton(currentServerDef))

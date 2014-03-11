@@ -59,6 +59,10 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 <! SSZ : END MODIFICATION !>
 /* End definition of internal component data type */
 
+/* Start collection arrays declaration (StaticBindings optimization) */
+<StaticBindingsClientCollectionsArrays(definition=definition, instance=instance)>
+/* End collection arrays declaration (StaticBindings optimization) */
+
 /* Start definition of component type */
 <! SSZ : BEGIN MODIFICATION !>
 <if (!(instance.decorations.("allow-instance-data-removal")))>
@@ -145,11 +149,11 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
 <if (isClient.(itf.role))>
   <if (itf.numberOfElement)>
   <! Optimization : Here we check if bindings from our instance are static !>
-    <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
-// Optimized : Removed declaration for memory saving 1
+    <if (definition.astDecorations.("parent-has-static-bindings"))>
+// @StaticBindings Optimized collection (client): Declare the "shortcut" array in a dedicated section further in the file. 
 // <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <else>
-// No optimization : default behavior 1
+// No optimization: Standard collection
 <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <else>
@@ -171,7 +175,7 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
   <if (definition.astDecorations.("parent-has-static-bindings"))>
     <! We do not optimize collection interfaces yet !>
     <if (itf.numberOfElement)>
-// No optimization : Collection interfaces are not supported yet
+// Optimized collection (server)
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <else>
       <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
@@ -212,6 +216,15 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
   <endif>
 <endif>
 <! SSZ : END MODIFICATION !>
+>>
+
+StaticBindingsClientCollectionsArrays(definition, instance) ::= <<
+<if (definition.interfaces)><definition.interfaces:{ <if (isClient.(it.role))><if (it.numberOfElement)><if (definition.astDecorations.("parent-has-static-bindings"))>
+<SBClientCollectionArrayDecl(definition=definition, itf=it, itfDef=it.astDecorations.("interfaceDefinition"))><endif><endif><endif>} ; separator="\n"><endif>
+>>
+
+SBClientCollectionArrayDecl(definition, itf, itfDef) ::= <<
+<if (itfDef.methods)><itfDef.methods:{<methodPointersArrayDef(definition=definition, method=it, itf=itf, withThisPtr="false")>;}; separator="\n"><endif>
 >>
 
 SubComponentStructures(definition) ::= <<
@@ -728,6 +741,192 @@ ComponentFactoryParameter(definition, parameter) ::= <<
 int <parameter.name;format="toCName">
 <endif>
 >>
+
+// -----------------------------------------------------------------------------
+// Nearly brutally copied from IDL2C/IDL2CPP since we need to define function pointers arrays
+
+// we took inspiration from methodPointerDef to create methodPointersArrayDef
+
+methodDef(method, methodName, withThisPtr) ::= <<
+<typeQualifier(qualifiers=method)><varDef(type=method.type, name=methodPrototype(name=methodName, parameters=method.parameters, withThisPtr=withThisPtr, vaArgs=method.vaArgs))>
+>>
+
+methodPointerCast(method, withThisPtr) ::= <<
+(<varDef(type=method.type, name=methodPrototype(name="(*)", parameters=method.parameters, withThisPtr=withThisPtr, vaArgs=method.vaArgs))>)
+>>
+
+
+methodPointerDef(method, withThisPtr) ::= "<methodDef(method=method, methodName=methodPointerName(name=method.name), withThisPtr=withThisPtr)> "
+
+methodPointerName(name) ::= "(* <name>)"
+
+// Arrays
+methodPointersArrayDef(definition, method, itf, withThisPtr) ::= "<methodDef(method=method, methodName=methodPointersArrayName(definition=definition, name=method.name, itf=itf), withThisPtr=withThisPtr)> "
+
+methodPointersArrayName(definition, name, itf) ::= "(* __component_<definition.name;format=\"toCName\">_<itf.name>_<name>[<itf.numberOfElement>])"
+//
+
+thisPointerDef ::= [
+  "true" : "void *_mind_this",
+  "typed" : "CONTEXT_PTR_DECL",
+  "false" : ""
+]
+
+thisPointerComma ::= [
+  "true" : ",",
+  "typed" : ",",
+  "false" : ""
+]
+
+noParamVoid ::= [
+  "true" : "",
+  "typed" : "",
+  "false" : "void"
+]
+
+vaArgsMap ::= [
+   "true" : "true",
+   default :
+]
+
+methodPrototype(name, parameters, withThisPtr, vaArgs) ::= <<
+<name>(<thisPointerDef.(withThisPtr)> <if(parameters)>
+<thisPointerComma.(withThisPtr)> <parameters:parameterDef(parameter=it); separator=", "> <if (vaArgs)>, ...<endif>
+<else> 
+<if (vaArgs)> <thisPointerComma.(withThisPtr)> ...
+<else>
+<noParamVoid.(withThisPtr)> 
+<endif>
+<endif>)
+>>
+
+parameterDef(parameter) ::= <<
+<typeQualifier(qualifiers=parameter)><varDef(type=parameter.type, name=parameterName(parameter=parameter))>
+>>
+
+parameterName(parameter) ::= <<
+<if (parameter.isOut)>
+<outParameterTemplateMap.(parameter.isOut)>
+<else>
+<outParameterTemplateMap.false>
+<endif>
+>>
+
+outParameterTemplateMap ::= [
+  "true"  : "(*<parameter.name>)",
+  "false" : "<parameter.name>",
+  default : "<parameter.name>"
+]
+
+enumRefDef(type) ::= "enum <type.name>"
+
+varDef(type, name) ::= <<
+<(varDefTemplateMap.(type.astDecorations.kind))(type=type, name=name)>
+>>
+
+enumVarDef(type, name) ::= "<enumDef(type=type)> <name>"
+
+enumRefVarDef(type, name) ::= "<enumRefDef(type=type)> <name>"
+
+structVarDef(type, name) ::= "<structDef(type=type)> <name>"
+
+structRefVarDef(type, name) ::= "<structRefDef(type=type)> <name>"
+
+unionVarDef(type, name) ::= "<unionDef(type=type)> <name>"
+
+unionRefVarDef(type, name) ::= "<unionRefDef(type=type)> <name>"
+
+pointerOfVarDef(type, name) ::= "<varDef(type=type.type, name=pointerOfVarName(type=type, name=name))>"
+
+pointerOfVarName(type, name) ::= "(* <typeQualifier(qualifiers=type)><name>)"
+
+arrayOfVarDef(type, name) ::= "<varDef(type=type.type, name=arrayOfVarName(type=type, name=name))>"
+
+arrayOfVarName(type, name) ::= "<name>[<if (type.constantExpression)><expression(expr=type.constantExpression)><endif>]"
+
+simpleVarDef(type, name) ::= <<
+<if (primitiveTypeNameMap.(type.name))>
+<primitiveTypeNameMap.(type.name)> <name>
+<else>
+<type.name> <name>
+<endif>
+>>
+
+typedefVarDef(type, name) ::= <<
+<type.name; format="toCName"> <name>
+>>
+
+varDefTemplateMap ::= [
+  "enum" :          "enumVarDef",
+  "enumRef" :       "enumRefVarDef",
+  "struct" :        "structVarDef",
+  "structRef" :     "structRefVarDef",
+  "union" :         "unionVarDef",
+  "unionRef" :      "unionRefVarDef",
+  "pointerOf" :     "pointerOfVarDef",
+  "arrayOf" :       "arrayOfVarDef",
+  "primitiveType" : "simpleVarDef",
+  "typedefRef" :    "typedefVarDef"
+]
+
+primitiveTypeNameMap ::= [
+  "string" : "__MIND_STRING_TYPEDEF"
+]
+
+expression(expr) ::= <<
+<(constantExpressionTemplateMap.(expr.astDecorations.kind))(expr=expr)>
+>>
+
+binaryOpertaionExpr(expr) ::= <<
+<expr.constantExpressions:{(<expression(expr=it)>)};separator=expr.operation>
+>>
+
+unaryOperationExpr(expr) ::= <<
+<expr.operation> (<expression(expr=expr.constantExpression)>)
+>>
+
+castOperationExpr(expr) ::= <<
+((<varDef(type=expr.type, name="")>) <expression(expr=expr.constantExpression)>)
+>>
+
+literalExpr(expr) ::= <<
+<expr.expr>
+>>
+
+constantExpressionTemplateMap ::= [
+  "binaryOperation" : "binaryOpertaionExpr",
+  "unaryOperation" :  "unaryOperationExpr",
+  "castOperation" :   "castOperationExpr",
+  "literal" :         "literalExpr"
+]
+
+typeQualifier(qualifiers) ::= <<
+<constQualiferMap.(qualifiers.isConst)><volatileQualifierMap.(qualifiers.isVolatile)>
+>>
+
+constQualiferMap ::= [
+  "true" : "const ",
+  "false": ""
+]
+
+volatileQualifierMap ::= [
+  "true" : "volatile ",
+  "false": ""
+]
+
+isVoidMethod(method) ::= "<(voidTypeTemplateMap.(method.type.astDecorations.kind))(type=method.type)>"
+
+voidPrimitiveType(type) ::= "<isVoidMap.(type.name)>"
+
+voidComplexType(type) ::= "<isComplexTypeVoidMap.(type)>"
+
+voidTypeTemplateMap ::= [
+  "primitiveType" : "voidPrimitiveType",
+  default         : "voidComplexType"
+]
+
+isVoidMap ::= [ "void" : "true" ]
+isComplexTypeVoidMap ::= [ default : ]
 
 }$$ 
 }

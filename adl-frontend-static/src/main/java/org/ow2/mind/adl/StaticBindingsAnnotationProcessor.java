@@ -104,10 +104,10 @@ AbstractADLLoaderAnnotationProcessor {
 
 				/*
 				 * For the CPL (ADL backend)
-				 * If Binding is not already tagged static, source isn't collection and destination isn't collection either
+				 * If Binding is not already tagged static, both for simple or collection bindings.
+				 * (generated code will use a different strategy though)
 				 */
-				if ((!OptimASTHelper.isStatic(binding)) && (OptimASTHelper.getFromInterfaceNumber(binding) == -1) && (OptimASTHelper.getToInterfaceNumber(binding) == -1)) {
-
+				if (!OptimASTHelper.isStatic(binding)) {
 					// This method may throw an exception when there's an error and stop the compilation
 					checkSourceDestinationSingletons(definition, binding, context);
 
@@ -195,22 +195,21 @@ AbstractADLLoaderAnnotationProcessor {
 				// (Annotation propagation wouldn't work because of the execution flow)
 				for (final Binding binding : ((BindingContainer) subCompDef).getBindings()) {	
 
-					// Check if the current binding is NOT part of a collection interface
-					// AND the current destination is NOT part of a collection interface either
-					// (Consider we don't know how to optimize them yet)
-					if ((OptimASTHelper.getFromInterfaceNumber(binding) == -1) && (OptimASTHelper.getToInterfaceNumber(binding) == -1))
-						// Then check if the binding was already static
-						if (!OptimASTHelper.isStatic(binding)) {
-							// This method may throw an exception when there's an error and stop the compilation
-							checkSourceDestinationSingletons(subCompDef, binding, context);
-							/*
-							 * For CPL optimization
-							 */
-							OptimASTHelper.setStaticDecoration(binding);
-						}
-					// Now take care of other sub-components in the architecture tree
-					recursiveStaticDecorationPropagation(subCompDef, context, recursive);
+					// Both for collection and simple bindings
+					
+					// Check if the binding was already static
+					if (!OptimASTHelper.isStatic(binding)) {
+						// This method may throw an exception when there's an error and stop the compilation
+						checkSourceDestinationSingletons(subCompDef, binding, context);
+						/*
+						 * For CPL optimization
+						 */
+						OptimASTHelper.setStaticDecoration(binding);
+					}
 				}
+				
+				// Now take care of other sub-components in the architecture tree
+				recursiveStaticDecorationPropagation(subCompDef, context, recursive);
 			}
 		}
 	}
