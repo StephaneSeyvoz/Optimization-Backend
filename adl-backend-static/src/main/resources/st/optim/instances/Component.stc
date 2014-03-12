@@ -150,6 +150,9 @@ InitInstance(definition, instance) ::= <<
   <AddAttributeValues(definition=definition, instance=instance)>
   <AddControllersValues(definition=definition, instance=instance)>
 )
+
+<! Collections optimization require further initialization !>
+<AddSBCollectionItfValues(definition=definition, instance=instance)>
 <endif>
 <! SSZ : END MODIFICATION !>
 >>
@@ -216,6 +219,48 @@ StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_
 
 BindingCastIfNeeded(instance, itf, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
 CollectionBindingCastIfNeeded(instance, itf, index, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
+
+// Begin StaticBindings Collection optimization
+AddSBCollectionItfValues(definition, instance) ::= <<
+<definition.interfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it)>
+<if (definition.astNodeTypes.("internalInterface"))>
+<if (definition.internalInterfaces)>
+<definition.internalInterfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it, isInternal="true")>
+<endif>
+<endif>
+
+>>
+
+AddSBCollectionItfValue(definition, instance, itf, isInternal) ::= <<
+<if (isClient.(itf.role))>
+<if (itf.numberOfElement)>
+<if (definition.astDecorations.("parent-has-static-bindings"))>
+<itf.astDecorations.("collectionIndexes"):AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, index=it, isInternal=isInternal);separator="\n">
+<endif>
+<endif>
+<endif>
+>>
+
+AddSBItfCollectionValue(definition, instance, itf, index, isInternal) ::= <<
+<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
+/* <itf.name>[<index>] - simple binding init */
+<SBStaticBindingValue(definition=definition, itf=itf, itfDef=itf.astDecorations.("interfaceDefinition"), index=index, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
+<else>
+# error "Optimization backend: StaticBindings Collection optimization TODO case: SBStaticCollectionBindingValue" 
+<endif>
+>>
+
+SBStaticBindingValue(definition, itf, itfDef, bindingDesc, index) ::= <<
+<if (bindingDesc.binding)>
+<if (itfDef.methods)><itfDef.methods:{<methodPointersArrayAccess(definition=definition, name=it.name, itf=itf, index=index)> = __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<it.name><if (bindingDesc.binding.toInterfaceNumber)>[<bindingDesc.binding.toInterfaceNumber>]<endif>;}; separator="\n"><endif>
+<else>
+<if (itfDef.methods)><itfDef.methods:{<methodPointersArrayAccess(definition=definition, name=it.name, itf=itf, index=index)> = (void*) 0;}; separator="\n"><endif>
+<endif>
+
+>>
+
+methodPointersArrayAccess(definition, name, itf, index) ::= "__component_<definition.name;format=\"toCName\">_<itf.name>_<name><if (index)>[<index>]<endif>)"
+// End StaticBindings Collection optimization
 
 DefineAttributeValues(definition, instance) ::= <<
 <if (definition.astNodeTypes.("attribute"))>
