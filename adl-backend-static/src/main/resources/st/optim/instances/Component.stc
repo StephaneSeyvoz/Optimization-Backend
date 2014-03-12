@@ -259,7 +259,7 @@ SBStaticBindingValue(definition, itf, itfDef, bindingDesc, index) ::= <<
 
 >>
 
-methodPointersArrayAccess(definition, name, itf, index) ::= "__component_<definition.name;format=\"toCName\">_<itf.name>_<name><if (index)>[<index>]<endif>)"
+methodPointersArrayAccess(definition, name, itf, index) ::= "__component_<definition.name;format=\"toCName\">_<itf.name>_<name><if (index)>[<index>]<endif>"
 // End StaticBindings Collection optimization
 
 DefineAttributeValues(definition, instance) ::= <<
