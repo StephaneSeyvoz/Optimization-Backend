@@ -449,6 +449,10 @@ extern <ComponentTypeName(definitionName=definition.name)> instance_name;
 <InitializeInterfaces(definition=definition, instance=instance)><InitializeComponents(definition=definition)><InitializeControllerStructures(definition=definition)><InitializeAttributes(definition=definition)>  } \
 };
 
+// Start macros for @StaticBindings-optimized Collections
+<AddStaticBindingsCollectionItfInitMacros(definition=definition, instance=definition)>
+// E macros for @StaticBindings-optimized Collections
+
 /* Duplicate-definition fix for some families of compilers such as IAR */
 #define <definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(private_name) \
 SINGLETON_PRIVATE_DATA_T private_name;
@@ -456,6 +460,34 @@ SINGLETON_PRIVATE_DATA_T private_name;
 int __component_<definition.name;format="toCName">_factory(void **instance, void *allocItf <ComponentFactoryParameters(definition=definition)>);
 int __component_<definition.name;format="toCName">_destroy(void *instance, void *allocItf);
 >>
+
+AddStaticBindingsCollectionItfInitMacros(definition, instance) ::= <<
+<definition.interfaces:{<AddStaticBindingsCollectionItfInitMacro(definition=definition, itf=it, instance=instance)>}; separator="\n">
+>>
+
+AddStaticBindingsCollectionItfInitMacro(definition, itf, instance) ::= <<
+<if (isClient.(itf.role))>
+<if (itf.numberOfElement)>
+<if (itf.astDecorations.("interfaceDefinition"))>
+<itf.astDecorations.("interfaceDefinition").methods:{<AddStaticBindingsCollectionFuncInitMacro(definition=definition, itf=itf, method=it, instance=instance)>}; separator="\n">
+<endif>
+<endif>
+<endif>
+>>
+
+AddStaticBindingsCollectionFuncInitMacro(definition, itf, method, instance) ::= <<
+<FuncPointerTypeDef(definition=definition, itf=itf, method=method, withThisPtr="false")>
+#define <definition.name;format="toUpperCName">_<itf.name;format="toUpperCName">_<method.name;format="toUpperCName">_INIT_COLL_FNCPTR_ARRAY(var_name, <itf.astDecorations.("collectionIndexes"):{<AddFuncsPtrsArgs(index=it)>}; separator=", ">) \
+<FuncPointerTypeName(definition=definition, itf=itf, name=method.name)> var_name[<itf.numberOfElement>] = { <itf.astDecorations.("collectionIndexes"):{<AddFuncsPtrsArgs(index=it)>}; separator=", "> };
+>>
+
+FuncPointerTypeDef(definition, itf, method, withThisPtr) ::= "typedef <methodDef(method=method, methodName=FuncPointerSignature(definition=definition, itf=itf, name=method.name), withThisPtr=withThisPtr)>;"
+
+FuncPointerSignature(definition, itf, name) ::= "(* <FuncPointerTypeName(definition=definition, itf=itf, name=name)>)"
+FuncPointerTypeName(definition, itf, name) ::= "<definition.name;format=\"toCName\">_<itf.name;format=\"toCName\">_<name>_t"
+
+AddFuncsPtrsArgs(index) ::= "func_ptr_<index>"
+//
 
 AddItfNames(definition) ::= <<
 <definition.interfaces:AddItfName(itf=it)><if (definition.astNodeTypes.("internalInterface"))>
@@ -509,14 +541,12 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
 /* <InitializeClientInterface(definition=definition, itf=itf)>, */ \
   <else>
     <if (definition.astDecorations.("parent-has-static-bindings"))>
-<! SSZ : Exception : If someone tries to optimize a collection interface, we don't optimize the latter yet !>
       <if (itf.numberOfElement)>
-<InitializeClientInterface(definition=definition, itf=itf)>,
+/* <InitializeClientInterface(definition=definition, itf=itf)>, */
       <else>
       	<if (itf.astDecorations.("binding-destination-is-controller"))>
 <InitializeClientInterface(definition=definition, itf=itf)>,
 		<else>
-<! SSZ : Exception : If someone tries to optimize a binding with a collection interface as destination, we don't optimize the latter yet !>
         	<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
 <InitializeClientInterface(definition=definition, itf=itf)>,
         	<else>
@@ -584,9 +614,8 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
 /* <InitializeClientInterface(definition=definition, itf=itf)> */ \
   		<else>
     		<if (definition.astDecorations.("parent-has-static-bindings"))>
-<! SSZ : Exception : If someone tries to optimize a collection interface, we don't optimize the latter yet !>
       			<if (itf.numberOfElement)>
-<InitializeClientInterface(definition=definition, itf=itf)>
+/* <InitializeClientInterface(definition=definition, itf=itf)> */
       			<else>
 <! SSZ : Exception : If someone tries to optimize a binding with a collection interface as destination, we don't optimize the latter yet !>
         			<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>

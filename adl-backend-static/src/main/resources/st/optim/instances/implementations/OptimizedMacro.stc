@@ -227,8 +227,14 @@ StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_
 
 SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::= <<
 <if (itf.numberOfElement)>
+  <if (definition.astDecorations.("parent-has-static-bindings"))>
+// Optimized collection binding (@StaticBindings)
+#define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) __component_<definition.name;format="toCName">_<itf.name>_##methName[(index)](
+#define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_<itf.name>_##methName[(index)]()
+  <else>
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData,
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData)
+  <endif>
 <else>
     <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
       <if (itf.astDecorations.("is-inline"))>

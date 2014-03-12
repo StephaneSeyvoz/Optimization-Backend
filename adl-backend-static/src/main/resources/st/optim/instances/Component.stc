@@ -243,16 +243,17 @@ AddSBCollectionItfValue(definition, instance, itf, isInternal) ::= <<
 
 AddSBItfCollectionValue(definition, instance, itf, index, isInternal) ::= <<
 <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
-/* <itf.name>[<index>] - simple binding init */
+/* <itf.name>[<index>] - @StaticBindings optimization arrays initialization - simple binding init */
 <SBStaticBindingValue(definition=definition, itf=itf, itfDef=itf.astDecorations.("interfaceDefinition"), index=index, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
 <else>
+/* <itf.name>[<index>] - @StaticBindings optimization arrays initialization - collection binding init case */
 # error "Optimization backend: StaticBindings Collection optimization TODO case: SBStaticCollectionBindingValue" 
 <endif>
 >>
 
 SBStaticBindingValue(definition, itf, itfDef, bindingDesc, index) ::= <<
 <if (bindingDesc.binding)>
-<if (itfDef.methods)><itfDef.methods:{<methodPointersArrayAccess(definition=definition, name=it.name, itf=itf, index=index)> = __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<it.name><if (bindingDesc.binding.toInterfaceNumber)>[<bindingDesc.binding.toInterfaceNumber>]<endif>;}; separator="\n"><endif>
+<if (itfDef.methods)><itfDef.methods:{<methodPointersArrayAccess(definition=definition, name=it.name, itf=itf, index=index)> = __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface><if (bindingDesc.binding.toInterfaceNumber)>_<bindingDesc.binding.toInterfaceNumber><endif>_<it.name>;}; separator="\n"><endif>
 <else>
 <if (itfDef.methods)><itfDef.methods:{<methodPointersArrayAccess(definition=definition, name=it.name, itf=itf, index=index)> = (void*) 0;}; separator="\n"><endif>
 <endif>
