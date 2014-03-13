@@ -94,7 +94,7 @@
     <section>
       <para>This document is intended to developers who wish to reduce the
       memory foot print of their embedded applications and gain performance
-      for some specific features.min</para>
+      for some specific features.</para>
     </section>
   </chapter>
 
@@ -107,16 +107,16 @@
 
       <para>
         <simplelist type="inline">
-          <member>adl-backend-static</member>
+          <member><code>adl-backend-static</code></member>
 
-          <member>idl-backend-static</member>
+          <member><code>idl-backend-static</code></member>
 
-          <member>cpl-preproc-static</member>
+          <member><code>cpl-preproc-static</code></member>
         </simplelist>
       </para>
 
       <para>Please make sure that these jar files are present in the
-      <code>ext</code>folder.</para>
+      <code>ext</code> folder.</para>
     </section>
   </chapter>
 
@@ -180,17 +180,17 @@
     <title>Optimization technical</title>
 
     <section>
-      <para>The way provided by the &productName; compiler to optimize the
-      application is ADL annotations and compilation flags or global
+      <para>Ways provided by the &productName; compiler to optimize the
+      application are ADL annotations, compilation flags or global
       extension.</para>
 
-      <para>Global extension are defined outside ADLs.</para>
+      <para><note>Global extension are defined outside ADLs.</note></para>
 
-      <para>Annotations are associated to specific key work of the MIND
-      language.</para>
+      <para><note>Annotations are associated to specific key work of the MIND
+      language.</note></para>
 
-      <para>The developer has to identify the code part to be optimized
-      following requirements.</para>
+      <para><note>The developer has to identify the code part to be optimized
+      following requirements.</note></para>
     </section>
   </chapter>
 
@@ -201,31 +201,30 @@
       <para>This mechanism allows to applied optimization on specific
       components without ADL code intrusion.</para>
 
-      <para>This mechanism is materialized by ext files referenced in the
-      Ext.properties file.</para>
+      <para>This mechanism is materialized by <code>ext</code>files referenced in the
+      <code>Ext.properties</code> file.</para>
 
       <formalpara>
         <title>Usage</title>
 
         <para/>
 
-        <para>@Singleton || @StaticBindings ||
-        @StaticDefinitionBindingList(...)</para>
+        <para>
+		<code>
+		(@Singleton || @StaticBindings || @StaticDefinitionBindingList(...))
+        primitive || composite &lt;package&gt;.&lt;component name&gt;
+        {
+			@Static
+			binds &lt;package&gt;.&lt;instance name from&gt; to &lt;package&gt;.&lt;instance name to&gt;;
 
-        <para>primitive || composite &lt;package&gt;.&lt;component name&gt;
-        {</para>
-
-        <para>@Static</para>
-
-        <para>binds &lt;package&gt;.&lt;instance name from&gt; to
-        &lt;package&gt;.&lt;instance name to&gt;;</para>
-
-        <para>}</para>
+        }
+		</code>
+		</para>
 
         <note>
           <para>&lt;package&gt;, &lt;component name&gt; and &lt;instance name
           ...&gt; can be replaced by '*' if we want to apply the annotation to
-          all packages and/or all compoenents.</para>
+          all packages and/or all components.</para>
         </note>
       </formalpara>
 
@@ -279,7 +278,7 @@
           <code>( cFlags = -D__MIND_NO_FACTORY )</code>
         </para>
       </formalpara>
-
+		<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -341,11 +340,12 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtGarbageComposite.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
 
+	<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -420,11 +420,12 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtStatic.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
 
+	  <para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -518,11 +519,11 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtSingleton.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
-
+	<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -550,6 +551,7 @@
         <para>The <code>@Singleton</code> annotation is described in the file
         <code>mindc-optimisations\src\assemble\resources\examples\optimisations\common\src\main\mind\com\schneiderelectric\optimisation\common/SingletonComponent.adl</code></para>
 
+		<para/>
         <para>The following code come from the same application as the
         previous one.</para>
 
@@ -612,11 +614,12 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtStaticBindings.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
 
+	  <para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -671,7 +674,7 @@
         <title>Annotation fields</title>
 
         <para>recursive:{true,false}</para>
-
+		<para/>
         <para>This option allows to propagate the annotation in all
         sub-composites.</para>
       </formalpara>
@@ -709,11 +712,11 @@
           <imageobject>
             <imagedata align="center"
                        fileref="images/AtGarbageUnusedInternal.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
-
+		<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -721,9 +724,9 @@
 
         <para>No unbound interface allowed.</para>
 
-        <para>[TO BE CHECKED] Allows only one required controller.</para>
+        <para><note>[TO BE CHECKED] Allows only one required controller.</note></para>
 
-        <para>[TO BE CHECKED] Allows only one provided controller.</para>
+        <para><note>[TO BE CHECKED] Allows only one provided controller.</note></para>
       </formalpara>
 
       <formalpara>
@@ -813,11 +816,11 @@
           <imageobject>
             <imagedata align="center"
                        fileref="images/AtStaticDefinitionBindingsList.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
-
+	<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -847,7 +850,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/com/schneiderelectric/optimisation/staticdefinitionbinding/StaticDefinitionBindingApplication.adl"
+			<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/com/schneiderelectric/optimisation/staticdefinitionbinding/StaticDefBindingApp.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 			</programlisting>
         </example>
@@ -856,7 +859,7 @@
 
     <section id="optim-annot-FreezeCallPointer">
       <title>
-        <classname>@FreezeCallPointer [UNKNOWN BY THE COMPILER !!]</classname>
+        <classname>@FreezeCallPointer</classname>
       </title>
 
       <formalpara>
@@ -889,11 +892,11 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtFreezeCallPointer.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
-
+		<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -935,7 +938,7 @@
         <classname>@Single [TODO]</classname>
       </title>
 
-      <formalpara>
+      <!-- <formalpara>
         <title>Annotation fields</title>
 
         <para>No field</para>
@@ -968,11 +971,11 @@
           <imageobject>
             <imagedata align="center"
                        fileref="images/AtGarbageUnusedInternal.png"
-                       format="PNG" scale="50"/>
+                       format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
       </example>
-
+	<para/>
       <formalpara>
         <title>Usage condition</title>
 
@@ -1001,7 +1004,7 @@
         <title>Example</title>
 
         <para>[TODO]</para>
-      </formalpara>
+      </formalpara> -->
     </section>
 
     <section id="optim-annot-Inline">
@@ -1009,7 +1012,7 @@
         <classname>@Inline [TODO]</classname>
       </title>
 
-      <formalpara>
+      <!-- <formalpara>
         <title>Annotation fields</title>
 
         <para>No field</para>
@@ -1035,7 +1038,7 @@
         <para>This remove unused code for composite and primitive
         definitions.</para>
       </note>
-
+		<para/>
       <formalpara>
         <title>Usage conditions</title>
 
@@ -1052,7 +1055,7 @@
         <title>Example</title>
 
         <para>[TODO]</para>
-      </formalpara>
+      </formalpara> -->
     </section>
   </chapter>
 </book>

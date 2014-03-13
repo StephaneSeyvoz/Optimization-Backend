@@ -9,7 +9,7 @@ An experimental optimization backend plugin for the Mindc compiler. The optimiza
 To generate the User and Developer Guides, perform the following command in the
 mind-compiler directory :
 
-$ mvn -N docbkx:generate-html docbkx:generate-pdf
+$ mvn -N clean pre-site
 
 The PDF and HTML documents can then be found in the <module-dir>/target/site
 directory.
@@ -20,4 +20,4 @@ various XML files which is not correctly handle by the plugin (if the top-level
 file has not been updated, the plugin will not re-compile the doc). So when 
 editing the documentation the command should be :
 
-$ touch src/docbkx/*.xml; mvn  -N docbkx:generate-html docbkx:generate-pdf
+$ touch src/docbkx/*.xml; mvn -N clean pre-site
