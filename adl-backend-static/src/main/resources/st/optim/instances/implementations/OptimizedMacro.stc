@@ -401,14 +401,14 @@ BIND_MY_INTERFACE(definition) ::= <<
 >>
 
 IS_BOUND(definition) ::= <<
-#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_PTR(GET_MY_INTERFACE_COLLECTION(itfName, idx))
 #define IS_BOUND_PTR(itfPtr) __component_is_bound(itfPtr)
-
 <! replacing IS_BOUND by specific behavior when optimized !>
 <if (definition.astDecorations.("parent-has-static-bindings"))>
 #define IS_BOUND(itfName) IS_BOUND_##itfName
-<definition.interfaces:IS_BOUND_INTERFACE(definition=definition, itf=it); separator="\n">
+#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_COLLECTION_##itfName(idx)
+<definition.interfaces:IS_BOUND_INTERFACE_STATICBINDINGS(definition=definition, itf=it); separator="\n">
 <else>
+#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_PTR(GET_MY_INTERFACE_COLLECTION(itfName, idx))
 	<if (definition.astDecorations.("static-in-parent"))>
 #define IS_BOUND(itfName) IS_BOUND_##itfName
 <definition.interfaces:IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it); separator="\n">
@@ -418,11 +418,21 @@ IS_BOUND(definition) ::= <<
 <endif>
 >>
 
-IS_BOUND_INTERFACE(definition, itf) ::= <<
-<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding)>
-#define IS_BOUND_<itf.name> 1
+IS_BOUND_INTERFACE_STATICBINDINGS(definition, itf) ::= <<
+<if (itf.numberOfElement)><! Right now we force the user to bind ALL his collection elements to simplify !>
+<IS_BOUND_COLLECTION_STATICBINDINGS(definition=definition, itf=itf)>
 <else>
+  <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding)>
+#define IS_BOUND_<itf.name> 1
+  <else>
 #define IS_BOUND_<itf.name> 0
+  <endif>
+<endif>
+>>
+ 
+IS_BOUND_COLLECTION_STATICBINDINGS(definition, itf) ::= <<
+<if (itf.astDecorations.("interfaceDefinition"))>
+#define IS_BOUND_COLLECTION_<itf.name>(index) __component_<definition.name; format="toCName">_<itf.name;format="toCName">_<first(itf.astDecorations.("interfaceDefinition").methods).name;format="toCName">[index] != 0
 <endif>
 >>
 
