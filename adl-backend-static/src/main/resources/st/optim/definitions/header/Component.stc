@@ -451,7 +451,7 @@ extern <ComponentTypeName(definitionName=definition.name)> instance_name;
 
 // Start macros for @StaticBindings-optimized Collections
 <AddStaticBindingsCollectionItfInitMacros(definition=definition, instance=definition)>
-// E macros for @StaticBindings-optimized Collections
+// End macros for @StaticBindings-optimized Collections
 
 /* Duplicate-definition fix for some families of compilers such as IAR */
 #define <definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(private_name) \
@@ -468,8 +468,10 @@ AddStaticBindingsCollectionItfInitMacros(definition, instance) ::= <<
 AddStaticBindingsCollectionItfInitMacro(definition, itf, instance) ::= <<
 <if (isClient.(itf.role))>
 <if (itf.numberOfElement)>
+<if (definition.astDecorations.("parent-has-static-bindings"))>
 <if (itf.astDecorations.("interfaceDefinition"))>
 <itf.astDecorations.("interfaceDefinition").methods:{<AddStaticBindingsCollectionFuncInitMacro(definition=definition, itf=itf, method=it, instance=instance)>}; separator="\n">
+<endif>
 <endif>
 <endif>
 <endif>
@@ -479,6 +481,7 @@ AddStaticBindingsCollectionFuncInitMacro(definition, itf, method, instance) ::= 
 <FuncPointerTypeDef(definition=definition, itf=itf, method=method, withThisPtr="false")>
 #define <definition.name;format="toUpperCName">_<itf.name;format="toUpperCName">_<method.name;format="toUpperCName">_INIT_COLL_FNCPTR_ARRAY(var_name, <itf.astDecorations.("collectionIndexes"):{<AddFuncsPtrsArgs(index=it)>}; separator=", ">) \
 <FuncPointerTypeName(definition=definition, itf=itf, name=method.name)> var_name[<itf.numberOfElement>] = { <itf.astDecorations.("collectionIndexes"):{<AddFuncsPtrsArgs(index=it)>}; separator=", "> };
+
 >>
 
 FuncPointerTypeDef(definition, itf, method, withThisPtr) ::= "typedef <methodDef(method=method, methodName=FuncPointerSignature(definition=definition, itf=itf, name=method.name), withThisPtr=withThisPtr)>;"
