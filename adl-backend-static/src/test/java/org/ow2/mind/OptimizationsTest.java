@@ -147,6 +147,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 	}
 
+
 	protected class TestCase {
 
 		public String rootDir;
