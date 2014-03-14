@@ -198,8 +198,8 @@ MultiCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::= <<
  * as the target can be a non-Singleton
  */
 MultiCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 /*
@@ -227,8 +227,14 @@ StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_
 
 SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::= <<
 <if (itf.numberOfElement)>
+  <if (definition.astDecorations.("parent-has-static-bindings"))>
+// Optimized collection binding (@StaticBindings)
+#define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) __component_<definition.name;format="toCName">_<itf.name>_##methName[(index)](
+#define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_<itf.name>_##methName[(index)]()
+  <else>
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITH_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData,
 #define CALL_COLLECTION_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(index, methName) __component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->meths->methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>[(index)]->selfData)
+  <endif>
 <else>
     <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
       <if (itf.astDecorations.("is-inline"))>
@@ -251,8 +257,8 @@ SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::
 >>
 
 SingletonCALLStaticBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName() 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName() 
 >>
 
 SingletonCALLStaticInlineBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
@@ -272,8 +278,8 @@ SingletonStandardCALL(definition, itf) ::= <<
  * as the target can be a non-Singleton
  */
 SingletonCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData) 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 CALLServerInterface(definition, interfaceDefinitions, instance, itf) ::= <<
@@ -395,14 +401,14 @@ BIND_MY_INTERFACE(definition) ::= <<
 >>
 
 IS_BOUND(definition) ::= <<
-#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_PTR(GET_MY_INTERFACE_COLLECTION(itfName, idx))
 #define IS_BOUND_PTR(itfPtr) __component_is_bound(itfPtr)
-
 <! replacing IS_BOUND by specific behavior when optimized !>
 <if (definition.astDecorations.("parent-has-static-bindings"))>
 #define IS_BOUND(itfName) IS_BOUND_##itfName
-<definition.interfaces:IS_BOUND_INTERFACE(definition=definition, itf=it); separator="\n">
+#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_COLLECTION_##itfName(idx)
+<definition.interfaces:IS_BOUND_INTERFACE_STATICBINDINGS(definition=definition, itf=it); separator="\n">
 <else>
+#define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_PTR(GET_MY_INTERFACE_COLLECTION(itfName, idx))
 	<if (definition.astDecorations.("static-in-parent"))>
 #define IS_BOUND(itfName) IS_BOUND_##itfName
 <definition.interfaces:IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it); separator="\n">
@@ -412,11 +418,21 @@ IS_BOUND(definition) ::= <<
 <endif>
 >>
 
-IS_BOUND_INTERFACE(definition, itf) ::= <<
-<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding)>
-#define IS_BOUND_<itf.name> 1
+IS_BOUND_INTERFACE_STATICBINDINGS(definition, itf) ::= <<
+<if (itf.numberOfElement)><! Right now we force the user to bind ALL his collection elements to simplify !>
+<IS_BOUND_COLLECTION_STATICBINDINGS(definition=definition, itf=itf)>
 <else>
+  <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding)>
+#define IS_BOUND_<itf.name> 1
+  <else>
 #define IS_BOUND_<itf.name> 0
+  <endif>
+<endif>
+>>
+ 
+IS_BOUND_COLLECTION_STATICBINDINGS(definition, itf) ::= <<
+<if (itf.astDecorations.("interfaceDefinition"))>
+#define IS_BOUND_COLLECTION_<itf.name>(index) __component_<definition.name; format="toCName">_<itf.name;format="toCName">_<first(itf.astDecorations.("interfaceDefinition").methods).name;format="toCName">[index] != 0
 <endif>
 >>
 

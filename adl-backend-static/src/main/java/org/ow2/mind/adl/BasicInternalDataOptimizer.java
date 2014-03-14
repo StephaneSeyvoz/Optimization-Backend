@@ -105,25 +105,25 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 			externalTypeOptimizationAllowed = parentIsTaggedStaticBindings(graph)
 					&& OptimASTHelper.isSingleton(compDef)
 					&& (!existsOptionalUnboundClientInterface(graph))
-					&& (!existsSourceCollectionInterface)
-					&& (!existsDestinationCollectionInterface(graph))
-					&& (!existsCollectionInterface(graph))
+					//&& (!existsSourceCollectionInterface) - Not needed anymore since we now optimize client collection interfaces
+					//&& (!existsDestinationCollectionInterface(graph))
+					//&& (!existsCollectionInterface(graph))
 					// Warning : the existsDestinationControllerInterface method ALSO DECORATES the according client interfaces
 					// with "binding-destination-is-controller" for StringTemplates: care about side effects
 					&& (!existsDestinationControllerInterfaceAndDecorateIt(graph))
 					&& (!hostsController(compDef))
-					&& OptimASTHelper.areGarbagedUnusedInternals(compDef);
+					/* && OptimASTHelper.areGarbagedUnusedInternals(compDef) - Now automatically used, @GarbageUnusedInternals is deprecated, obsolete */ ;
 			// Any component whose parent has @StaticBindings has its external type info optimized
 
 			// First check for type data
 			internalTypeOptimizationAllowed = parentIsTaggedStaticBindings(graph)
 					&& OptimASTHelper.isSingleton(compDef)
 					&& (!existsOptionalUnboundClientInterface(graph))
-					&& (!existsSourceCollectionInterface)
-					&& (!existsDestinationCollectionInterface(graph))
-					&& (!existsCollectionInterface(graph))
+					//&& (!existsSourceCollectionInterface) - Not needed anymore since we now optimize client collection interfaces
+					// && (!existsDestinationCollectionInterface(graph))
+					//&& (!existsCollectionInterface(graph))
 					&& (isTaggedStaticBindings(graph) || (!OptimASTHelper.isComposite(compDef)))
-					&& OptimASTHelper.areGarbagedUnusedInternals(compDef);
+					/* && OptimASTHelper.areGarbagedUnusedInternals(compDef) - Now automatically used, @GarbageUnusedInternals is deprecated, obsolete */ ;
 			// The last line is for the case where the user wants to optimize the current composite A with StaticBindings, but doesn't want
 			// @StaticBindings in internal composite B : as we have to keep B's internal interfaces data (even if it's external interfaces are
 			// optimized, we don't want to remove the whole internal data

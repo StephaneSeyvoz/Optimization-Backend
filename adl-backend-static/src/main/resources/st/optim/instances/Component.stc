@@ -2,6 +2,7 @@ template st.optim.instances.Component : st.common.ComponentHelper
 implements st.optim.instances.ComponentInstances{
 
 st.optim.membrane.ControllerGenerator ctrlGenerator = plugin(st.optim.membrane);
+st.interfaces.IDLDefinition idl2c = st.interfaces.IDL2C ; 
 
 $${
 
@@ -151,6 +152,11 @@ InitInstance(definition, instance) ::= <<
   <AddControllersValues(definition=definition, instance=instance)>
 )
 <endif>
+
+// Start StaticBindings Collection optimization
+<AddSBCollectionItfValues(definition=definition, instance=instance)>
+// End StaticBindings Collection optimization
+
 <! SSZ : END MODIFICATION !>
 >>
 
@@ -216,6 +222,69 @@ StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_
 
 BindingCastIfNeeded(instance, itf, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
 CollectionBindingCastIfNeeded(instance, itf, index, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
+
+AddSBCollectionItfValues(definition, instance) ::= <<
+<definition.interfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it)>
+<if (definition.astNodeTypes.("internalInterface"))>
+<if (definition.internalInterfaces)>
+<definition.internalInterfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it, isInternal="true")>
+<endif>
+<endif>
+
+>>
+
+AddSBCollectionItfValue(definition, instance, itf, isInternal) ::= <<
+<if (isClient.(itf.role))>
+<if (itf.numberOfElement)>
+<if (definition.astDecorations.("parent-has-static-bindings"))>
+<if (itf.astDecorations.("interfaceDefinition"))>
+// <itf.name> client interface
+<itf.astDecorations.("interfaceDefinition").methods:{<AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal)>}; separator="\n">
+<endif>
+<endif>
+<endif>
+<endif>
+>>
+
+// The referenced functions are accordingly prototyped in the .inc (in case you search for them, see implementations/Component.stc:AddSBItfCollectionValue)
+AddSBItfCollectionValue(definition, instance, itf, method, isInternal) ::= <<
+<definition.name;format="toUpperCName">_<itf.name;format="toUpperCName">_<method.name;format="toUpperCName">_INIT_COLL_FNCPTR_ARRAY(
+__component_<definition.name; format="toCName">_<itf.name;format="toCName">_<method.name;format="toCName">,
+<itf.astDecorations.("collectionIndexes"):{<AddSBBindingValue(definition=definition, instance=instance, itf=itf, index=it, isInternal=isInternal, methName=method.name)>}; separator=",\n">
+)
+
+>>
+
+AddSBBindingValue(definition, instance, itf, index, isInternal, methName) ::= <<
+<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
+<AddFuncPtrValue(definition=definition, instance=instance, itf=itf, index=index, isInternal=isInternal, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)), methName=methName)>
+<else>
+0
+<endif>
+>>
+
+AddFuncPtrValue(definition, instance, itf, index, isInternal, bindingDesc, methName) ::= <<
+<if (bindingDesc.binding)>
+__component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface><if (bindingDesc.binding.toInterfaceNumber)>_<bindingDesc.binding.toInterfaceNumber><endif>_<methName>
+<else>
+0
+<endif>
+>>
+
+AddSBCollectionTargetFunctionPrototype1(definition, instance, itf, index, isInternal, methName) ::= <<
+<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)))>
+<AddSBCollectionTargetFunctionPrototype2(definition=definition, instance=instance, itf=itf, index=index, isInternal=isInternal, bindingDesc=instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)), methName=methName)>
+<endif>
+>>
+
+AddSBCollectionTargetFunctionPrototype2(definition, instance, itf, index, isInternal, bindingDesc, methName) ::= <<
+<if (bindingDesc.binding)>
+<(idl2c.methodDef)(method=method, methodName=FuncPointerTypeName(bindingDesc=bindingDesc, methName=methName), withThisPtr="false")>;
+<endif>
+>>
+
+FuncPointerTypeName(bindingDesc, methName) ::= "__component_<bindingDesc.serverComponent.definition.name; format=\"toCName\">_<bindingDesc.binding.toInterface><if (bindingDesc.binding.toInterfaceNumber)>_<bindingDesc.binding.toInterfaceNumber><endif>_<methName>"
+// End StaticBindings Collection optimization
 
 DefineAttributeValues(definition, instance) ::= <<
 <if (definition.astNodeTypes.("attribute"))>
@@ -340,6 +409,13 @@ DeclareDestructorCalls(definition) ::= <<
 void __component_<it.name;format="toCName">_destructor_calls(void);
 #endif
 >>
+
+// -----------------------------------------------------------------------------
+// Add features based on IDL2C since we need to define function pointers arrays
+
+methodPointersArrayDef(definition, method, itf, withThisPtr) ::= "<(idl2c.methodDef)(method=method, methodName=methodPointersArrayName(definition=definition, name=method.name, itf=itf), withThisPtr=withThisPtr)> "
+
+methodPointersArrayName(definition, name, itf) ::= "(* __component_<definition.name;format=\"toCName\">_<itf.name>_<name>[<itf.numberOfElement>])"
 
 }$$
 

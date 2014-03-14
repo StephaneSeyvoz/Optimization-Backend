@@ -26,14 +26,22 @@ import static org.ow2.mind.PathHelper.fullyQualifiedNameToPath;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.CompilerError;
 import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.interfaces.Interface;
+import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
+import org.objectweb.fractal.adl.types.TypeInterface;
 import org.ow2.mind.SourceFileWriter;
 import org.ow2.mind.adl.graph.ComponentGraph;
+import org.ow2.mind.idl.IDLLoader;
+import org.ow2.mind.idl.ast.IDL;
+import org.ow2.mind.idl.ast.InterfaceDefinition;
 import org.ow2.mind.io.IOErrors;
 
 import com.google.inject.Inject;
@@ -53,6 +61,9 @@ public class OptimizedDefinitionHeaderSourceGenerator extends AbstractSourceGene
 
 	protected final static String FILE_EXT         = ".adl.h";
 
+	@Inject
+	protected IDLLoader idlLoaderItf;
+	
 	@Inject
 	protected OptimizedDefinitionHeaderSourceGenerator(
 			@Named(TEMPLATE_NAME) final String templateGroupName) {
@@ -82,6 +93,9 @@ public class OptimizedDefinitionHeaderSourceGenerator extends AbstractSourceGene
 
 		if (regenerate(outputFile, definition, context)) {
 
+			decorateClientInterfacesWithAccordingInterfaceDefinition(definition,
+			          context);
+			
 			final StringTemplate st = getInstanceOf("ComponentDefinitionHeader");
 			st.setAttribute("definition", definition);
 
@@ -93,7 +107,7 @@ public class OptimizedDefinitionHeaderSourceGenerator extends AbstractSourceGene
 			// /!\ 	HERE WE CONSIDER AS A PRE-CONDITION THAT WE WILL HAVE
 			// 		ONLY ONE AND ONLY ONE INSTANCE PER DEFINITION 			/!\
 			st.setAttribute("instance", instanceGraph);
-			
+
 			//topLevelGraph = null;
 			//instanceGraph = null;
 
@@ -117,4 +131,43 @@ public class OptimizedDefinitionHeaderSourceGenerator extends AbstractSourceGene
 			}
 		}
 	}
+
+	/**
+	   * This utility method allows us to find the method definitions to be used
+	   * for collections optimization, to allow defining function pointers arrays.
+	   * 
+	   * @param definition
+	   * @param context
+	   * @throws ADLException when a server interface signature can't be loaded
+	   */
+	  private void decorateClientInterfacesWithAccordingInterfaceDefinition(
+	      final Definition definition, final Map<Object, Object> context)
+	      throws ADLException {
+
+	    // defensive
+	    if (!(definition instanceof InterfaceContainer)) return;
+
+	    final InterfaceContainer itfContainer = (InterfaceContainer) definition;
+
+	    for (final Interface currItf : itfContainer.getInterfaces()) {
+	      if (!(currItf instanceof TypeInterface)) continue;
+	      final TypeInterface currTypeItf = (TypeInterface) currItf;
+
+	      // found one
+	      if (currTypeItf.getRole().equals(TypeInterface.CLIENT_ROLE)) {
+
+	        // load according InterfaceDefinition
+	        final IDL currItfIDL = idlLoaderItf.load(currTypeItf.getSignature(),
+	            context);
+
+	        if (currItfIDL instanceof InterfaceDefinition) {
+	          final InterfaceDefinition currItfItfDef = (InterfaceDefinition) currItfIDL;
+
+	          // decorate our instance
+	          currItf.astSetDecoration("interfaceDefinition", currItfItfDef);
+	        }
+	      }
+	    }
+
+	  }
 }
