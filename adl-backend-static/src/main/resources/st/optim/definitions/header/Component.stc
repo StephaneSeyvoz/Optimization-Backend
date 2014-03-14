@@ -2,6 +2,7 @@ template st.optim.definitions.header.Component: st.common.ComponentHelper
   implements st.optim.definitions.header.ComponentDefinitionHeader {
 
 st.optim.membrane.ControllerGenerator ctrlGenerator = plugin(st.optim.membrane);
+st.interfaces.IDLDefinition idl2c = st.interfaces.IDL2C ; 
 
 $${
 
@@ -484,7 +485,7 @@ AddStaticBindingsCollectionFuncInitMacro(definition, itf, method, instance) ::= 
 
 >>
 
-FuncPointerTypeDef(definition, itf, method, withThisPtr) ::= "typedef <methodDef(method=method, methodName=FuncPointerSignature(definition=definition, itf=itf, name=method.name), withThisPtr=withThisPtr)>;"
+FuncPointerTypeDef(definition, itf, method, withThisPtr) ::= "typedef <(idl2c.methodDef)(method=method, methodName=FuncPointerSignature(definition=definition, itf=itf, name=method.name), withThisPtr=withThisPtr)>;"
 
 FuncPointerSignature(definition, itf, name) ::= "(* <FuncPointerTypeName(definition=definition, itf=itf, name=name)>)"
 FuncPointerTypeName(definition, itf, name) ::= "<definition.name;format=\"toCName\">_<itf.name;format=\"toCName\">_<name>_t"
@@ -778,187 +779,10 @@ int <parameter.name;format="toCName">
 // Nearly brutally copied from IDL2C/IDL2CPP since we need to define function pointers arrays
 
 // we took inspiration from methodPointerDef to create methodPointersArrayDef
-
-methodDef(method, methodName, withThisPtr) ::= <<
-<typeQualifier(qualifiers=method)><varDef(type=method.type, name=methodPrototype(name=methodName, parameters=method.parameters, withThisPtr=withThisPtr, vaArgs=method.vaArgs))>
->>
-
-methodPointerCast(method, withThisPtr) ::= <<
-(<varDef(type=method.type, name=methodPrototype(name="(*)", parameters=method.parameters, withThisPtr=withThisPtr, vaArgs=method.vaArgs))>)
->>
-
-
-methodPointerDef(method, withThisPtr) ::= "<methodDef(method=method, methodName=methodPointerName(name=method.name), withThisPtr=withThisPtr)> "
-
-methodPointerName(name) ::= "(* <name>)"
-
-// Arrays
-methodPointersArrayDef(definition, method, itf, withThisPtr) ::= "<methodDef(method=method, methodName=methodPointersArrayName(definition=definition, name=method.name, itf=itf), withThisPtr=withThisPtr)> "
+methodPointersArrayDef(definition, method, itf, withThisPtr) ::= "<(idl2c.methodDef)(method=method, methodName=methodPointersArrayName(definition=definition, name=method.name, itf=itf), withThisPtr=withThisPtr)> "
 
 methodPointersArrayName(definition, name, itf) ::= "(* __component_<definition.name;format=\"toCName\">_<itf.name>_<name>[<itf.numberOfElement>])"
 //
-
-thisPointerDef ::= [
-  "true" : "void *_mind_this",
-  "typed" : "CONTEXT_PTR_DECL",
-  "false" : ""
-]
-
-thisPointerComma ::= [
-  "true" : ",",
-  "typed" : ",",
-  "false" : ""
-]
-
-noParamVoid ::= [
-  "true" : "",
-  "typed" : "",
-  "false" : "void"
-]
-
-vaArgsMap ::= [
-   "true" : "true",
-   default :
-]
-
-methodPrototype(name, parameters, withThisPtr, vaArgs) ::= <<
-<name>(<thisPointerDef.(withThisPtr)> <if(parameters)>
-<thisPointerComma.(withThisPtr)> <parameters:parameterDef(parameter=it); separator=", "> <if (vaArgs)>, ...<endif>
-<else> 
-<if (vaArgs)> <thisPointerComma.(withThisPtr)> ...
-<else>
-<noParamVoid.(withThisPtr)> 
-<endif>
-<endif>)
->>
-
-parameterDef(parameter) ::= <<
-<typeQualifier(qualifiers=parameter)><varDef(type=parameter.type, name=parameterName(parameter=parameter))>
->>
-
-parameterName(parameter) ::= <<
-<if (parameter.isOut)>
-<outParameterTemplateMap.(parameter.isOut)>
-<else>
-<outParameterTemplateMap.false>
-<endif>
->>
-
-outParameterTemplateMap ::= [
-  "true"  : "(*<parameter.name>)",
-  "false" : "<parameter.name>",
-  default : "<parameter.name>"
-]
-
-enumRefDef(type) ::= "enum <type.name>"
-
-varDef(type, name) ::= <<
-<(varDefTemplateMap.(type.astDecorations.kind))(type=type, name=name)>
->>
-
-enumVarDef(type, name) ::= "<enumDef(type=type)> <name>"
-
-enumRefVarDef(type, name) ::= "<enumRefDef(type=type)> <name>"
-
-structVarDef(type, name) ::= "<structDef(type=type)> <name>"
-
-structRefVarDef(type, name) ::= "<structRefDef(type=type)> <name>"
-
-unionVarDef(type, name) ::= "<unionDef(type=type)> <name>"
-
-unionRefVarDef(type, name) ::= "<unionRefDef(type=type)> <name>"
-
-pointerOfVarDef(type, name) ::= "<varDef(type=type.type, name=pointerOfVarName(type=type, name=name))>"
-
-pointerOfVarName(type, name) ::= "(* <typeQualifier(qualifiers=type)><name>)"
-
-arrayOfVarDef(type, name) ::= "<varDef(type=type.type, name=arrayOfVarName(type=type, name=name))>"
-
-arrayOfVarName(type, name) ::= "<name>[<if (type.constantExpression)><expression(expr=type.constantExpression)><endif>]"
-
-simpleVarDef(type, name) ::= <<
-<if (primitiveTypeNameMap.(type.name))>
-<primitiveTypeNameMap.(type.name)> <name>
-<else>
-<type.name> <name>
-<endif>
->>
-
-typedefVarDef(type, name) ::= <<
-<type.name; format="toCName"> <name>
->>
-
-varDefTemplateMap ::= [
-  "enum" :          "enumVarDef",
-  "enumRef" :       "enumRefVarDef",
-  "struct" :        "structVarDef",
-  "structRef" :     "structRefVarDef",
-  "union" :         "unionVarDef",
-  "unionRef" :      "unionRefVarDef",
-  "pointerOf" :     "pointerOfVarDef",
-  "arrayOf" :       "arrayOfVarDef",
-  "primitiveType" : "simpleVarDef",
-  "typedefRef" :    "typedefVarDef"
-]
-
-primitiveTypeNameMap ::= [
-  "string" : "__MIND_STRING_TYPEDEF"
-]
-
-expression(expr) ::= <<
-<(constantExpressionTemplateMap.(expr.astDecorations.kind))(expr=expr)>
->>
-
-binaryOpertaionExpr(expr) ::= <<
-<expr.constantExpressions:{(<expression(expr=it)>)};separator=expr.operation>
->>
-
-unaryOperationExpr(expr) ::= <<
-<expr.operation> (<expression(expr=expr.constantExpression)>)
->>
-
-castOperationExpr(expr) ::= <<
-((<varDef(type=expr.type, name="")>) <expression(expr=expr.constantExpression)>)
->>
-
-literalExpr(expr) ::= <<
-<expr.expr>
->>
-
-constantExpressionTemplateMap ::= [
-  "binaryOperation" : "binaryOpertaionExpr",
-  "unaryOperation" :  "unaryOperationExpr",
-  "castOperation" :   "castOperationExpr",
-  "literal" :         "literalExpr"
-]
-
-typeQualifier(qualifiers) ::= <<
-<constQualiferMap.(qualifiers.isConst)><volatileQualifierMap.(qualifiers.isVolatile)>
->>
-
-constQualiferMap ::= [
-  "true" : "const ",
-  "false": ""
-]
-
-volatileQualifierMap ::= [
-  "true" : "volatile ",
-  "false": ""
-]
-
-isVoidMethod(method) ::= "<(voidTypeTemplateMap.(method.type.astDecorations.kind))(type=method.type)>"
-
-voidPrimitiveType(type) ::= "<isVoidMap.(type.name)>"
-
-voidComplexType(type) ::= "<isComplexTypeVoidMap.(type)>"
-
-voidTypeTemplateMap ::= [
-  "primitiveType" : "voidPrimitiveType",
-  default         : "voidComplexType"
-]
-
-isVoidMap ::= [ "void" : "true" ]
-isComplexTypeVoidMap ::= [ default : ]
 
 }$$ 
 }
