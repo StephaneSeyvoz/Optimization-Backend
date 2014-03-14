@@ -76,7 +76,11 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 /* End declaration of interface V-Tables. */
 
 /* Start declaration of factory */
-<! SSZ : BEGIN MODIFICATION !><! Here and inside !>
+<! SSZ : BEGIN MODIFICATION !>
+// Start macros for @StaticBindings-optimized Collections
+<AddStaticBindingsCollectionItfInitMacros(definition=definition, instance=definition)>
+// End macros for @StaticBindings-optimized Collections
+
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 <FactoryDef(definition=definition, instance=instance)>
 <endif>
@@ -448,10 +452,6 @@ extern <ComponentTypeName(definitionName=definition.name)> instance_name;
   { /* __component_internal_data: */ \
 <InitializeInterfaces(definition=definition, instance=instance)><InitializeComponents(definition=definition)><InitializeControllerStructures(definition=definition)><InitializeAttributes(definition=definition)>  } \
 };
-
-// Start macros for @StaticBindings-optimized Collections
-<AddStaticBindingsCollectionItfInitMacros(definition=definition, instance=definition)>
-// End macros for @StaticBindings-optimized Collections
 
 /* Duplicate-definition fix for some families of compilers such as IAR */
 #define <definition.name;format="toUpperCName">_DECLARE_PRIVATEDATA(private_name) \

@@ -146,6 +146,65 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		}
 
 	}
+	
+	// !!!!! TO BE DELETED - ONLY FOR TEMPORARY TEST PURPOSES !!!!!
+	/**
+	 * @param testCase The current generated TestCase to run.
+	 * The TestCase is a row from the DataProvider, and consists of a path and an ADL name issued from a combination
+	 * of optimisations (with the help of templates/generics).
+	 * @throws Exception
+	 */
+/*	@Test(dataProvider = "complex-optimizations-test", groups = {"optimizations"})
+	public void collectionOnlyOptimizationsComplexDataTest(TestCase testCase)
+			throws Exception {
+		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
+				"common", testCase.rootDir);
+
+		// Note : "true" forces to clean and rebuild completely
+		initContext(true);
+
+		List<String> cFlags = testCase.flags;
+		String adlName = testCase.adlName;
+		
+		if (!adlName.startsWith("collection"))
+			return;
+
+		final Definition d = runner.load(adlName);
+		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
+		if (runAnno != null) {
+
+			if ((cFlags != null) && (!cFlags.isEmpty()))
+				runner.addCFlags(cFlags);
+
+			final String adl;
+			adl = (runAnno.addBootstrap)
+					? "GenericApplication" + testCase.optimCombo + "<" + adlName + ">"
+							: adlName;
+
+			if (!adl.equals("GenericApplicationSBr<collection.HelloworldSelfbindsCollectionSimple>"))
+				return;
+			
+			if (logger.isLoggable(Level.FINE)) {
+
+				String cFlagsString = ", without flag.";
+				if ((cFlags != null) && (!cFlags.isEmpty()))
+					cFlagsString = ", with flag : " + cFlags + ".";
+
+				logger.log(Level.FINE, "Testing Combination " + adl + cFlagsString);
+			}
+
+			File exeFile = runner.compile(adl, runAnno.executableName);
+			final int r = runner.run(exeFile, (String[]) null);
+
+			assertEquals(r, 0, "Unexpected return value");
+
+		} else {
+			if (logger.isLoggable(Level.FINE))
+				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
+		}
+
+	}*/
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	protected class TestCase {
 

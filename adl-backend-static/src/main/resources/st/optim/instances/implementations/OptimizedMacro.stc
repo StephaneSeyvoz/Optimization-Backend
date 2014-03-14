@@ -198,8 +198,8 @@ MultiCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::= <<
  * as the target can be a non-Singleton
  */
 MultiCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(CONTEXT_PTR_ACCESS->__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 /*
@@ -257,8 +257,8 @@ SingletonCALLClientInterface(definition, interfaceDefinitions, instance, itf) ::
 >>
 
 SingletonCALLStaticBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName() 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName() 
 >>
 
 SingletonCALLStaticInlineBinding(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
@@ -278,8 +278,8 @@ SingletonStandardCALL(definition, itf) ::= <<
  * as the target can be a non-Singleton
  */
 SingletonCALLSingleInterface(definition, interfaceDefinitions, itf, bindingDesc) ::= <<
-#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
-#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData) 
+#define CALL_INTERFACE_METHOD_<itf.name>_WITH_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData,
+#define CALL_INTERFACE_METHOD_<itf.name>_WITHOUT_PARAM(methName) __component_<bindingDesc.serverComponent.definition.name; format="toCName">_<bindingDesc.binding.toInterface>_<if (bindingDesc.binding.toInterfaceNumber)><bindingDesc.binding.toInterfaceNumber>_<endif>##methName(__component_<definition.name;format="toCName">_singleton_instance.__component_internal_data.type.<itf.name>->selfData) 
 >>
 
 CALLServerInterface(definition, interfaceDefinitions, instance, itf) ::= <<
