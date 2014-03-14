@@ -100,7 +100,7 @@ OptimizedMethodDecls1(definition, instance, interfaceDefinitions, itf, index, is
   <if (itf.numberOfElement)>
     <if (definition.astDecorations.("parent-has-static-bindings"))>
       <if (itf.astDecorations.("interfaceDefinition"))>
-        <itf.astDecorations.("interfaceDefinition").methods:{<AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal)>}; separator="\n">
+<itf.astDecorations.("interfaceDefinition").methods:{<AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal)>}; separator="\n">
       <endif>
     <endif>
   <else>
@@ -199,13 +199,16 @@ AddSBCollectionTargetFunctionPrototype1(definition, instance, itf, index, isInte
 <endif>
 >>
 
+// do not redefine target server functions when target is self
 AddSBCollectionTargetFunctionPrototype2(definition, instance, itf, index, isInternal, bindingDesc, methName) ::= <<
 <if (bindingDesc.binding)>
-<(idl2c.methodDef)(method=method, methodName=FuncPointerTypeName(bindingDesc=bindingDesc, methName=methName), withThisPtr="false")>;
+<if (!(bindingDesc.binding.astDecorations.("self-binding-detected")))>
+<(idl2c.methodDef)(method=method, methodName=FuncName(bindingDesc=bindingDesc, methName=methName), withThisPtr="false")>;
+<endif>
 <endif>
 >>
 
-FuncPointerTypeName(bindingDesc, methName) ::= "__component_<bindingDesc.serverComponent.definition.name; format=\"toCName\">_<bindingDesc.binding.toInterface><if (bindingDesc.binding.toInterfaceNumber)>_<bindingDesc.binding.toInterfaceNumber><endif>_<methName>"
+FuncName(bindingDesc, methName) ::= "__component_<bindingDesc.serverComponent.definition.name; format=\"toCName\">_<bindingDesc.binding.toInterface><if (bindingDesc.binding.toInterfaceNumber)>_<bindingDesc.binding.toInterfaceNumber><endif>_<methName>"
 // End StaticBindings Collection optimization
 
 }$$

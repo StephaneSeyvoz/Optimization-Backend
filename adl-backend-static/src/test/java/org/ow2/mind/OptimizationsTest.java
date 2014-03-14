@@ -154,7 +154,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	 * of optimisations (with the help of templates/generics).
 	 * @throws Exception
 	 */
-/*	@Test(dataProvider = "complex-optimizations-test", groups = {"optimizations"})
+	@Test(dataProvider = "complex-optimizations-test", groups = {"optimizations"})
 	public void collectionOnlyOptimizationsComplexDataTest(TestCase testCase)
 			throws Exception {
 		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
@@ -181,9 +181,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 					? "GenericApplication" + testCase.optimCombo + "<" + adlName + ">"
 							: adlName;
 
-			if (!adl.equals("GenericApplicationSBr<collection.HelloworldSelfbindsCollectionSimple>"))
-				return;
-			
 			if (logger.isLoggable(Level.FINE)) {
 
 				String cFlagsString = ", without flag.";
@@ -203,7 +200,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
 		}
 
-	}*/
+	}
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	protected class TestCase {

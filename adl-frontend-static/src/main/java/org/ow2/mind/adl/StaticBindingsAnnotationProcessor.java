@@ -112,7 +112,14 @@ AbstractADLLoaderAnnotationProcessor {
 					checkSourceDestinationSingletons(definition, binding, context);
 
 					AnnotationHelper.addAnnotation(binding, new Static());
-				}	
+				}
+
+				// We also need to protect "self" bindings (from a component client interfaces to its own server interfaces)
+				// since the server methods prototypes are already defined in the .inc file, we do not need to redefine them
+				// when handling optimized clients (still in the .inc / implementations/Component.stc) when writing their
+				// target function prototype (= redundant declaration = compilation failure)
+				if (binding.getFromComponent().equals(binding.getToComponent()))
+					binding.astSetDecoration("self-binding-detected", "true");
 			}
 
 			// Please note that the propagation DOES NOT work for sub-components at this stage.
@@ -196,7 +203,7 @@ AbstractADLLoaderAnnotationProcessor {
 				for (final Binding binding : ((BindingContainer) subCompDef).getBindings()) {	
 
 					// Both for collection and simple bindings
-					
+
 					// Check if the binding was already static
 					if (!OptimASTHelper.isStatic(binding)) {
 						// This method may throw an exception when there's an error and stop the compilation
@@ -206,8 +213,15 @@ AbstractADLLoaderAnnotationProcessor {
 						 */
 						OptimASTHelper.setStaticDecoration(binding);
 					}
+
+					// We also need to protect "self" bindings (from a component client interfaces to its own server interfaces)
+					// since the server methods prototypes are already defined in the .inc file, we do not need to redefine them
+					// when handling optimized clients (still in the .inc / implementations/Component.stc) when writing their
+					// target function prototype (= redundant declaration = compilation failure)
+					if (binding.getFromComponent().equals(binding.getToComponent()))
+						binding.astSetDecoration("self-binding-detected", "true");
 				}
-				
+
 				// Now take care of other sub-components in the architecture tree
 				recursiveStaticDecorationPropagation(subCompDef, context, recursive);
 			}

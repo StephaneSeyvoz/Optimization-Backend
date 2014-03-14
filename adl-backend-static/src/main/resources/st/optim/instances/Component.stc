@@ -246,11 +246,8 @@ AddSBCollectionItfValue(definition, instance, itf, isInternal) ::= <<
 <endif>
 >>
 
-// TODO: Clean up the commented part if it stays commented after 20140314
+// The referenced functions are accordingly prototyped in the .inc (in case you search for them, see implementations/Component.stc:AddSBItfCollectionValue)
 AddSBItfCollectionValue(definition, instance, itf, method, isInternal) ::= <<
-/*
-<itf.astDecorations.("collectionIndexes"):{<AddSBCollectionTargetFunctionPrototype1(definition=definition, instance=instance, itf=itf, index=it, isInternal=isInternal, methName=method.name)>}; separator="\n">
- */
 <definition.name;format="toUpperCName">_<itf.name;format="toUpperCName">_<method.name;format="toUpperCName">_INIT_COLL_FNCPTR_ARRAY(
 __component_<definition.name; format="toCName">_<itf.name;format="toCName">_<method.name;format="toCName">,
 <itf.astDecorations.("collectionIndexes"):{<AddSBBindingValue(definition=definition, instance=instance, itf=itf, index=it, isInternal=isInternal, methName=method.name)>}; separator=",\n">
