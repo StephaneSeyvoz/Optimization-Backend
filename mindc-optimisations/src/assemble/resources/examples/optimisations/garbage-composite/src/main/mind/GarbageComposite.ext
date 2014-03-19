@@ -1,0 +1,9 @@
+/**
+ * This rule will apply the '@GarbageComposite' annotation to every component. 
+ * (Although it really is useful only on the 'top level' component)  
+ * New ADL files will be created in the output directory, 
+ * containing the representation of the architecture purged of all composite component
+ */
+@GarbageComposite(dumpADL=true)
+composite **.* {
+}
