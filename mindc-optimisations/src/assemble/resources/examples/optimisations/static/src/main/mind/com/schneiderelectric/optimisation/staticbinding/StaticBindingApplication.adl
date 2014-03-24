@@ -1,25 +1,58 @@
 /**
- * This component is part of the example demonstrating the usage of the '@Static' optimization.
- * It is the optimized version of the @component com.schneiderelectric.optimisation.common.BaseApplication component.
+ * This component is part of the example demonstrating the usage of the 
+ * '@Static' optimization.
+ * It is the optimized version of the 
+ *
+ * @component 
+ * com.schneiderelectric.optimisation.common.BaseApplication 
+ * component.
  * 
- * Only the differences with he @component com.schneiderelectric.optimisation.common.BaseApplication component are documented here.
- * Consider having a look at the @component com.schneiderelectric.optimisation.common.BaseApplication documentation for more.
+ * Only the differences with he 
+ * @component 
+ * com.schneiderelectric.optimisation.common.BaseApplication 
+ * component are documented here.
+ 
+ * Consider having a look at the 
+ * @component 
+ * com.schneiderelectric.optimisation.common.BaseApplication 
+ * documentation for more.
  */
  
 @Singleton
-composite com.schneiderelectric.optimisation.staticbinding.StaticBindingApplication {
+composite 
+com.schneiderelectric.optimisation.staticbinding.StaticBindingApplication 
+{
+
  	contains boot.Bootstrap as bootstrap; 
+
  	/**
- 	 * As both @component boot.Bootstrap and @component com.schneiderelectric.optimisation.common.SingletonComponent are singletons,
+ 	 * As both @component boot.Bootstrap and 
+	 * @component com.schneiderelectric.optimisation.common.SingletonComponent 
+	 * are singletons,
  	 * It is possible to annotate this binding with '@Static'
  	 */
  	@Static
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
-	contains com.schneiderelectric.optimisation.common.SingletonComponent as singletonComp;
+	
+	contains 
+	com.schneiderelectric.optimisation.common.SingletonComponent 
+	as 
+	singletonComp;
+	
+	
 	/**
-	 * @component com.schneiderelectric.optimisation.common.MultiInstanciableComponent is not a singleton.
+	 * @component 
+	 * com.schneiderelectric.optimisation.common.MultiInstanciableComponent 
+	 * is not a singleton.
 	 * The @Static annotation won't be applied
 	 */
-	binds singletonComp.firstClientInterface to firstMultiInstanciableComp.serverInterface;
-	contains com.schneiderelectric.optimisation.common.MultiInstanciableComponent as firstMultiInstanciableComp;
+	binds 
+	singletonComp.firstClientInterface 
+	to 
+	firstMultiInstanciableComp.serverInterface;
+	
+	contains 
+	com.schneiderelectric.optimisation.common.MultiInstanciableComponent 
+	as 
+	firstMultiInstanciableComp;
 }

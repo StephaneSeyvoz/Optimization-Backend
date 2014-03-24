@@ -76,10 +76,7 @@
                             <outputDirectory>${project.build.directory}/site/images</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/src/docbkx/devGuide/images</directory>
-                                </resource>
-                                <resource>
-                                    <directory>${basedir}/src/docbkx/userGuide/images</directory>
+                                    <directory>${basedir}/src/docbkx/images</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -128,7 +125,7 @@
                         </goals>
                         <inherited>false</inherited>
                         <configuration>
-                            <includes>mindc-user-guide.xml</includes>
+                            <includes>Optimization-backend.xml</includes>
                             <targetDirectory>${project.build.directory}/site</targetDirectory>
                             <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html.xsl</htmlCustomization>
                             <htmlStylesheet>css/docbook.css</htmlStylesheet>
@@ -139,15 +136,15 @@
                                 </parameter>
                                 <parameter>
                                     <name>pdf.link</name>
-                                    <value>mindc-user-guide.pdf</value>
+                                    <value>Optimization-backend.pdf</value>
                                 </parameter>
                                 <parameter>
                                     <name>chunked.link</name>
-                                    <value>userGuide/mindc-user-guide.html</value>
+                                    <value>userGuide/Optimization-backend.html</value>
                                 </parameter>
                                 <parameter>
                                     <name>printable.link</name>
-                                    <value>printable/mindc-user-guide.html</value>
+                                    <value>printable/Optimization-backend.html</value>
                                 </parameter>
                             </customizationParameters>
                         </configuration>
@@ -160,7 +157,7 @@
                         </goals>
                         <inherited>false</inherited>
                         <configuration>
-                            <includes>mindc-user-guide.xml</includes>
+                            <includes>Optimization-backend.xml</includes>
                             <chunkedOutput>true</chunkedOutput>
                             <targetDirectory>${project.build.directory}/site/userGuide</targetDirectory>
                             <imgSrcPath>../</imgSrcPath>
@@ -173,21 +170,21 @@
                                 </parameter>
                                 <parameter>
                                     <name>pdf.link</name>
-                                    <value>../mindc-user-guide.pdf</value>
+                                    <value>../Optimization-backend.pdf</value>
                                 </parameter>
                                 <parameter>
                                     <name>single.link</name>
-                                    <value>../mindc-user-guide.html</value>
+                                    <value>../Optimization-backend.html</value>
                                 </parameter>
                                 <parameter>
                                     <name>printable.link</name>
-                                    <value>../printable/mindc-user-guide.html</value>
+                                    <value>../printable/Optimization-backend.html</value>
                                 </parameter>
                             </customizationParameters>
                         </configuration>
                     </execution>
                     <!-- Dev Guide HTML executions -->
-                    <execution>
+                    <!-- <execution>
                         <id>devguide-html</id>
                         <phase>pre-site</phase>
                         <goals>
@@ -252,7 +249,7 @@
                                 </parameter>
                             </customizationParameters>
                         </configuration>
-                    </execution>
+                    </execution> -->
                 </executions>
                 <configuration>
                     <targetDirectory>${project.build.directory}/site</targetDirectory>
