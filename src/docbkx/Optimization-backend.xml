@@ -71,6 +71,15 @@
             <entry>Add @Single annotation. Add detailed schema for
             @StaticDefinitionBindingsList and @FreezeCallPointer.</entry>
           </row>
+                    <row>
+            <entry>0.3</entry>
+
+            <entry>24/03/2014</entry>
+
+            <entry>Julien TOUS</entry>
+
+            <entry>Document review : Modify @Singleton (gain) and mention unused factory elimination</entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -229,6 +238,10 @@
         <note>The developer has to identify the code parts to be optimized,
         following requirements.</note>
       </para>
+      <para>
+      By default the optimization backend (activated by the -O option) limit the generation of fractal factories to the factories declared in ADL.
+      This optimization does not reduce the flexibility of the application, and can already lead to significant reduction of the code sections.     
+      </para>
     </section>
   </chapter>
 
@@ -307,7 +320,7 @@
 
     <section id="optim-annot-garbagecomposite">
       <title>
-        <classname>@GarbageComposite (also available as @Flatten)</classname>
+        <classname>@Flatten (also available as @GarbageComposite)</classname>
       </title>
 
       <formalpara>
@@ -337,14 +350,14 @@
         </para>
       </formalpara>
 
-      <para>The <classname>GarbageComposite</classname> annotation allows to
+      <para>The <classname>Flatten</classname> annotation allows to
       suppress all composites. The final architecture is in the flattened view
       of all components. The top-level component resulting of the architecture
       transformation will directly contain all your primitives, and
       "delegation bindings" (going through composites) will be merged.</para>
 
       <example>
-        <title>@GarbageComposite overview</title>
+        <title>@Flatten overview</title>
 
         <mediaobject>
           <imageobject>
@@ -555,8 +568,11 @@
         times.</para>
 
         <note>
-          <para>Mixing standard C code with Mind macros-annotated code is made
-          possible.</para>
+          <para>Using Mind macros-annotated code from standard C functions is made
+          possible.
+          </para>
+          <para>Use of global data as PRIVATE is made safe, which is usefull when componentizing legacy C code.
+          </para>
         </note>
 
         <note>
@@ -569,7 +585,13 @@
       <formalpara>
         <title>Gains</title>
 
-        <para>Some gain in memory stack.</para>
+        <para>
+        Used alone (not combined with over optimization annotations), @Singleton doesn't provide any benefit.
+        It event increases the code section and execution time. 
+        </para>
+        <para>
+        But using the @Singleton annotation is mandatory for some other optimizations.
+		</para>
       </formalpara>
 
       <formalpara>
@@ -638,7 +660,7 @@
       </note>
 
       <note>
-        <para>If there's no attribute, no controller and no sub-components
+        <para>If there's no attribute <!--Does the presence of attribute reduce the optimization benefit ??? attributes are not really glue.-->, no controller and no sub-components
         then all the "glue" is removed.</para>
       </note>
 
@@ -935,10 +957,9 @@
       <formalpara>
         <title>Remark</title>
 
-        <para>In multi-threaded applications you should protect (lock access)
-        the sections using BIND_MY_INTERFACE and the following CALL, since
-        BIND_MY_INTERFACE is a stateful action. For safe and lock-free similar
-        behaviour, see the <classname>FreezeCallPointer</classname>
+        <para>CALL_PTR which can be used as thread-safe and lock-free alternative to 
+        BIND_MY_INTERFACE for highly-dynamic binding.
+        Can be optimized in in a very similar way, see the <classname>FreezeCallPointer</classname>
         annotation.</para>
       </formalpara>
 
@@ -988,8 +1009,8 @@
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
       call an explicit server interface via an interface pointer (macro
       CALL_PTR), in an optimized way. Its objective is the same as
-      <classname>StaticDefinitionBinding</classname>, but allows safe and
-      lock-free multi-threading while calling a pool of target component
+      <classname>StaticDefinitionBinding</classname>, but allows to optimize the
+      CALL_PTR (which is thread-safe and lock-free), while calling a pool of target component
       instances (restricted to the same target definition, like
       <classname>StaticDefinitionBinding</classname>).</para>
 
