@@ -60,6 +60,39 @@
 
             <entry>Document review</entry>
           </row>
+		  
+          <row>
+            <entry>0.3</entry>
+
+            <entry>21/03/2014</entry>
+
+            <entry>Yves Teissier</entry>
+
+            <entry>Add @Single annotation. Add detailed schema for
+            @StaticDefinitionBindingsList and @FreezeCallPointer.</entry>
+          </row>
+
+          <row>
+            <entry>0.4</entry>
+
+            <entry>24/03/2014</entry>
+
+            <entry>Julien Tous</entry>
+
+            <entry>Document review : Modify @Singleton (gain) and mention
+            unused factory elimination</entry>
+          </row>
+
+          <row>
+            <entry>0.5</entry>
+
+            <entry>24/03/2014</entry>
+
+            <entry>Yves Teissier</entry>
+
+            <entry>Add synthesis chapter. Add generalization of the
+            @StaticBindings annotation to collections.</entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -121,7 +154,7 @@
           <member>
             <code>adl-backend-static</code>
           </member>
-
+		  
           <member>
             <code>idl-backend-static</code>
           </member>
@@ -203,13 +236,12 @@
 
     <section>
       <para>Ways provided by the &productName; compiler to optimize the
-      application are ADL annotations, compilation flags or global
-      extension.</para>
+      application are ADL annotations or global extension.</para>
 
       <para>
         <note>Global extensions (.ext files) are defined outside ADLs.</note>
       </para>
-
+	  
       <para>
         <note>Annotations are associated to specific keywords of the MIND
         language.</note>
@@ -219,6 +251,12 @@
         <note>The developer has to identify the code parts to be optimized,
         following requirements.</note>
       </para>
+
+      <para>By default the optimization backend (activated by the -O option)
+      limit the generation of fractal factories to the factories declared in
+      ADL. This optimization does not reduce the flexibility of the
+      application, and can already lead to significant reduction of the code
+      sections.</para>
     </section>
   </chapter>
 
@@ -231,6 +269,11 @@
 
       <para>This mechanism is materialized by <code>ext</code> files
       referenced in the <code>Ext.properties</code> file.</para>
+
+      <note>
+        <para>global extension are applicable on components and bindings but
+        not one interfaces.</para>
+      </note>
 
       <formalpara>
         <title>Usage</title>
@@ -248,7 +291,7 @@
         </para>
 
         <para>
-          <code> @Static binds &lt;package&gt;.&lt;instance name from&gt; to
+          <code>@Static binds &lt;package&gt;.&lt;instance name from&gt; to
           &lt;package&gt;.&lt;instance name to&gt;;</code>
         </para>
 
@@ -293,72 +336,11 @@
   </chapter>
 
   <chapter>
-    <title>Compilation flags</title>
-
-    <section id="optim-annot-nofactory">
-      <title>
-        <classname>__MIND_NO_FACTORY (deprecated)</classname>
-      </title>
-
-      <formalpara>
-        <title>Warning: OBSOLETE / DEPRECATED</title>
-
-        <para>This once manual optimization is now automatically ran, with
-        auto-detection, when using --optimize.</para>
-
-        <para>Using it with any 2014 version will not break anything, but is
-        purely useless. We let this documentation here for long-term users
-        information.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Flag target</title>
-
-        <para>This flag allows to remove unused factory code.</para>
-
-        <para>This flag has to be added to the cflags variable in the
-        <code>Default.properties</code> file.</para>
-
-        <para>
-          <code>( cFlags = -D__MIND_NO_FACTORY )</code>
-        </para>
-      </formalpara>
-
-      <para/>
-
-      <formalpara>
-        <title>Usage condition</title>
-
-        <para>The factory interface is not used.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Consequences</title>
-
-        <para>Dynamic component instantiation is no more possible.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Gains</title>
-
-        <para>This flag reduce the generated code size and binary foot
-        print.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Example</title>
-
-        <para>[TODO]</para>
-      </formalpara>
-    </section>
-  </chapter>
-
-  <chapter>
     <title>Annotations</title>
 
     <section id="optim-annot-garbagecomposite">
       <title>
-        <classname>@GarbageComposite (also available as @Flatten)</classname>
+        <classname>@Flatten (also available as @GarbageComposite)</classname>
       </title>
 
       <formalpara>
@@ -388,14 +370,14 @@
         </para>
       </formalpara>
 
-      <para>The <classname>GarbageComposite</classname> annotation allows to
-      suppress all composites. The final architecture is in the flattened view
-      of all components. The top-level component resulting of the architecture
+      <para>The <classname>Flatten</classname> annotation allows to suppress
+      all composites. The final architecture is in the flattened view of all
+      components. The top-level component resulting of the architecture
       transformation will directly contain all your primitives, and
-      "delegation bindings" (going through composites) will be merged. </para>
+      "delegation bindings" (going through composites) will be merged.</para>
 
       <example>
-        <title>@GarbageComposite overview</title>
+        <title>@Flatten overview</title>
 
         <mediaobject>
           <imageobject>
@@ -436,7 +418,7 @@
 
         <para>The <code>@GarbageComposite</code> annotation is described in
         the file
-        <code>optimisations\garbage-composite\src\main\mind\com\schneiderelectric\optimisation\garbagecomposite/GarbagedCompositeApplication.adl</code></para>
+        <code>optimisation/garbagecomposite/GarbagedCompositeApplication.adl</code></para>
 
         <example>
           <title>The @GarbageComposite annotation</title>
@@ -506,6 +488,8 @@
 
         <para>Another client A' still has the possibility to be dynamically
         bound to the server B.</para>
+
+        <para>The B interface still can be discovered</para>
       </formalpara>
 
       <formalpara>
@@ -521,7 +505,7 @@
         <title>Example</title>
 
         <para>The <code>@Static</code> annotation is described in the file
-        <code>mindc-optimisations\src\assemble\resources\examples\optimisations\static\src\main\mind\com\schneiderelectric\optimisation\staticbinding/StaticBindingApplication.adl</code></para>
+        <code>optimisation/staticbinding/StaticBindingApplication.adl</code></para>
 
         <para>The binding between the client interface of the component
         bootStrap and the server interface of the component
@@ -605,25 +589,37 @@
         <para>The annotated component can't be instantiated several
         times.</para>
 
-        <para>Mixing standard C code with Mind macros-annotated code is made
-        possible.</para>
+        <note>
+          <para>Using Mind macros-annotated code from standard C functions is
+          made possible.</para>
 
-        <para>Knowing the component will be unique in the application allows
-        the @StaticBindings annotation to make strong assumptions for further
-        optimizations.</para>
+          <para>Use of global data as PRIVATE is made safe, which is usefull
+          when componentizing legacy C code.</para>
+        </note>
+
+        <note>
+          <para>Knowing the component will be unique in the application allows
+          the @StaticBindings annotation to make strong assumptions for
+          further optimizations.</para>
+        </note>
       </formalpara>
 
       <formalpara>
         <title>Gains</title>
 
-        <para>Some gain in memory stack.</para>
+        <para>Used alone (not combined with over optimization annotations),
+        @Singleton doesn't provide any benefit. It event increases the code
+        section and execution time.</para>
+
+        <para>But using the @Singleton annotation is mandatory for some other
+        optimizations.</para>
       </formalpara>
 
       <formalpara>
         <title>Example</title>
 
         <para>The <code>@Singleton</code> annotation is described in the file
-        <code>mindc-optimisations\src\assemble\resources\examples\optimisations\common\src\main\mind\com\schneiderelectric\optimisation\common/SingletonComponent.adl</code></para>
+        <code>optimisation/common/SingletonComponent.adl</code></para>
 
         <para/>
 
@@ -675,6 +671,10 @@
       <para>This annotation is used on composite definition.</para>
 
       <note>
+        <para>This annocation is applicable on collections.</para>
+      </note>
+
+      <note>
         <para>Remove all meta data in the server interfaces.</para>
       </note>
 
@@ -685,8 +685,14 @@
       </note>
 
       <note>
-        <para>If there's no attribute, no controller and no sub-components
-        then all the "glue" is removed.</para>
+        <para>If there's no attribute <!--Does the presence of attribute reduce the optimization benefit ??? attributes are not really glue.-->,
+        no controller and no sub-components then all the "glue" is
+        removed.</para>
+      </note>
+
+      <note>
+        <para>If two instances of the component are absolutely mandatory you
+        can duplicate the component by using inheritance.</para>
       </note>
 
       <example>
@@ -901,8 +907,8 @@
         <para>
           <simplelist type="inline">
             <member>@StaticDefinitionsBindingsList({@StaticDefinitionBinding(fromItf
-            = "&lt;client interface&gt;", toItf = "server interface"), ...
-            )</member>
+            = "&lt;component definition.client interface&gt;", toItf =
+            "&lt;component definition.server interface&gt;"), ... )</member>
           </simplelist>
         </para>
       </formalpara>
@@ -920,6 +926,9 @@
       <para>The <classname>StaticDefinitionBindingsList</classname> annotation
       allows to connect explicitly one or several client interface of a
       component to a server interface of a component definition.</para>
+
+      <para>Function call is « frozen » for the specified unique target
+      definition (no other) at compilation time.</para>
 
       <note>
         <para>The call function is blocked on a component definition.</para>
@@ -942,6 +951,18 @@
           <imageobject>
             <imagedata align="center"
                        fileref="images/AtStaticDefinitionBindingsList.png"
+                       format="PNG" scale="80"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <example>
+        <title>@StaticDefinitionBindingsList detail</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="images/AtStaticDefinitionBindingsList-02.png"
                        format="PNG" scale="90"/>
           </imageobject>
         </mediaobject>
@@ -967,11 +988,10 @@
       <formalpara>
         <title>Remark</title>
 
-        <para>In multi-threaded applications you should protect (lock access)
-        the sections using BIND_MY_INTERFACE and the following CALL, since
-        BIND_MY_INTERFACE is a stateful action. For safe and lock-free similar
-        behaviour, see the <classname>FreezeCallPointer</classname>
-        annotation.</para>
+        <para>CALL_PTR which can be used as thread-safe and lock-free
+        alternative to BIND_MY_INTERFACE for highly-dynamic binding. Can be
+        optimized in in a very similar way, see the
+        <classname>FreezeCallPointer</classname> annotation.</para>
       </formalpara>
 
       <formalpara>
@@ -1003,7 +1023,8 @@
       <formalpara>
         <title>Annotation fields</title>
 
-        <para>@FreezeCallPointer(toItf="server interface")</para>
+        <para>@FreezeCallPointer(toItf="&lt;component definition.server
+        interface&gt;")</para>
       </formalpara>
 
       <formalpara>
@@ -1019,13 +1040,14 @@
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
       call an explicit server interface via an interface pointer (macro
       CALL_PTR), in an optimized way. Its objective is the same as
-      <classname>StaticDefinitionBinding</classname>, but allows safe and
-      lock-free multi-threading while calling a pool of target component
-      instances (restricted to the same target definition, like
-      <classname>StaticDefinitionBinding</classname>).</para>
+
+      <classname>StaticDefinitionBinding</classname>, but allows to optimize
+      the CALL_PTR (which is thread-safe and lock-free), while calling a pool
+      of target component instances (restricted to the same target definition,
+      like <classname>StaticDefinitionBinding</classname>).</para>
 
       <note>
-        <para>...</para>
+        <para>The required interface must be removed.</para>
       </note>
 
       <example>
@@ -1034,7 +1056,19 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtFreezeCallPointer.png"
-                       format="PNG" scale="90"/>
+                       format="PNG" scale="80"/>
+          </imageobject>
+        </mediaobject>
+      </example>
+
+      <example>
+        <title>@FreezeCallPointer detail</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       fileref="images/AtFreezeCallPointer-02.png"
+                       format="PNG" scale="80"/>
           </imageobject>
         </mediaobject>
       </example>
@@ -1098,13 +1132,13 @@
 
     <section id="optim-annot-Single">
       <title>
-        <classname>@Single [TODO]</classname>
+        <classname>@Single</classname>
       </title>
 
-      <!-- <formalpara>
+      <formalpara>
         <title>Annotation fields</title>
 
-        <para>No field</para>
+        <para>NO FIELD</para>
       </formalpara>
 
       <formalpara>
@@ -1112,62 +1146,117 @@
 
         <para>
           <simplelist type="inline">
-            <member>binding</member>
+            <member>provided interface</member>
           </simplelist>
         </para>
       </formalpara>
 
-      <para>The <classname>Single</classname> annotation allows to ...</para>
-
-      <note>
-        <para>[TODO]</para>
-      </note>
-
-      <note>
-        <para>[TODO]</para>
-      </note>
+      <para>The <classname>Single</classname> annotation allows to make a
+      provided interface unique.</para>
 
       <example>
         <title>@Single overview</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center"
-                       fileref="images/AtGarbageUnusedInternal.png"
-                       format="PNG" scale="90"/>
+            <imagedata align="center" fileref="images/AtSingle.png"
+                       format="PNG" scale="80"/>
           </imageobject>
         </mediaobject>
       </example>
-	<para/>
+
       <formalpara>
         <title>Usage condition</title>
 
-        <para>[TODO]</para>
-
-        <para/>
-
-        <para/>
-
-        <para/>
+        <para>To be used only with the association of the annotation
+        @StaticDefinitionBindingsList</para>
       </formalpara>
 
       <formalpara>
         <title>Consequences</title>
 
-        <para>[TODO]</para>
+        <para>The server interface can't be discovered.</para>
       </formalpara>
 
       <formalpara>
         <title>Gains</title>
 
-        <para>...</para>
+        <para>The vtable of the provided interface is suppressed. So gain in
+        memory and method call time.</para>
       </formalpara>
-
-      <formalpara>
-        <title>Example</title>
-
-        <para>[TODO]</para>
-      </formalpara> -->
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Synthesis</title>
+
+    <table frame="all">
+      <title>Synthesis</title>
+
+      <tgroup align="left" cols="3" colsep="0.2" rowsep="1">
+        <thead>
+          <row>
+            <entry>Reconfigurable</entry>
+
+            <entry>Multi-instance (default behaviour without
+            optimization)</entry>
+
+            <entry>Single-instance (Singleton)</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Yes</entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>this-&gt;type.itf.fct(this, args ...)</para>
+            </entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>this-&gt;type.itf.fct(args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@Singleton (for component)</para>
+
+              <para>@Single (for provided interface)</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>No or partially</entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>fct(this, args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@StaticDefinitionBindingList</para>
+            </entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>fct(args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@Static</para>
+
+              <para>@StaticBindings</para>
+
+              <para>@FreezeCallPointer</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </chapter>
 </book>
