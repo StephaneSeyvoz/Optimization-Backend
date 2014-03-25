@@ -39,7 +39,7 @@
 		<module>single-interface-plugin</module>
 		<module>cpl-preproc-static</module>
 		<module>adl-backend-static</module>
-        <module>mindc-optimisations</module>
+        <module>mindc-optimizations</module>
 	</modules>
 	
 	<build>

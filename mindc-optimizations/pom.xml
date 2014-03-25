@@ -8,26 +8,31 @@
         <version>2.1-SNAPSHOT</version>
     </parent>
 
-	<name>mindc-optimisations</name>
-	<description>optimisations integration module</description>
+	<name>mindc-optimizations</name>
+	<description>optimizations integration module</description>
 
 	<groupId>org.ow2.mind</groupId>
-	<artifactId>mindc-optimisations</artifactId>
+	<artifactId>mindc-optimizations</artifactId>
 	
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>adl-backend-cpp</artifactId>
+			<artifactId>adl-frontend-static</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>fractal-runtime-cpp</artifactId>
+			<artifactId>single-interface-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>idl-backend-cpp</artifactId>
+			<artifactId>cpl-preproc-static</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>adl-backend-static</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

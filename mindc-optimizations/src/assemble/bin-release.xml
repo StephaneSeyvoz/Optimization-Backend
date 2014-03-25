@@ -11,10 +11,10 @@
         <dependencySet>
             <outputDirectory>ext</outputDirectory>
             <includes>
-                <include>${project.groupId}:single-interface-plugin</include>
-                <include>${project.groupId}:cpl-preproc-static</include>
-                <include>${project.groupId}:adl-backend-static</include>
                 <include>${project.groupId}:adl-frontend-static</include>
+                <include>${project.groupId}:single-interface-plugin</include>
+                <include>${project.groupId}:adl-backend-static</include>
+                <include>${project.groupId}:cpl-preproc-static</include>
             </includes>
             <fileMode>0644</fileMode>
         </dependencySet>
