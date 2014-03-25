@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mindpath>
+	<mindpathentry kind="SOURCE" path="/static/src/main/mind"/>
+	<mindpathentry kind="SOURCE" path="/static/src/test/mind"/>
+	<mindpathentry kind="APPLI" path="com.schneiderelectric.optimisation.staticbinding.BaseApplication:BaseApplication"/>
+	<mindpathentry kind="PROJECT" path="/common"/>
+	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
+</mindpath>
