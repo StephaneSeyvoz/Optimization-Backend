@@ -85,10 +85,6 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		Boolean externalTypeOptimizationAllowed = false;
 		Boolean internalTypeOptimizationAllowed = false;
 
-		// Separated from the other verifications because it also sets the
-		// "reverse-binding-descriptors" decoration on the AST and we ALWAYS want it to be done
-		Boolean existsSourceCollectionInterface = existsSourceCollectionInterface(graph);
-
 		Definition compDef = graph.getDefinition();
 
 		// Check if the current component is the top-level one (the whole application) (maybe there is a cleaner way ?)
@@ -236,65 +232,6 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		}
 
 		return false;
-	}
-
-	protected void setReverseCollectionBindingDescriptor(ComponentGraph graph, Map<String, BindingDescriptor> bindings){
-		graph.setDecoration("reverse-collection-binding-descriptors", bindings);
-	}
-
-	/*
-	 * This method both checks if a binding leading to the current component has for source a collection interface or not.
-	 * It also adds a "reverse binding descriptor" for the concerned collection interface (copied from the according source "binding descriptor" but obtained
-	 * from the destination interface name).
-	 * This info will be used in internal type data generation of server components called from collections.
-	 */
-	protected boolean existsSourceCollectionInterface(ComponentGraph instanceGraph){
-
-		boolean result = false;
-		Map<String, BindingDescriptor> reverseBindings = new HashMap<String, BindingDescriptor>();
-
-		ComponentGraph parents[] = instanceGraph.getParents();
-
-		Map<String, BindingDescriptor> descs;
-
-		// We make the hypothesis that there will be only one parent
-		// No management of shared components yet
-		if (parents.length == 1) {
-			ComponentGraph[] thisGraphAndSiblings = parents[0].getSubComponents();
-			for (ComponentGraph currentSibling : thisGraphAndSiblings){
-				// We do not check to remove current component because self-bindings are allowed, we want to care about them too
-				descs = (Map<String, BindingDescriptor>) currentSibling.getDecoration("binding-descriptors");
-				if (!descs.isEmpty()){
-					Collection<String> keys = descs.keySet();
-					Iterator<String> keysIterator = keys.iterator();
-
-					while(keysIterator.hasNext()) {
-						String currentKey = keysIterator.next();
-						BindingDescriptor bindingDesc = (BindingDescriptor) descs.get(currentKey);
-						Binding parentBinding = bindingDesc.binding;
-
-						// check if current binding source is the current component
-						// also check if a binding isn't null : happens when an element of a collection interface isn't bound
-						if ((parentBinding != null) && (parentBinding.getToComponent().equals(instanceGraph.getNameInParent(parents[0])))) {
-							// Is current binding destination  an element of a collection interface ?
-							if (OptimASTHelper.getFromInterfaceNumber(parentBinding) != -1){
-								result = true;
-								// Here we put the DESTINATION name of the binding as we use REVERSE resolution from the binding
-								reverseBindings.put(parentBinding.getToInterface(), bindingDesc);
-							}
-						}
-					}
-				}
-			}
-			if (!reverseBindings.isEmpty())
-				setReverseCollectionBindingDescriptor(instanceGraph, reverseBindings);
-		} else {
-			// TODO : Log warning/error message to tell the user that a shared component is an issue for us ?
-			// and check the return value
-			return result;
-		}
-
-		return result;
 	}
 	
 	protected boolean existsDestinationControllerInterfaceAndDecorateIt(ComponentGraph instanceGraph) {

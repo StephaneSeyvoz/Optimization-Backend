@@ -428,19 +428,14 @@ ServerInterfaceStub(definition, instance, interfaceDefinitions, itf) ::= <<
 <else>
 <! SSZ : BEGIN MODIFICATION !>
 <if (definition.astDecorations.("parent-has-static-bindings"))>
-  <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-  <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
-  <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
-  <else>
-  	<! We don't want to optimize controllers !>
-  	<if (itf.astDecorations.("controller-interface"))>
+  <! We don't want to optimize controllers !>
+  <if (itf.astDecorations.("controller-interface"))>
 <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
-  	<else>
+  <else>
 /* Optimized according to @StaticBindings
 <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
 */
 	<endif>
-  <endif>
 <else>
 <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
 <endif>
@@ -504,18 +499,13 @@ ServerInterfaceVTableInit(definition, interfaceDefinitions, itf) ::= <<
 */
     <else>
       <if (definition.astDecorations.("parent-has-static-bindings"))>
-      <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-        <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
+        <! We don't want to optimize controllers !>
+	      <if (itf.astDecorations.("controller-interface"))>
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
         <else>
-          <! We don't want to optimize controllers !>
-	        <if (itf.astDecorations.("controller-interface"))>
-<ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
-          <else>
 /* Optimized according to @StaticBindings
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
 */
-          <endif>
         <endif>
       <else>
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>

@@ -183,19 +183,13 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
 // Optimized collection (server)
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <else>
-      <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-      <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.fromInterfaceNumber)>
-// No optimization : Parent has @StaticBindings but binding source is a collection
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <else>
-      	<! Maybe our interface is a controller, that we don't want to optimize: exception case !>
-      	<if (itf.astDecorations.("controller-interface"))>
+      <! Maybe our interface is a controller, that we don't want to optimize: exception case !>
+      <if (itf.astDecorations.("controller-interface"))>
 // No optimization : Parent has @StaticBindings but the interface is a controller
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      	<else>
+      <else>
 // Optimized : Parent has @StaticBinding, interface is not a controller, doesn't have a collection as binding source, and isn't collection 
 // <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      	<endif>
       <endif>
     <endif>
   <else>
@@ -418,18 +412,12 @@ ServerInterfaceVTableDecl(definition, itf) ::= <<
     <else>
       <! Optimization : Here we check if bindings from our instance are static !>
       <if (definition.astDecorations.("parent-has-static-bindings"))>
-        <! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-        <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.fromInterfaceNumber)>
-// No optimization : default behavior 7
-extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-        <else>
-          <if (itf.astDecorations.("controller-interface"))>
+        <if (itf.astDecorations.("controller-interface"))>
 // No optimization : Parent has @StaticBindings but binding destination is a controller
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      	  <else>
+      	<else>
 // Optimized : Removed reference as the VTable has already been garbaged anyway
 // extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
-      	  <endif>
       	<endif>
       <else>
 extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf)>;
@@ -581,15 +569,11 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
     <if (itf.numberOfElement)>
 <InitializeServerInterface(definition=definition, itf=itf)>,
     <else>
-      <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.fromInterfaceNumber)>
+      <if (itf.astDecorations.("controller-interface"))>
 <InitializeServerInterface(definition=definition, itf=itf)>,
       <else>
-      	<if (itf.astDecorations.("controller-interface"))>
-<InitializeServerInterface(definition=definition, itf=itf)>,
-      	<else>
 /* <InitializeServerInterface(definition=definition, itf=itf)>, */ \
-		<endif>
-      <endif>
+		  <endif>
     <endif>
   <else>
     <if (isInternal)>
@@ -653,16 +637,11 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
     <if (itf.numberOfElement)>
 <InitializeServerInterface(definition=definition, itf=itf)>
     <else>
-<! As we do not optimize collection interfaces, we've got to care whether a binding source is a collection so the destination isn't optimized either !>
-      <if (instance.decorations.("reverse-collection-binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.fromInterfaceNumber)>
+      <if (itf.astDecorations.("controller-interface"))>
 <InitializeServerInterface(definition=definition, itf=itf)>
       <else>
-      	<if (itf.astDecorations.("controller-interface"))>
-<InitializeServerInterface(definition=definition, itf=itf)>
-      	<else>
 /* <InitializeServerInterface(definition=definition, itf=itf)> */ \
-		<endif>
-      <endif>
+		  <endif>
     <endif>
   <else>
     <if (isInternal)>
