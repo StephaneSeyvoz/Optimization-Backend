@@ -4,8 +4,10 @@ import fractal.api.Component;
 import fractal.api.AttributeController;
 
 // Hard-write CALL_PTR in the component to
-// target interface instance ("s") from definition type ("singlestaticcallptr.factory.selfcall.Server")
-// the instances can be different though: the optimization just replaces the function call
+// target interface instance ("s") from definition 
+// type ("singlestaticcallptr.factory.selfcall.Server")
+// the instances can be different though: the optimization 
+// just replaces the function call
 @FreezeCallPointer(toItf="singlestaticcallptr.factory.selfcall.Server.s")
 primitive singlestaticcallptr.factory.selfcall.Client {
   

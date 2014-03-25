@@ -69,16 +69,18 @@ public class SingleAnnotationProcessor extends AbstractADLLoaderAnnotationProces
 					assert targetItf instanceof MindInterface;
 					IDL targetIDL = idlLoaderItf.load(((MindInterface) targetItf).getSignature(), context);
 					// Is the interface concerned by @Single ?
-					Boolean isSingleItf = (Boolean) targetIDL.astGetDecoration("single-itf");
-					if (isSingleItf) {
-						// Then we will decorate the IDL source of the binding
-						Component sourceComp = ASTHelper.getComponent(definition, currBinding.getFromComponent());
-						Definition currentClientDef = ASTHelper.getResolvedComponentDefinition(sourceComp, loaderItf, context);
-						Interface sourceItf = ASTHelper.getInterface(currentClientDef, currBinding.getFromInterface());
-						assert sourceItf instanceof MindInterface;
-//						IDL sourceIDL = idlLoaderItf.load(((MindInterface) sourceItf).getSignature(), context);
-//						sourceIDL.astSetDecoration("target-is-single-itf", "true");
-						sourceItf.astSetDecoration("target-is-single-itf", true);
+					Boolean isSingleItf = (Boolean)targetIDL.astGetDecoration("single-itf");
+					if (isSingleItf != null) {
+						if (isSingleItf) {
+							// Then we will decorate the IDL source of the binding
+							Component sourceComp = ASTHelper.getComponent(definition, currBinding.getFromComponent());
+							Definition currentClientDef = ASTHelper.getResolvedComponentDefinition(sourceComp, loaderItf, context);
+							Interface sourceItf = ASTHelper.getInterface(currentClientDef, currBinding.getFromInterface());
+							assert sourceItf instanceof MindInterface;
+	//						IDL sourceIDL = idlLoaderItf.load(((MindInterface) sourceItf).getSignature(), context);
+	//						sourceIDL.astSetDecoration("target-is-single-itf", "true");
+							sourceItf.astSetDecoration("target-is-single-itf", true);
+						}
 					}
 				}
 					
