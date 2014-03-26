@@ -1,0 +1,41 @@
+/**
+ * This component is part of the example demonstrating the usage of the 
+ * '@Static' optimization.
+ * 
+ * It is a singleton component (NOT multi-instanciable).
+ */
+ 
+@Singleton
+primitive 
+com.schneiderelectric.optimisation.common.SingletonComponent
+{
+/**
+ * The @interface boot.Main#methods#main method of this interface will print :
+ * <br/> - The current method name.
+ * <br/> - The current interface name.
+ * <br/> - The current definition.
+ * <br/>
+ * 
+ * Then :
+ * <br/> - Call the @interface boot.Main#methods#main method of the 
+ * <br/> @component this#interfaces#firstClientInterface interface.
+ * <br/> - Call the @interface boot.Main#methods#main method of the 
+ * <br/> @component this#interfaces#secondClientInterface interface
+ * <br/> if it is bound.
+ * <br/>
+ * 
+ * Finally return the sum of the @component this
+ * #interfaces#firstClientInterface 
+ * @component this#interfaces#secondClientInterface 
+ * interface return code.
+ */
+ 	provides boot.Main as serverInterface;
+ 	requires boot.Main as firstClientInterface;
+	
+/**
+ * This interface is optional. 
+ * It will be tested before calling its method. 
+ */ 	
+ 	requires optional boot.Main as secondClientInterface;
+  	source SingletonComponent.c;
+}
