@@ -585,19 +585,23 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
       		<if (itf.numberOfElement)>
 /* <InitializeClientInterface(definition=definition, itf=itf)> */
       		<else>
-      		  <if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-          		<if (itf.contingency)>
+      		  <if (itf.astDecorations.("binding-destination-is-controller"))>
+<InitializeClientInterface(definition=definition, itf=itf)>,
+      		  <else>
+      		    <if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
+      		      <if (itf.contingency)>
 <InitializeClientInterface(definition=definition, itf=itf)>
-          		<endif>
-          	<else>
-          		<if (isInternal)>
-          			<if (definition.astDecorations.("has-static-bindings"))>
+          		  <endif>
+          		<else>
+          		  <if (isInternal)>
+          		    <if (definition.astDecorations.("has-static-bindings"))>
 /* <InitializeClientInterface(definition=definition, itf=itf)> */ \
+          			  <else>
+<InitializeClientInterface(definition=definition, itf=itf)>
+          			  <endif>
           			<else>
 <InitializeClientInterface(definition=definition, itf=itf)>
-          			<endif>
-          		<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
+          		  <endif>
           		<endif>
           	<endif>
       		<endif>
