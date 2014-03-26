@@ -139,7 +139,11 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 				&& (!(OptimASTHelper.isComposite(compDef))) /* Composite */
 				&& (!(compDef instanceof AttributeContainer && (((AttributeContainer) compDef).getAttributes() != null) && (((AttributeContainer) compDef).getAttributes().length != 0))) /* Attributes */
 				&& (!(compDef instanceof ControllerContainer)) /* Controllers*/
-				&& (!(compDef instanceof ImplementationContainer && ((ImplementationContainer) compDef).getData() != null)) /* Private data */ ){
+				// Since "new singleton private data" using external global variable for PRIVATE
+				// (not inside _internal_data struct anymore), the following issue was made irrelevant:
+				//	&& (!(compDef instanceof ImplementationContainer && ((ImplementationContainer) compDef).getData() != null)) /* Private data */
+			)
+		{
 			setAllowInstanceDataRemovalDecoration(graph);
 			result = true;
 		}
