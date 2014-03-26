@@ -57,7 +57,6 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 <else>
 /* Internal data was optimized, so it was removed */
 <endif>
-<! SSZ : END MODIFICATION !>
 /* End definition of internal component data type */
 
 /* Start collection arrays declaration (StaticBindings optimization) */
@@ -65,11 +64,9 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 /* End collection arrays declaration (StaticBindings optimization) */
 
 /* Start definition of component type */
-<! SSZ : BEGIN MODIFICATION !>
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 <ComponentTypeDef(definition=definition)> 
 <endif>
-<! SSZ : END MODIFICATION !>
 /* End  definition of component type */
 
 /* Start declaration of interface V-Tables. */
@@ -77,7 +74,6 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 /* End declaration of interface V-Tables. */
 
 /* Start declaration of factory */
-<! SSZ : BEGIN MODIFICATION !>
 // Start macros for @StaticBindings-optimized Collections
 <AddStaticBindingsCollectionItfInitMacros(definition=definition, instance=definition)>
 // End macros for @StaticBindings-optimized Collections
@@ -85,7 +81,6 @@ struct __component_<definition.name;format="toCName">_internal_data_t {
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 <FactoryDef(definition=definition, instance=instance)>
 <endif>
-<! SSZ : END MODIFICATION !>
 /* End declaration of factory */
 
 #endif /* __COMPONENT_<definition.name;format="toUpperCName">_ADL_H */
@@ -150,10 +145,8 @@ TypeStructures(definition, instance) ::= <<
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
 
 InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
-<! SSZ : BEGIN MODIFICATION !>
 <if (isClient.(itf.role))>
   <if (itf.numberOfElement)>
-  <! Optimization : Here we check if bindings from our instance are static !>
     <if (definition.astDecorations.("parent-has-static-bindings"))>
 // @StaticBindings Optimized collection (client): Declare the "shortcut" array in a dedicated section further in the file. 
 // <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
@@ -176,7 +169,6 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
   	<endif>
   <endif>
 <else>
-  <! Optimization : Here we check if the host component is in a @StaticBindings-tagged composite (decoration propagated) !>
   <if (definition.astDecorations.("parent-has-static-bindings"))>
     <! We do not optimize collection interfaces yet !>
     <if (itf.numberOfElement)>
@@ -214,7 +206,6 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
     <endif>
   <endif>
 <endif>
-<! SSZ : END MODIFICATION !>
 >>
 
 StaticBindingsClientCollectionsArrays(definition, instance) ::= <<
@@ -237,13 +228,11 @@ SubComponentStructures(definition) ::= <<
 >>
 
 ComponentDescriptorDecl(component) ::= <<
-  <! SSZ : BEGIN MODIFICATION !>
   <if (!(component.astDecorations.("allow-instance-data-removal")))>
   <ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;
   <else>
   /*<ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;*/
   <endif>
-  <! SSZ : END MODIFICATION !>
 >>
 
 
@@ -365,13 +354,11 @@ typedef struct {
 
 
 <if (definition.astDecorations.("is-singleton"))>
-<! SSZ : BEGIN MODIFICATION !>
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 /* declaration of singleton instance as global variable. */
 #define INSTANCE___component_<definition.name;format="toCName">_singleton_instance_DECLARED
 extern PRIVATE_DATA_T __component_<definition.name;format="toCName">_singleton_instance;
 <endif>
-<! SSZ : END MODIFICATION !>
 <endif>
 
 #else /* __COMPONENT_IN_<definition.name;format="toUpperCName"> */
@@ -385,7 +372,6 @@ typedef struct {
 // V-Table declaration
 
 ComponentVTableDecl(definition) ::= <<
-<! SSZ : BEGIN MODIFICATION !>
 /* Start declaration of server interface V-Tables. */
 <definition.interfaces:ServerInterfaceVTableDecl(definition=definition, itf=it); separator="\n">
 /* End declaration of server interface V-Tables. */
@@ -397,11 +383,9 @@ ComponentVTableDecl(definition) ::= <<
 /* End declaration of internal server interface V-Tables */
 <endif>
 <endif>
-<! SSZ : END MODIFICATION !>
 >>
 
 ServerInterfaceVTableDecl(definition, itf) ::= <<
-<! SSZ : BEGIN MODIFICATION !>
 <if(isServer.(itf.role))>
   <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):{index | extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(definition=definition,itf=itf,index=index)>;};separator="\n">
@@ -425,7 +409,6 @@ extern <InterfaceVTableType(signature=itf.signature)> <vTableInstanceName(defini
     <endif>
   <endif>
 <endif>
-<! SSZ : END MODIFICATION !>
 >>
 
 
@@ -538,26 +521,26 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
       <else>
       	<if (itf.astDecorations.("binding-destination-is-controller"))>
 <InitializeClientInterface(definition=definition, itf=itf)>,
-		<else>
+		    <else>
         	<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
 <InitializeClientInterface(definition=definition, itf=itf)>,
         	<else>
-          		<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-            		<if (itf.contingency)>
+          	<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
+            	<if (itf.contingency)>
 <InitializeClientInterface(definition=definition, itf=itf)>,
-            		<endif>
-          		<else>
-            		<if (isInternal)>
-              			<if (definition.astDecorations.("has-static-bindings"))>
+            	<endif>
+          	<else>
+            	<if (isInternal)>
+            		<if (definition.astDecorations.("has-static-bindings"))>
 /* <InitializeClientInterface(definition=definition, itf=itf)>, */ \
-             	 		<else>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-              			<endif>
-            		<else>
+             		<else>
 <InitializeClientInterface(definition=definition, itf=itf)>,
             		<endif>
-          		<endif>
+            	<else>
+<InitializeClientInterface(definition=definition, itf=itf)>,
+            	<endif>
           	<endif>
+          <endif>
         <endif>
       <endif>
     <else>
@@ -582,7 +565,7 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
 <InitializeServerInterface(definition=definition, itf=itf)>,
       	<else>
 /* <InitializeServerInterface(definition=definition, itf=itf)>, */
-		<endif>
+		    <endif>
       <else>
 <InitializeServerInterface(definition=definition, itf=itf)>,
       <endif>
@@ -602,30 +585,30 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
 /* <InitializeClientInterface(definition=definition, itf=itf)> */ \
   		<else>
     		<if (definition.astDecorations.("parent-has-static-bindings"))>
-      			<if (itf.numberOfElement)>
+      		<if (itf.numberOfElement)>
 /* <InitializeClientInterface(definition=definition, itf=itf)> */
-      			<else>
+      		<else>
 <! SSZ : Exception : If someone tries to optimize a binding with a collection interface as destination, we don't optimize the latter yet !>
-        			<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
+        		<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
 <InitializeClientInterface(definition=definition, itf=itf)>
-        			<else>
-          				<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-            				<if (itf.contingency)>
+        		<else>
+          		<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
+          			<if (itf.contingency)>
 <InitializeClientInterface(definition=definition, itf=itf)>
-            				<endif>
-          				<else>
-            				<if (isInternal)>
-              					<if (definition.astDecorations.("has-static-bindings"))>
-/* <InitializeClientInterface(definition=definition, itf=itf)> */ \
-              					<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-              					<endif>
-            				<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-            				<endif>
-          				<endif>
           			<endif>
-      			<endif>
+          		<else>
+          			<if (isInternal)>
+          				<if (definition.astDecorations.("has-static-bindings"))>
+/* <InitializeClientInterface(definition=definition, itf=itf)> */ \
+          				<else>
+<InitializeClientInterface(definition=definition, itf=itf)>
+          				<endif>
+          			<else>
+<InitializeClientInterface(definition=definition, itf=itf)>
+          			<endif>
+          		<endif>
+          	<endif>
+      		<endif>
     		<else>
 <InitializeClientInterface(definition=definition, itf=itf)>
     		<endif>
@@ -650,7 +633,7 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
 <InitializeServerInterface(definition=definition, itf=itf)>
       	<else>
 /* <InitializeServerInterface(definition=definition, itf=itf)> */
-		<endif>
+		    <endif>
       <else>
 <InitializeServerInterface(definition=definition, itf=itf)>
       <endif>
@@ -694,11 +677,11 @@ InitializeComponents(definition) ::= <<
 >>
 
 SubCompName(component) ::= <<
-  <! SSZ : BEGIN MODIFICATION  added this new function !><if (component.astDecorations.("allow-instance-data-removal"))>  /* &(<component.name>), */<else>  &(<component.name>),<endif><! SSZ : END MODIFICATION !>
+  <if (component.astDecorations.("allow-instance-data-removal"))>  /* &(<component.name>), */<else>  &(<component.name>),<endif>
 >>
 
 LastSubCompName(component) ::= <<
-  <! SSZ : BEGIN MODIFICATION  added this new function !><if (component.astDecorations.("allow-instance-data-removal"))>  /* &(<component.name>) */<else>  &(<component.name>)<endif><! SSZ : END MODIFICATION !>
+  <if (component.astDecorations.("allow-instance-data-removal"))>  /* &(<component.name>) */<else>  &(<component.name>)<endif>
 >>
 
 InitializeAttributes(definition) ::= <<
@@ -753,9 +736,6 @@ ComponentFactoryParameter(definition, parameter) ::= <<
 int <parameter.name;format="toCName">
 <endif>
 >>
-
-// -----------------------------------------------------------------------------
-// Nearly brutally copied from IDL2C/IDL2CPP since we need to define function pointers arrays
 
 // we took inspiration from methodPointerDef to create methodPointersArrayDef
 methodPointersArrayDef(definition, method, itf, withThisPtr) ::= "<(idl2c.methodDef)(method=method, methodName=methodPointersArrayName(definition=definition, name=method.name, itf=itf), withThisPtr=withThisPtr)> "
