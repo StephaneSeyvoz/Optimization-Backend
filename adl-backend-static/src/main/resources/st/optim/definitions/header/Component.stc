@@ -170,7 +170,7 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
   <endif>
 <else>
   <if (definition.astDecorations.("parent-has-static-bindings"))>
-    <! We do not optimize collection interfaces yet !>
+    <! We do not optimize server collection interfaces yet !>
     <if (itf.numberOfElement)>
 // Optimized collection (server)
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
@@ -522,24 +522,20 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
       	<if (itf.astDecorations.("binding-destination-is-controller"))>
 <InitializeClientInterface(definition=definition, itf=itf)>,
 		    <else>
-        	<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
+        	<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
+           	<if (itf.contingency)>
 <InitializeClientInterface(definition=definition, itf=itf)>,
-        	<else>
-          	<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-            	<if (itf.contingency)>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-            	<endif>
-          	<else>
-            	<if (isInternal)>
-            		<if (definition.astDecorations.("has-static-bindings"))>
+           	<endif>
+          <else>
+           	<if (isInternal)>
+           		<if (definition.astDecorations.("has-static-bindings"))>
 /* <InitializeClientInterface(definition=definition, itf=itf)>, */ \
-             		<else>
+           		<else>
 <InitializeClientInterface(definition=definition, itf=itf)>,
-            		<endif>
-            	<else>
+           		<endif>
+           	<else>
 <InitializeClientInterface(definition=definition, itf=itf)>,
-            	<endif>
-          	<endif>
+           	<endif>
           <endif>
         <endif>
       <endif>
@@ -549,6 +545,7 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
   <endif>
 <else>
   <if (definition.astDecorations.("parent-has-static-bindings"))>
+<! SSZ : Exception : If someone tries to optimize a server collection interface, we don't optimize the latter yet !>
     <if (itf.numberOfElement)>
 <InitializeServerInterface(definition=definition, itf=itf)>,
     <else>
@@ -588,24 +585,19 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
       		<if (itf.numberOfElement)>
 /* <InitializeClientInterface(definition=definition, itf=itf)> */
       		<else>
-<! SSZ : Exception : If someone tries to optimize a binding with a collection interface as destination, we don't optimize the latter yet !>
-        		<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.toInterfaceNumber)>
+      		  <if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
+          		<if (itf.contingency)>
 <InitializeClientInterface(definition=definition, itf=itf)>
-        		<else>
-          		<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-          			<if (itf.contingency)>
-<InitializeClientInterface(definition=definition, itf=itf)>
-          			<endif>
-          		<else>
-          			<if (isInternal)>
-          				<if (definition.astDecorations.("has-static-bindings"))>
+          		<endif>
+          	<else>
+          		<if (isInternal)>
+          			<if (definition.astDecorations.("has-static-bindings"))>
 /* <InitializeClientInterface(definition=definition, itf=itf)> */ \
-          				<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-          				<endif>
           			<else>
 <InitializeClientInterface(definition=definition, itf=itf)>
           			<endif>
+          		<else>
+<InitializeClientInterface(definition=definition, itf=itf)>
           		<endif>
           	<endif>
       		<endif>
@@ -616,7 +608,7 @@ InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
     <endif>
 <else>
   <if (definition.astDecorations.("parent-has-static-bindings"))>
-<! SSZ : Exception : If someone tries to optimize a collection interface, we don't optimize the latter yet !>
+<! SSZ : Exception : If someone tries to optimize a server collection interface, we don't optimize the latter yet !>
     <if (itf.numberOfElement)>
 <InitializeServerInterface(definition=definition, itf=itf)>
     <else>
