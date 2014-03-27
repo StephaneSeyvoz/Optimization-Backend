@@ -423,24 +423,22 @@ ServerInterfaceStubs(definition, instance, interfaceDefinitions) ::= <<
 
 ServerInterfaceStub(definition, instance, interfaceDefinitions, itf) ::= <<
 <if (isServer.(itf.role))>
-<if (itf.numberOfElement)>
+  <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):{index | <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, index=index, method=it); separator="\n">};separator="\n">
-<else>
-<! SSZ : BEGIN MODIFICATION !>
-<if (definition.astDecorations.("parent-has-static-bindings"))>
-  <! We don't want to optimize controllers !>
-  <if (itf.astDecorations.("controller-interface"))>
-<interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
   <else>
-/* Optimized according to @StaticBindings
+    <if (definition.astDecorations.("parent-has-static-bindings"))>
+      <if (itf.astDecorations.("controller-interface"))>
+// Non optimized: Controller
+<interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
+      <else>
+/* Optimized: @StaticBindings
 <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
 */
-	<endif>
-<else>
+	    <endif>
+	  <else>
 <interfaceDefinitions.(itf.signature).methods:ServerMethodStub(definition=definition, instance=instance, itf=itf, method=it); separator="\n">
-<endif>
-<! SSZ : END MODIFICATION !>
-<endif>
+    <endif>
+  <endif>
 <endif>
 >>
 
@@ -455,14 +453,13 @@ ServerMethodStub(definition, instance, itf, index, method) ::= <<
 <if (! ((idl2c.isVoidMethod)(method=method)))>
   return 
 <endif>
-<! SSZ : BEGIN MODIFICATION !>
+
 <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.astDecorations.("is-static"))>
 <METHODOptimizedCall(itfName=itf.name, index=index, methodName=method.name)><method.parameters:{<it.name>};separator=", ">);
 <else>
 <METHODName(itfName=itf.name, index=index, methodName=method.name)>(<method.parameters:{<it.name>};separator=", ">);
 <endif>
 
-<! SSZ : END MODIFICATION !>
 #endif
 
 }
@@ -492,25 +489,23 @@ ServerInterfaceVTableInit(definition, interfaceDefinitions, itf) ::= <<
   <if (itf.numberOfElement)>
 <itf.astDecorations.("collectionIndexes"):ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf, index=it);separator="\n">
   <else>
-<! SSZ : BEGIN MODIFICATION !>
     <if (itf.astDecorations.("single-itf"))>
-/* Optimized according to @Single
+/* Optimized: @Single
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
 */
     <else>
       <if (definition.astDecorations.("parent-has-static-bindings"))>
-        <! We don't want to optimize controllers !>
 	      <if (itf.astDecorations.("controller-interface"))>
+// Non-Optimized: Controller
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
         <else>
-/* Optimized according to @StaticBindings
+/* Optimized: @StaticBindings
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
 */
         <endif>
       <else>
 <ServerInterfaceVTableInit1(definition=definition, interfaceDefinitions=interfaceDefinitions, itf=itf)>
       <endif>
-<! SSZ : END MODIFICATION !>
     <endif>
   <endif>
 <endif>

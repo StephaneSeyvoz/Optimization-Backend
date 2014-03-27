@@ -46,9 +46,7 @@ ComponentDefinitionHeader(definition, instance) ::= <<
 <if (!(instance.decorations.("allow-instance-data-removal")))>
 struct __component_<definition.name;format="toCName">_internal_data_t {
 <TypeStructures(definition=definition, instance=instance)>
-<if (!(instance.decorations.("allow-subcomps-data-removal")))>
 <SubComponentStructures(definition=definition)>
-<endif>
 <ControllerStructures(definition=definition)>
 <AttributeStructures(definition=definition)>
 <if (!(instance.decorations.("allow-instance-data-removal")))>
@@ -125,6 +123,7 @@ TypeStructures(definition, instance) ::= <<
   } type;
 <endif>
 <endif>
+
 <if (definition.astNodeTypes.("internalInterface"))>
 <if (definition.internalInterfaces)>
 <if (instance.decorations.("allow-internal-type-data-removal"))>
@@ -142,65 +141,65 @@ TypeStructures(definition, instance) ::= <<
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
 
-InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
-<if (isClient.(itf.role))>
-  <if (itf.numberOfElement)>
-    <if (definition.astDecorations.("parent-has-static-bindings"))>
-// @StaticBindings Optimized collection (client): Declare the "shortcut" array in a dedicated section further in the file. 
-// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-    <else>
-// No optimization: Standard collection
-<InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-    <endif>
-  <else>
-  	<if (itf.astDecorations.("binding-destination-is-controller"))>
+PossibleOptimizationInterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
+<if (itf.astDecorations.("binding-destination-is-controller"))>
 // No optimization : Binding destination is a controller
 <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-  	<else>
-  		<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
-// Optimized : Interface is not collection, and is statically bound
-// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-    	<else>
-// No optimization : Normal binding (no collection, no controller) and not static
-<InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-  		<endif>
-  	<endif>
-  <endif>
 <else>
-  <if (definition.astDecorations.("parent-has-static-bindings"))>
-    <! We do not optimize server collection interfaces yet !>
-    <if (itf.numberOfElement)>
-// Optimized collection (server)
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+  <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
+// Optimized: @Static / @StaticBindings
+// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+  <else>
+// No optimization: Normal binding and not static
+<InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+  <endif>
+<endif>
+>>
+
+InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
+<if (isClient.(itf.role))>
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+<PossibleOptimizationInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)>
     <else>
-      <! Maybe our interface is a controller, that we don't want to optimize: exception case !>
-      <if (itf.astDecorations.("controller-interface"))>
-// No optimization : Parent has @StaticBindings but the interface is a controller
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <else>
-// Optimized : Parent has @StaticBinding, interface is not a controller, doesn't have a collection as binding source, and isn't collection 
-// <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <endif>
+// No optimization: No @StaticBindings on this composite
+<InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <else>
-    <! parent is not decorated with static-bindings but current component is decorated with static-bindings ? optimize internal server interface data !>
-    <if (isInternal)>
-      <if (definition.astDecorations.("has-static-bindings"))>
-      	<! Maybe our interface is a controller, that we don't want to optimize: exception case: exception case !>
-      	<if (itf.astDecorations.("binding-destination-is-controller"))>
+<PossibleOptimizationInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)> 	  
+  <endif>
+<else>  
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+    	<if (itf.astDecorations.("binding-destination-is-controller"))>
 // No optimization : interface is a controller (and internal)
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      	<else>
-      		// Optimized : Removed declaration for memory saving, as the interface is internal and not a controller
-      		// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      	<endif>
       <else>
-      // No optimization : default behavior as no @StaticBindings concerns the host composite and the current component
-      <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+// Optimized: Interface is internal and not a controller
+// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
       <endif>
     <else>
-    // No optimization : default behavior for external interface as no @StaticBindings was specified on the parent
-    <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+// No optimization: No @StaticBindings on this composite
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+    <endif>
+  <else>
+    <if (definition.astDecorations.("parent-has-static-bindings"))>
+      <! We do not optimize server collection interfaces yet !>
+      <if (itf.numberOfElement)>
+// No optimization (server collection)
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+      <else>
+        <if (itf.astDecorations.("controller-interface"))>
+// No optimization : Parent has @StaticBindings but the interface is a controller
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+        <else>
+// Optimized : Parent has @StaticBinding, interface is not a controller, and isn't collection 
+// <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+        <endif>
+      <endif>
+    <else>
+// No optimization : default behavior for external interface as no @StaticBindings was specified on the parent
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <endif>
 <endif>
@@ -218,18 +217,26 @@ SBClientCollectionArrayDecl(definition, itf, itfDef) ::= <<
 SubComponentStructures(definition) ::= <<
 <if (definition.astNodeTypes.("component"))>
 <if (definition.components)>
+<if (!(instance.decorations.("allow-subcomps-data-removal")))>
   struct {
     <definition.components:ComponentDescriptorDecl(component=it); separator="\n">
   } components;
+<else>
+  /*
+  struct {
+    <definition.components:ComponentDescriptorDecl(component=it); separator="\n">
+  } components;
+  */
+<endif>
 <endif>
 <endif>
 >>
 
 ComponentDescriptorDecl(component) ::= <<
   <if (!(component.astDecorations.("allow-instance-data-removal")))>
-  <ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;
+<ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;
   <else>
-  /*<ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;*/
+//<ComponentTypeName(definitionName=component.definitionReference.name)> *<component.name> ;
   <endif>
 >>
 
@@ -682,11 +689,11 @@ isBoundValue(definition, itf, index) ::= <<
 >>
 
 InitializeComponents(definition) ::= <<
-<if (definition.astNodeTypes.("component"))><if (definition.components)>    { /* components */ \
+<if (!(instance.decorations.("allow-subcomps-data-removal")))><if (definition.astNodeTypes.("component"))><if (definition.components)>    { /* components */ \
       <trunc(definition.components):{<SubCompName(component=it)>}> \
       <last(definition.components):{<LastSubCompName(component=it)>}> \
     }, \
-<endif><endif>
+<endif><endif><endif>
 >>
 
 SubCompName(component) ::= <<
