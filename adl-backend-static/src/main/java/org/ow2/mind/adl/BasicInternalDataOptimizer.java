@@ -21,11 +21,9 @@
  */
 package org.ow2.mind.adl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
@@ -41,7 +39,6 @@ import org.ow2.mind.adl.ast.Binding;
 import org.ow2.mind.adl.ast.BindingContainer;
 import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.ComponentContainer;
-import org.ow2.mind.adl.ast.ImplementationContainer;
 import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.adl.ast.Source;
 import org.ow2.mind.adl.graph.BindingInstantiator.BindingDescriptor;
@@ -49,6 +46,7 @@ import org.ow2.mind.adl.graph.ComponentGraph;
 import org.ow2.mind.adl.membrane.ast.Controller;
 import org.ow2.mind.adl.membrane.ast.ControllerContainer;
 import org.ow2.mind.compilation.CompilationCommand;
+import org.ow2.mind.error.ErrorManager;
 import org.ow2.mind.inject.InjectDelegate;
 
 import com.google.inject.Inject;
@@ -61,10 +59,13 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 
 	// Annotation used to specify that the field is used to store the reference to the next object of the delegation chain.
 	@InjectDelegate
-	protected GraphCompiler      clientCompilerItf;
+	protected GraphCompiler 	clientCompilerItf;
 
 	@Inject
-	Loader loaderItf;
+	protected Loader 			loaderItf;
+	
+	@Inject
+	protected ErrorManager		errorManagerItf;
 
 	// ---------------------------------------------------------------------------
 	// Implementation of the Visitor interface
@@ -86,7 +87,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 	/*
 	 * Recursive check on the whole tree for possible optimizations detection
 	 */
-	protected boolean visitGraphForOptimizationChecks(ComponentGraph graph, Map<Object, Object> context) {
+	protected boolean visitGraphForOptimizationChecks(ComponentGraph graph, Map<Object, Object> context) throws ADLException {
 
 		boolean result = false;
 		boolean subCompOptimized = false;
@@ -108,8 +109,13 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 			internalTypeOptimizationAllowed = true;
 		} else {	
 			// First check for type data
+			// Details:
+			// - We do not optimize unbound client interfaces
+			// - StaticBindings allows deleting client and server data
+			// - Static only allows deleting client data (so to allow external type optimization in this case, there has to be no server data at all)
 			externalTypeOptimizationAllowed = OptimASTHelper.isSingleton(compDef)
-					&& parentIsTaggedStaticBindings(graph)
+					&& (parentIsTaggedStaticBindings(graph)
+							|| (!parentIsTaggedStaticBindings(graph) && !existsNonStaticBindingFromComponent(graph) && !existsServerInterface(graph)))
 					&& (!existsOptionalUnboundClientInterface(graph))
 					&& (!existsDestinationControllerInterfaceAndDecorateIt(graph, context))
 					&& (!hostsController_ExceptDelegator(compDef));
@@ -204,6 +210,21 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		return result;
 	}
 
+	private boolean existsServerInterface(ComponentGraph instanceGraph) {
+		Node node = (Node) instanceGraph.getDefinition();
+		if (node instanceof InterfaceContainer){
+			InterfaceContainer itfCtnr = (InterfaceContainer) node;
+			for (Interface currentInterface : itfCtnr.getInterfaces()){
+				// Every interface seems to be a TypeInterface anyway...
+				if (currentInterface instanceof TypeInterface) {
+					if (((TypeInterface) currentInterface).getRole().equals(TypeInterface.SERVER_ROLE))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	protected boolean existsCollectionInterface(ComponentGraph instanceGraph){
 		Node node = (Node) instanceGraph.getDefinition();
 		if (node instanceof InterfaceContainer){
@@ -283,7 +304,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 								// We need to resolve the destination interface to check for its decorations
 								Node parentDef = parents[0].getDefinition();
 								Definition destCompDef;
-								
+
 								if (destCompName.equals("this"))
 									destCompDef = instanceGraph.getDefinition(); // TODO: check if we should compute InternalInterface-based instead later ?
 								else {
@@ -305,7 +326,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 										Component srcComp = ASTHelper.getComponent(parentDef, srcCompName);
 										srcCompDef = ASTHelper.getResolvedComponentDefinition(srcComp, loaderItf, context);
 									}
-									
+
 									Interface srcItf = ASTHelper.getInterface(srcCompDef, srcInterfaceName);
 									// Here we put the DESTINATION name of the binding as we use REVERSE resolution from the binding
 									srcItf.astSetDecoration("binding-destination-is-controller", true);
@@ -330,12 +351,12 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 	protected boolean hostsController_ExceptDelegator(Definition def) {
 		if (! (def instanceof ControllerContainer))
 			return false;
-		
+
 		Controller[] ctrlArray = ((ControllerContainer) def).getControllers();
-		
+
 		if (ctrlArray.length < 1)
 			return false;
-		
+
 		boolean foundDelegator = false;
 		for (Controller currCtrlr : ctrlArray) {
 			Source[] currCtrlrSources = currCtrlr.getSources();
@@ -344,7 +365,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 					foundDelegator = true;
 			}
 		}
-		
+
 		if (foundDelegator)
 			if (ctrlArray.length > 1)
 				return true;
@@ -367,43 +388,28 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		return false;
 	}
 
-	//	/**
-	//	 * For all bindings in the current composite
-	//	 * @param instanceGraph
-	//	 */
-	//	protected void decorate_BindingSourceSingletonComps_IfExistsNonStaticOne(ComponentGraph instanceGraph) {
-	//		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
-	//		
-	//		// No binding but the definition is a composite ?
-	//		// Then we decorate all sub-components since we can optimize their client interfaces data.
-	//		if ((descs == null || descs.isEmpty()))
-	//			if (ASTHelper.isComposite(instanceGraph.getDefinition()) ) {
-	//				// TODO
-	//				return;
-	//			} else return;
-	//		
-	//		Collection<String> keys = descs.keySet();
-	//		Iterator<String> keysIterator = keys.iterator();
-	//		
-	//		while(keysIterator.hasNext()) {
-	//			BindingDescriptor bindingDesc = (BindingDescriptor) descs.get(keysIterator.next());
-	//			Binding binding = bindingDesc.binding;
-	//			Boolean isStaticDecoration = (Boolean) binding.astGetDecoration("is-static");
-	//			// the "false" case should never exist, the key is present with "true" value or just absent... putting check just in case
-	//			if ((isStaticDecoration == null) || (isStaticDecoration.equals(Boolean.FALSE))) {
-	//				
-	//				String fromComponent = binding.getFromComponent();
-	//				ComponentGraph subCompGraph = instanceGraph.getSubComponent(fromComponent);
-	//				subCompGraph.setDecoration("cannot-", decoration)
-	//			}
-	//		}
-	//		
-	//		// iterate on components, if the List of 
-	//		for (String currComponent : theMap.keySet()) {
-	//			
-	//		}
-	//
-	//	}
+	/**
+	 * 
+	 * @param instanceGraph
+	 * @throws ADLException 
+	 */
+	protected boolean existsNonStaticBindingFromComponent(ComponentGraph instanceGraph) throws ADLException {
+		Node node = (Node) instanceGraph.getDefinition();
+		if (node instanceof InterfaceContainer){
+			InterfaceContainer itfCtnr = (InterfaceContainer) node;
+			for (Interface currentInterface : itfCtnr.getInterfaces()){
+				// Every interface seems to be a TypeInterface anyway...
+				if (currentInterface instanceof TypeInterface) {
+					TypeInterface currentTypeInterface = (TypeInterface) currentInterface;
+					if (currentTypeInterface.getRole().equals(TypeInterface.CLIENT_ROLE)){
+						if (!isStatic(currentTypeInterface, instanceGraph))
+							return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 
 	// Interfaces signatures
 	protected void setAllowExternalTypeDataRemovalDecoration(ComponentGraph instanceGraph){
@@ -438,6 +444,29 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 
 		// Get the binding
 		if (descs.get(typeInterface.getName()).binding != null) {
+			//System.out.println("Component " + instanceGraph.getNameInParent(instanceGraph.getParents()[0]) + " interface \"" + typeInterface.getName() + "\" is bound.");
+			return true;
+		} else {
+			//System.out.println("Component " + instanceGraph.getNameInParent(instanceGraph.getParents()[0]) + " interface \"" + typeInterface.getName() + "\" is not bound.");
+			return false;
+		}
+	}
+	
+	protected boolean isStatic(TypeInterface typeInterface, ComponentGraph instanceGraph) {
+		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
+
+		// binding-descriptors are systematically created even if a client interface is not bound !
+		// we've got to check if the DESTINATION is null !
+
+		Binding binding = descs.get(typeInterface.getName()).binding;
+		
+		if (binding == null)
+			return false;
+		
+		Boolean isStatic = (Boolean) binding.astGetDecoration("is-static");
+		
+		// Get the binding
+		if ((isStatic != null) && isStatic.equals(Boolean.TRUE)) {
 			//System.out.println("Component " + instanceGraph.getNameInParent(instanceGraph.getParents()[0]) + " interface \"" + typeInterface.getName() + "\" is bound.");
 			return true;
 		} else {
