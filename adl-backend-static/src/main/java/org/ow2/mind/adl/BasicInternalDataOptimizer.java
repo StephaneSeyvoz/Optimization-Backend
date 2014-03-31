@@ -43,8 +43,10 @@ import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.ComponentContainer;
 import org.ow2.mind.adl.ast.ImplementationContainer;
 import org.ow2.mind.adl.ast.OptimASTHelper;
+import org.ow2.mind.adl.ast.Source;
 import org.ow2.mind.adl.graph.BindingInstantiator.BindingDescriptor;
 import org.ow2.mind.adl.graph.ComponentGraph;
+import org.ow2.mind.adl.membrane.ast.Controller;
 import org.ow2.mind.adl.membrane.ast.ControllerContainer;
 import org.ow2.mind.compilation.CompilationCommand;
 import org.ow2.mind.inject.InjectDelegate;
@@ -110,7 +112,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 					&& parentIsTaggedStaticBindings(graph)
 					&& (!existsOptionalUnboundClientInterface(graph))
 					&& (!existsDestinationControllerInterfaceAndDecorateIt(graph, context))
-					&& (!hostsController(compDef));
+					&& (!hostsController_ExceptDelegator(compDef));
 
 			// Check for inner_type data
 			internalTypeOptimizationAllowed = OptimASTHelper.isSingleton(compDef)
@@ -325,10 +327,30 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		return result;
 	}
 
-	protected boolean hostsController(Definition def) {
-		if ((def instanceof ControllerContainer) && (((ControllerContainer) def).getControllers().length != 0))
-			return true;
-		else return false;
+	protected boolean hostsController_ExceptDelegator(Definition def) {
+		if (! (def instanceof ControllerContainer))
+			return false;
+		
+		Controller[] ctrlArray = ((ControllerContainer) def).getControllers();
+		
+		if (ctrlArray.length < 1)
+			return false;
+		
+		boolean foundDelegator = false;
+		for (Controller currCtrlr : ctrlArray) {
+			Source[] currCtrlrSources = currCtrlr.getSources();
+			for (Source currSource : currCtrlrSources) {
+				if (currSource.getPath().equals("InterfaceDelegator")) 
+					foundDelegator = true;
+			}
+		}
+		
+		if (foundDelegator)
+			if (ctrlArray.length > 1)
+				return true;
+			else
+				return false;
+		else return true;
 	}
 
 	protected boolean parentIsTaggedStaticBindings(ComponentGraph graph){
