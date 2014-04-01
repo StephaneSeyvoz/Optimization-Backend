@@ -458,6 +458,9 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		// binding-descriptors are systematically created even if a client interface is not bound !
 		// we've got to check if the DESTINATION is null !
 
+		if (descs == null)
+			return false;
+		
 		Binding binding = descs.get(typeInterface.getName()).binding;
 		
 		if (binding == null)
