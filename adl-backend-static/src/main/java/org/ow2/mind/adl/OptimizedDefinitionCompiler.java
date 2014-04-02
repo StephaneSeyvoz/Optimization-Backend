@@ -62,7 +62,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 	/* For Visitor interface related fields and their details (dependency-injection etc),
 	 * @see org.ow2.mind.adl.BasicDefinitionCompiler
 	 */
-	
+
 	// ---------------------------------------------------------------------------
 	// Helper methods
 	// ---------------------------------------------------------------------------
@@ -72,6 +72,13 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 			final ImplementationContainer container,
 			final Collection<CompilationCommand> compilationTasks,
 			final Map<Object, Object> context) throws ADLException {
+
+		// we don't use the KeepSrcNameContextHelper here since it would need to
+		// add a adl-backend -> mindc modules dependency, which is wrong.
+		final Boolean keepSrcNameInCtx = (Boolean) context.get("keep-src-name");
+		final Boolean keepSrcName = (keepSrcNameInCtx != null)
+				? keepSrcNameInCtx
+						: false;
 
 		final Source[] sources = container.getSources();
 		for (int i = 0; i < sources.length; i++) {
@@ -93,10 +100,9 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 
 			} else if (OptimASTHelper.isAssembly(src)) {
 				// src file is an assembly file
-				final String implSuffix = "_impl" + i;
-				final File objectFile = outputFileLocatorItf.getCCompiledOutputFile(
-						fullyQualifiedNameToPath(definition.getName(), implSuffix, ".o"),
-						context);
+
+				// default naming convention
+				String implSuffix = "_impl" + i;
 
 				final File srcFile;
 				assert src.getPath() != null;
@@ -108,15 +114,67 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 					throw new CompilerError(GenericErrors.INTERNAL_ERROR, e);
 				}
 
+				if (keepSrcName) {
+					// keep-source-name convention: override suffix
+					final String srcName = srcFile.getName();
+
+					// replace all path separators by underscores and remove extension
+					implSuffix = "_"
+							+ srcName.replace(File.separatorChar, '_').substring(0,
+									srcFile.getName().lastIndexOf('.'));
+				}
+
+				final File objectFile = outputFileLocatorItf.getCCompiledOutputFile(
+						fullyQualifiedNameToPath(definition.getName(), implSuffix, ".o"),
+						context);
+
 				final AssemblerCommand gccCommand = compilationCommandFactory
-						.newAssemblerCommand(definition, src, srcFile, objectFile,
-								context);
+						.newAssemblerCommand(definition, src, srcFile, objectFile, context);
 
 				compilationTasks.add(gccCommand);
 
 			} else {
 				// src file is a normal C file to be processed with MPP.
-				final String implSuffix = "_impl" + i;
+
+				// default naming convention, useful to keep for inlined C code
+				String implSuffix = "_impl" + i;
+
+				final File srcFile;
+				String inlinedCCode = src.getCCode();
+				if (inlinedCCode != null) {
+					// Implementation code is inlined in the ADL. Dump it in a file.
+					srcFile = outputFileLocatorItf.getCSourceOutputFile(
+							fullyQualifiedNameToPath(definition.getName(), implSuffix, ".c"),
+							context);
+					inlinedCCode = BackendFormatRenderer.sourceToLine(src) + "\n"
+							+ inlinedCCode + "\n";
+					try {
+						SourceFileWriter.writeToFile(srcFile, inlinedCCode);
+					} catch (final IOException e) {
+						throw new CompilerError(IOErrors.WRITE_ERROR, e,
+								srcFile.getAbsolutePath());
+					}
+				} else {
+					assert src.getPath() != null;
+					final URL srcURL = implementationLocatorItf.findSource(src.getPath(),
+							context);
+					try {
+						srcFile = new File(srcURL.toURI());
+					} catch (final URISyntaxException e) {
+						throw new CompilerError(GenericErrors.INTERNAL_ERROR, e);
+					}
+
+					if (keepSrcName) {
+						// keep-source-name convention: override suffix
+						final String srcName = srcFile.getName();
+
+						// replace all path separators by underscores and remove extension
+						implSuffix = "_"
+								+ srcName.replace(File.separatorChar, '_').substring(0,
+										srcFile.getName().lastIndexOf('.'));
+					}
+				}
+
 				final File cppFile = outputFileLocatorItf
 						.getCSourceTemporaryOutputFile(
 								fullyQualifiedNameToPath(definition.getName(), implSuffix, ".i"),
@@ -143,32 +201,6 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 									definition, i), context);
 				}
 
-				final File srcFile;
-				String inlinedCCode = src.getCCode();
-				if (inlinedCCode != null) {
-					// Implementation code is inlined in the ADL. Dump it in a file.
-					srcFile = outputFileLocatorItf.getCSourceOutputFile(
-							fullyQualifiedNameToPath(definition.getName(), implSuffix, ".c"),
-							context);
-					inlinedCCode = BackendFormatRenderer.sourceToLine(src) + "\n"
-							+ inlinedCCode + "\n";
-					try {
-						SourceFileWriter.writeToFile(srcFile, inlinedCCode);
-					} catch (final IOException e) {
-						throw new CompilerError(IOErrors.WRITE_ERROR, e,
-								srcFile.getAbsolutePath());
-					}
-				} else {
-					assert src.getPath() != null;
-					final URL srcURL = implementationLocatorItf.findSource(src.getPath(),
-							context);
-					try {
-						srcFile = new File(srcURL.toURI());
-					} catch (final URISyntaxException e) {
-						throw new CompilerError(GenericErrors.INTERNAL_ERROR, e);
-					}
-				}
-
 				final PreprocessorCommand cppCommand = compilationCommandFactory
 						.newPreprocessorCommand(definition, src, srcFile, null, depFile,
 								cppFile, context);
@@ -180,8 +212,6 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 
 				cppCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
 						DefinitionIncSourceGenerator.getIncFileName(definition), context));
-				
-				// SSZ : BEGIN MODIFICATION
 
 				// Original macro : replaced by our instance-oriented one
 				//				gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
@@ -195,7 +225,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				ComponentGraph instanceGraph = (ComponentGraph) context.get("currentInstanceGraph");
 
 				File macroFile = null;
-				
+
 				if (topLevelGraph == null)
 					macroFile = outputFileLocatorItf.getCSourceOutputFile(
 							DefinitionMacroSourceGenerator.getMacroFileName(definition),
@@ -208,51 +238,46 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 					macroFile = outputFileLocatorItf.getCSourceOutputFile(
 							InstanceMacroSourceGenerator
 							.getMacroFileName(new InstancesDescriptor(topLevelGraph.getDefinition(), instanceGraph.getDefinition(), instances)), context);
-					//topLevelGraph = null;
-					//instanceGraph = null;
-					//instances = null;
 				}
 				gccCommand.addIncludeFile(macroFile);
-				// SSZ : END MODIFICATION
 
 				gccCommand.setAllDependenciesManaged(true);
 
-				// SSZ
-				// For inline support
-				
+
+				// For inline support (not functional yet)
 				PreprocessorCommand inlineCppCommand = null;
 				String inlineSuffix = "_inline";
-				
+
 				// server side
 				if (mppCommand instanceof OptimMPPCommand && OptimASTHelper.hasInlineDecoration(definition)) {
-					
+
 					// here the cast is forced because we need to access a method that is not
 					// available in the standard MPPCommand interface
 					OptimMPPCommand optimMppCommand = (OptimMPPCommand) mppCommand;
-					
+
 					File inlineOutputHeaderFile = outputFileLocatorItf.getCSourceOutputFile(
 							fullyQualifiedNameToPath(definition.getName(), inlineSuffix, ".h"),
 							context);
-					
+
 					optimMppCommand.setInlineOutputFile(inlineOutputHeaderFile);
-					
+
 					// we need to expand macros of the inlined methods in their "server" context
 					// before inclusion in the client (to avoid macros inconsistency)
-					
+
 					final File inlineCppFile = outputFileLocatorItf
 							.getCSourceOutputFile(
 									fullyQualifiedNameToPath(definition.getName(), inlineSuffix, ".cpp.h"),
 									context);
-					
+
 					inlineCppCommand = compilationCommandFactory
 							.newPreprocessorCommand(definition, null, inlineOutputHeaderFile, null, null,
 									inlineCppFile, context);
-					
+
 					inlineCppCommand.addIncludeFile(macroFile);
 				}
-				
+
 				// client side
-				
+
 				// TODO: add a check
 				List<Definition> targetInlineDefinitions = (List<Definition>) definition.astGetDecoration("inline-target-defs");
 				if (targetInlineDefinitions != null)
@@ -262,13 +287,13 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 								fullyQualifiedNameToPath(currInlineDef.getName(), inlineSuffix, ".cpp.h"),
 								context));
 				//
-				
+
 				compilationTasks.add(cppCommand);
 				compilationTasks.add(mppCommand);
-				
+
 				if (inlineCppCommand != null)
 					compilationTasks.add(inlineCppCommand);
-				
+
 				compilationTasks.add(gccCommand);
 			}
 		}
@@ -326,7 +351,6 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 						.newCompilerCommand(definition, additionalCompilationUnit, cppFile,
 								true, null, null, objectFile, context);
 
-				// SSZ : BEGIN MODIFICATION
 				// This optimization-based modification is based on the predicate that EVERY COMPONENT
 				// is singleton
 
@@ -351,8 +375,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 					topLevelGraph = null;
 					//instanceGraph = null;
 					instances = null;
-				}
-				// SSZ : END MODIFICATION				
+				}		
 
 				gccCommand.setAllDependenciesManaged(true);
 
@@ -369,8 +392,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				final CompilerCommand gccCommand = compilationCommandFactory
 						.newCompilerCommand(definition, additionalCompilationUnit, mppFile,
 								true, null, null, objectFile, context);
-				
-				// SSZ : BEGIN MODIFICATION
+
 				// This optimization-based modification is based on the predicate that EVERY COMPONENT
 				// is singleton
 				ComponentGraph topLevelGraph = (ComponentGraph) context.get("topLevelGraph");
@@ -390,10 +412,7 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 					gccCommand.addIncludeFile(outputFileLocatorItf.getCSourceOutputFile(
 							InstanceMacroSourceGenerator
 							.getMacroFileName(new InstancesDescriptor(topLevelGraph.getDefinition(), instanceGraph.getDefinition(), instances)), context));
-					//topLevelGraph = null;
-					//instanceGraph = null;
-					//instances = null;
-					// SSZ : END MODIFICATION
+
 				}
 
 				gccCommand.setAllDependenciesManaged(true);
