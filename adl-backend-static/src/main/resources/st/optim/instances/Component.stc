@@ -43,6 +43,7 @@ TopLevelInstances(topLevelDefinition, definitions, instances) ::= <<
 <if (!(first(instances).decorations.("allow-instance-data-removal")))>
 void *__component_toplevel = &<first(instances).decorations.("instance-name"); format="toCName">;
 <endif>
+
 >>
 
 IncludeDependencies(definition, instance) ::= <<

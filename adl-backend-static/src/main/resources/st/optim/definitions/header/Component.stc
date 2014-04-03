@@ -142,7 +142,7 @@ TypeStructures(definition, instance) ::= <<
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
 
-PossibleOptimizationInterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
+PossibleOptimizationClientInterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
 <if (itf.astDecorations.("binding-destination-is-controller"))>
 // No optimization : Binding destination is a controller
 <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
@@ -157,49 +157,46 @@ PossibleOptimizationInterfaceDescriptorDecl(definition, itf, instance, isInterna
 <endif>
 >>
 
+PossibleOptimizationServerInterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
+<if (itf.numberOfElement)>
+// No optimization (server collection)
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+<else>
+  <if (itf.astDecorations.("controller-interface"))>
+// No optimization: Parent has @StaticBindings, but the interface is a controller
+<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+  <else>
+// Optimized: Parent has @StaticBinding, interface is not a controller, and isn't collection 
+// <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
+  <endif>
+<endif>
+>>
+
 InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
 <if (isClient.(itf.role))>
   <if (isInternal)>
     <if (definition.astDecorations.("has-static-bindings"))>
-<PossibleOptimizationInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)>
+<PossibleOptimizationClientInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)>
     <else>
 // No optimization: No @StaticBindings on this composite
 <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <else>
-<PossibleOptimizationInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)> 	  
+<PossibleOptimizationClientInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)> 	  
   <endif>
 <else>  
   <if (isInternal)>
     <if (definition.astDecorations.("has-static-bindings"))>
-    	<if (itf.astDecorations.("binding-destination-is-controller"))>
-// No optimization : interface is a controller (and internal)
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <else>
-// Optimized: Interface is internal and not a controller
-// <InterfaceType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <endif>
+<PossibleOptimizationServerInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)>
     <else>
 // No optimization: No @StaticBindings on this composite
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <else>
     <if (definition.astDecorations.("parent-has-static-bindings"))>
-      <! We do not optimize server collection interfaces yet !>
-      <if (itf.numberOfElement)>
-// No optimization (server collection)
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-      <else>
-        <if (itf.astDecorations.("controller-interface"))>
-// No optimization : Parent has @StaticBindings but the interface is a controller
-<InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-        <else>
-// Optimized : Parent has @StaticBinding, interface is not a controller, and isn't collection 
-// <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
-        <endif>
-      <endif>
+<PossibleOptimizationServerInterfaceDescriptorDecl(definition=definition, itf=itf, instance=instance, isInternal=isInternal)>
     <else>
-// No optimization : default behavior for external interface as no @StaticBindings was specified on the parent
+// No optimization: No @StaticBindings on the parent
 <InterfaceDescType(signature=itf.signature)> <itf.name><if (itf.numberOfElement)>[<itf.numberOfElement>]<endif>;
     <endif>
   <endif>
@@ -535,62 +532,51 @@ InitializeInterfaces(definition, instance) ::= <<
 <endif>
 >>
 
+InitializeClientInterfacePossibleOptimization(definition, instance, itf, isInternal, isLast) ::= <<
+<if (itf.astDecorations.("binding-destination-is-controller"))>
+<InitializeClientInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif>
+<else>
+  <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
+/* <InitializeClientInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif> */ \
+  <else>
+<InitializeClientInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif>
+  <endif>
+<endif>
+>>
+
+InitializeServerInterfacePossibleOptimization(definition, instance, itf, isInternal, isLast) ::= <<
+<if (itf.numberOfElement)>
+<InitializeServerInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif>
+<else>
+  <if (itf.astDecorations.("controller-interface"))>
+<InitializeServerInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif>
+  <else>
+/* <InitializeServerInterface(definition=definition, itf=itf)><if (!(isLast))>,<endif> */ \
+  <endif>
+<endif>
+>>
+
 InitializeInterface(definition, instance, itf, isInternal) ::= <<
 <if(isClient.(itf.role))>
-  <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
-/* <InitializeClientInterface(definition=definition, itf=itf)>, */ \
-  <else>
-    <if (definition.astDecorations.("parent-has-static-bindings"))>
-      <if (itf.numberOfElement)>
-/* <InitializeClientInterface(definition=definition, itf=itf)>, */
-      <else>
-      	<if (itf.astDecorations.("binding-destination-is-controller"))>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-		    <else>
-        	<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-           	<if (itf.contingency)>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-           	<endif>
-          <else>
-           	<if (isInternal)>
-           		<if (definition.astDecorations.("has-static-bindings"))>
-/* <InitializeClientInterface(definition=definition, itf=itf)>, */ \
-           		<else>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-           		<endif>
-           	<else>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-           	<endif>
-          <endif>
-        <endif>
-      <endif>
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+<InitializeClientInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal)>
     <else>
 <InitializeClientInterface(definition=definition, itf=itf)>,
     <endif>
+  <else>
+<InitializeClientInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal)>
   <endif>
 <else>
-  <if (definition.astDecorations.("parent-has-static-bindings"))>
-<! SSZ : Exception : If someone tries to optimize a server collection interface, we don't optimize the latter yet !>
-    <if (itf.numberOfElement)>
-<InitializeServerInterface(definition=definition, itf=itf)>,
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+<InitializeServerInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal)>
     <else>
-      <if (itf.astDecorations.("controller-interface"))>
 <InitializeServerInterface(definition=definition, itf=itf)>,
-      <else>
-/* <InitializeServerInterface(definition=definition, itf=itf)>, */ \
-		  <endif>
-    <endif>
+    <endif>  
   <else>
-    <if (isInternal)>
-      <if (definition.astDecorations.("has-static-bindings"))>
-      	<if (itf.astDecorations.("controller-interface"))>
-<InitializeServerInterface(definition=definition, itf=itf)>,
-      	<else>
-/* <InitializeServerInterface(definition=definition, itf=itf)>, */
-		    <endif>
-      <else>
-<InitializeServerInterface(definition=definition, itf=itf)>,
-      <endif>
+    <if (definition.astDecorations.("parent-has-static-bindings"))>
+<InitializeServerInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal)>
     <else>
 <InitializeServerInterface(definition=definition, itf=itf)>,
     <endif>
@@ -600,64 +586,25 @@ InitializeInterface(definition, instance, itf, isInternal) ::= <<
 
 InitializeLastInterface(definition, instance, itf, isInternal) ::= <<
 <if(isClient.(itf.role))>
-	<if (itf.astDecorations.("binding-destination-is-controller"))>
-<InitializeClientInterface(definition=definition, itf=itf)>
-	<else>
-		<if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
-/* <InitializeClientInterface(definition=definition, itf=itf)> */ \
-  		<else>
-    		<if (definition.astDecorations.("parent-has-static-bindings"))>
-      		<if (itf.numberOfElement)>
-/* <InitializeClientInterface(definition=definition, itf=itf)> */
-      		<else>
-      		  <if (itf.astDecorations.("binding-destination-is-controller"))>
-<InitializeClientInterface(definition=definition, itf=itf)>,
-      		  <else>
-      		    <if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding))>
-      		      <if (itf.contingency)>
-<InitializeClientInterface(definition=definition, itf=itf)>
-          		  <endif>
-          		<else>
-          		  <if (isInternal)>
-          		    <if (definition.astDecorations.("has-static-bindings"))>
-/* <InitializeClientInterface(definition=definition, itf=itf)> */ \
-          			  <else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-          			  <endif>
-          			<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-          		  <endif>
-          		<endif>
-          	<endif>
-      		<endif>
-    		<else>
-<InitializeClientInterface(definition=definition, itf=itf)>
-    		<endif>
-    	<endif>
-    <endif>
-<else>
-  <if (definition.astDecorations.("parent-has-static-bindings"))>
-<! SSZ : Exception : If someone tries to optimize a server collection interface, we don't optimize the latter yet !>
-    <if (itf.numberOfElement)>
-<InitializeServerInterface(definition=definition, itf=itf)>
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+<InitializeClientInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal, isLast="true")>
     <else>
-      <if (itf.astDecorations.("controller-interface"))>
-<InitializeServerInterface(definition=definition, itf=itf)>
-      <else>
-/* <InitializeServerInterface(definition=definition, itf=itf)> */ \
-		  <endif>
+<InitializeClientInterface(definition=definition, itf=itf)>
     <endif>
   <else>
-    <if (isInternal)>
-      <if (definition.astDecorations.("has-static-bindings"))>
-      	<if (itf.astDecorations.("controller-interface"))>
+<InitializeClientInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal, isLast="true")>
+  <endif>
+<else>
+  <if (isInternal)>
+    <if (definition.astDecorations.("has-static-bindings"))>
+<InitializeServerInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal, isLast="true")>
+    <else>
 <InitializeServerInterface(definition=definition, itf=itf)>
-      	<else>
-/* <InitializeServerInterface(definition=definition, itf=itf)> */
-		    <endif>
-      <else>
-<InitializeServerInterface(definition=definition, itf=itf)>
-      <endif>
+    <endif>  
+  <else>
+    <if (definition.astDecorations.("parent-has-static-bindings"))>
+<InitializeServerInterfacePossibleOptimization(definition=definition, instance=instance, itf=itf, isInternal=isInternal, isLast="true")>
     <else>
 <InitializeServerInterface(definition=definition, itf=itf)>
     <endif>
