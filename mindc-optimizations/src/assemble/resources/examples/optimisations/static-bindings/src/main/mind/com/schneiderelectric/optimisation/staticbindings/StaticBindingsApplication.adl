@@ -14,9 +14,6 @@
 //Will try to apply the the same optimization as '@Static' everywhere 
 @StaticBindings
 
-//Will garbage unused data resulting from the '@StaticBindings' optimisation  
-@GarbageUnusedInternals 
-
 @Singleton
 composite 
 com.schneiderelectric.optimisation.staticbindings.StaticBindingsApplication
