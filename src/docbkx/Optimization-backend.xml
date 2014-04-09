@@ -224,6 +224,13 @@
                 <entry>Indicates files that contains optimization
                 rules.</entry>
               </row>
+			  <row>
+                <entry>NONE</entry>
+
+                <entry>--flatten</entry>
+
+                <entry>This option remove all composite levels. All component are in the same level. The only remaining composite is the main composite.</entry>
+              </row>
             </tbody>
           </tgroup>
         </table>
@@ -313,10 +320,9 @@
 
         <example>
           <title>Extra file example 1</title>
-
-          <programlisting>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+            <programlisting>
+				<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  	        </programlisting>
         </example>
       </formalpara>
 
@@ -327,7 +333,7 @@
           <title>Extra file example 2</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -376,13 +382,16 @@
       transformation will directly contain all your primitives, and
       "delegation bindings" (going through composites) will be merged.</para>
 
+      <note>This annotation can also be used with the extraOptions
+      (.properties file).</note>
+
       <example>
         <title>@Flatten overview</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" fileref="images/AtGarbageComposite.png"
-                       format="PNG" scale="90"/>
+                       format="PNG" scale="70"/>
           </imageobject>
         </mediaobject>
       </example>
@@ -416,15 +425,14 @@
       <formalpara>
         <title>Example</title>
 
-        <para>The <code>@GarbageComposite</code> annotation is described in
-        the file
+        <para>The <code>@flatten</code> annotation is described in the file
         <code>optimisation/garbagecomposite/GarbagedCompositeApplication.adl</code></para>
 
         <example>
-          <title>The @GarbageComposite annotation</title>
+          <title>The @flatten annotation</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/com/schneiderelectric/optimisation/garbagecomposite/GarbagedCompositeApplication.adl"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/com/schneiderelectric/optimisation/garbagecomposite/GarbagedCompositeApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -515,7 +523,7 @@
           <title>The @Static annotation</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
+<xi:include href="../../mindc-optimizations\src\assemble\resources\examples\optimisations\static\src\main\mind\com\schneiderelectric\optimisation\staticbinding\StaticBindingApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -631,7 +639,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 <?db-font-size 75% ?>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -772,7 +780,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 <?db-font-size 75% ?>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
 </programlisting>
@@ -889,7 +897,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 <?db-font-size 75% ?>
-<xi:include href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -1009,7 +1017,7 @@
           <title>The @StaticDefinitionBindingsList annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?><xi:include
-              href="../../mindc-optimisations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/com/schneiderelectric/optimisation/staticdefinitionbinding/StaticDefBindingApp.adl"
+              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/com/schneiderelectric/optimisation/staticdefinitionbinding/StaticDefBindingApp.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
         </example>
       </formalpara>
@@ -1040,6 +1048,7 @@
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
       call an explicit server interface via an interface pointer (macro
       CALL_PTR), in an optimized way. Its objective is the same as
+
       <classname>StaticDefinitionBinding</classname>, but allows to optimize
       the CALL_PTR (which is thread-safe and lock-free), while calling a pool
       of target component instances (restricted to the same target definition,
