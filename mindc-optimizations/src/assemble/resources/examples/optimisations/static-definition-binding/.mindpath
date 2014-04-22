@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mindpath>
 	<mindpathentry kind="SOURCE" path="/static-definition-binding/src/main/mind"/>
-	<mindpathentry kind="SOURCE" path="/static-definition-binding/src/test/mind"/>
 	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
 	<mindpathentry kind="PROJECT" path="/common"/>
 	<mindpathentry kind="APPLI" path="com.schneiderelectric.optimisation.staticdefinitionbinding.StaticDefinitionBindingApplication:StaticDefinitionBindingApplication"/>
