@@ -12,6 +12,7 @@
 					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -78,25 +79,24 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="NONE" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="NONE" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="NONE" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="NONE" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="NONE" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="NONE" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="NONE" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="NONE" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
+						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
+						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
+						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
+						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
+						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
+						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
+						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
+						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -112,6 +112,7 @@
 					<extension id="org.ow2.mindEd.ide.MindcErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -178,25 +179,24 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="NONE" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="NONE" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="NONE" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="NONE" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="NONE" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="NONE" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="NONE" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="NONE" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
+						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
+						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
+						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
+						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
+						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
+						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
+						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
+						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>

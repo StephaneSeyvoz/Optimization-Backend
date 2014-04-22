@@ -62,25 +62,24 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="NONE" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="NONE" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="NONE" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="NONE" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="NONE" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="NONE" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="NONE" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="NONE" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
+						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
+						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
+						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
+						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
+						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
+						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
+						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
+						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -145,27 +144,26 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="main/mind|test/mind" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="main/mind" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="NONE" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="NONE" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="NONE" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="NONE" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="NONE" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="NONE" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="NONE" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="NONE" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
+						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
+						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
+						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
+						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
+						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
+						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
+						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
+						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -230,27 +228,26 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="main/mind|test/mind" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="main/mind" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/main/mind"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/test/mind"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="mind.cpl.settings" factoryId="org.eclipse.cdt.core.extension.container.factory">
 					<externalSetting>
-						<entry flags="NONE" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
-						<entry flags="NONE" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
-						<entry flags="NONE" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="PRIVATE" value="__private__"/>
-						<entry flags="NONE" kind="macro" name="ATTR(attribute)" value="attribute"/>
-						<entry flags="NONE" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
-						<entry flags="NONE" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
-						<entry flags="NONE" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
-						<entry flags="NONE" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
-						<entry flags="NONE" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
-						<entry flags="NONE" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
+						<entry flags="" kind="macro" name="METH(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND(interface)" value="(interface!=0)"/>
+						<entry flags="" kind="macro" name="GET_COLLECTION_SIZE(interface)" value="0"/>
+						<entry flags="" kind="macro" name="CALL(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="PRIVATE" value="__private__"/>
+						<entry flags="" kind="macro" name="ATTR(attribute)" value="attribute"/>
+						<entry flags="" kind="macro" name="CONSTRUCTOR()" value="void _constructor_()"/>
+						<entry flags="" kind="macro" name="DESTRUCTOR()" value="void _destructor_()"/>
+						<entry flags="" kind="macro" name="GET_MY_INTERFACE(interface)" value="interface"/>
+						<entry flags="" kind="macro" name="IS_BOUND_PTR(intertface_pointer)" value="(intertface_pointer!=0)"/>
+						<entry flags="" kind="macro" name="CALL_PTR(interface,method ...)" value="method##interface"/>
+						<entry flags="" kind="macro" name="METH_PTR(methodPointer)" value="methodPointer"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -259,14 +256,18 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="common.cdt.managedbuild.target.gnu.mingw.exe.253786616" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
 	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683;cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.759940977;cdt.managedbuild.tool.gnu.c.compiler.input.586553575">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="BaseApplication">
+			<resource resourceType="PROJECT" workspacePath="/common"/>
+		</configuration>
+		<configuration configurationName="MultiInstanceApplication">
+			<resource resourceType="PROJECT" workspacePath="/common"/>
+		</configuration>
+		<configuration configurationName="CompositeApplication">
+			<resource resourceType="PROJECT" workspacePath="/common"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
 			<target name="all" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
@@ -319,4 +320,14 @@
 			</target>
 		</buildTargets>
 	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683;cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683.;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug.759940977;cdt.managedbuild.tool.gnu.c.compiler.input.586553575">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683.1416220312;cdt.managedbuild.config.gnu.mingw.exe.debug.1933556683.1416220312.;cdt.managedbuild.tool.gnu.c.compiler.mingw.base.105391821;cdt.managedbuild.tool.gnu.c.compiler.input.241832332">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
