@@ -17,37 +17,20 @@
 // will have there 'clientInterface' interface bound to the 
 // 'serverInterface' of an instance a 'MultiInstanciableComponent' component.
 @StaticDefinitionBinding(
-
-fromItf=
-"
-com.schneiderelectric.optimisation.common.SingletonComponent.clientInterface
-",
-
-toItf=
-"
-com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serverInterface
-"
-
+fromItf="com.schneiderelectric.optimisation.common.SingletonComponent.clientInterface",
+toItf="com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serverInterface"
 ),
 
 // This specify that ALL instances of Boostrap component, 
 // will have there 'entryPoint' interface bound to the 
 // 'serverInterface' of an instance a 'SingletonComponent' component.
 @StaticDefinitionBinding(
-
-fromItf=
-"
-boot.Bootstrap.entryPoint
-",
-
-toItf=
-"
-com.schneiderelectric.optimisation.common.SingletonComponent.serverInterface
-"
+fromItf="boot.Bootstrap.entryPoint",
+toItf="com.schneiderelectric.optimisation.common.SingletonComponent.serverInterface"
 )
 })
 
 composite 
-com.schneiderelectric.optimisation.staticdefinitionbinding.StaticDefinitionBindingApplication 
+com.schneiderelectric.optimisation.staticdefinitionbinding.StaticDefBindingApp 
 extends com.schneiderelectric.optimisation.common.MultiInstanceApplication {	
 }
