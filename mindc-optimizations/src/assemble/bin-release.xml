@@ -25,7 +25,7 @@
             <directory>src/assemble/resources/examples</directory>
             <filtered>false</filtered>
             <outputDirectory>examples</outputDirectory>
-            <fileMode>0644</fileMode>
+            <directoryMode>0644</directoryMode>
         </fileSet>
     </fileSets>
 </assembly>
