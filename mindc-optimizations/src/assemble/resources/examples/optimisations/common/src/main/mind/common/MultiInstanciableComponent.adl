@@ -3,7 +3,7 @@
  * 
  * It is a multi-instanciable component (NOT a singleton).
  */
-primitive com.schneiderelectric.optimisation.common.MultiInstanciableComponent {
+primitive common.MultiInstanciableComponent {
 /**
  * The only method of this interface will only print :
  * <br/> - The current method name.

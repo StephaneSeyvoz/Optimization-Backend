@@ -4,13 +4,13 @@
  * It is a manually optimized version of the 
  *
  * @component 
- * com.schneiderelectric.optimisation.garbagecomposite.CompositeApplication 
+ * garbagecomposite.CompositeApplication 
  * component
  * 
  * Have a look at the 
  * 
  * @component 
- * com.schneiderelectric.optimisation.garbagecomposite.CompositeApplication 
+ * garbagecomposite.CompositeApplication 
  * component for more documentation.
  *
  */
@@ -20,7 +20,7 @@
 //Directly specify that we don't want to keep the sub composites
 @GarbageComposite
 composite 
-com.schneiderelectric.optimisation.garbagecomposite.GarbagedCompositeApplication 
+garbagecomposite.GarbagedCompositeApplication 
 {
  	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
@@ -28,7 +28,7 @@ com.schneiderelectric.optimisation.garbagecomposite.GarbagedCompositeApplication
 	 * This component is a composite. It will be replaced by it's content.
 	 */
 	contains 
-	com.schneiderelectric.optimisation.common.AroundSingletonComponent 
+	common.AroundSingletonComponent 
 	as 
 	singletonComp;
 	
@@ -39,7 +39,7 @@ com.schneiderelectric.optimisation.garbagecomposite.GarbagedCompositeApplication
 	 * This component is a composite. It will be replaced by it's content. 
 	 */
 	contains 
-	com.schneiderelectric.optimisation.common.AroundMultiInstanciableComponent 
+	common.AroundMultiInstanciableComponent 
 	as 
 	firstMultiInstanciableComp;	
 }

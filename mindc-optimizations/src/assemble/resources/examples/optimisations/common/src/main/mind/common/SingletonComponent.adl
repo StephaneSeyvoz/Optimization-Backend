@@ -7,7 +7,7 @@
  
 @Singleton
 primitive 
-com.schneiderelectric.optimisation.common.SingletonComponent
+common.SingletonComponent
 {
 /**
  * The @interface boot.Main#methods#main method of this interface will print :

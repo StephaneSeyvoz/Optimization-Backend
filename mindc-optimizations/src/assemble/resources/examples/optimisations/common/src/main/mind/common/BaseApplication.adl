@@ -10,7 +10,7 @@
 //  
 @Singleton
 
-composite com.schneiderelectric.optimisation.common.BaseApplication {
+composite common.BaseApplication {
  	/**
  	 * Initialize everything necessary to enter the component world.
  	 * <br/>
@@ -23,11 +23,11 @@ composite com.schneiderelectric.optimisation.common.BaseApplication {
 	 * <br/>
 	 * This component is a singleton.
 	 */
-	contains SingletonComponent as singletonComp;
+	contains common.SingletonComponent as singletonComp;
 	binds singletonComp.firstClientInterface to firstMultiInstanciableComp.serverInterface;
 	/**
 	 * Simply print a message on the screen.
 	 * This component is multi-instanciable
 	 */
-	contains MultiInstanciableComponent as firstMultiInstanciableComp;
+	contains common.MultiInstanciableComponent as firstMultiInstanciableComp;
 }

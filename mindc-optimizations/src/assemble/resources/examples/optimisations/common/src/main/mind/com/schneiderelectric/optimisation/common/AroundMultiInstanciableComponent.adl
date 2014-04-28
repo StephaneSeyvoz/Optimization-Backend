@@ -1,5 +1,0 @@
-composite com.schneiderelectric.optimisation.common.AroundMultiInstanciableComponent {
-	provides boot.Main as serverInterface;
-	binds this.serverInterface to multiInstanciableComp.serverInterface;
-	contains MultiInstanciableComponent as multiInstanciableComp;
-}

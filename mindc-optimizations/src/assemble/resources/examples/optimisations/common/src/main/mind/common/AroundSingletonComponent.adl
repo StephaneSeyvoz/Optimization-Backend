@@ -3,10 +3,10 @@
  */
 
 @Singleton
-composite com.schneiderelectric.optimisation.common.AroundSingletonComponent {
+composite common.AroundSingletonComponent {
 	provides boot.Main as serverInterface;
 	binds this.serverInterface to singletonComp.serverInterface;
-	contains SingletonComponent as singletonComp;
+	contains common.SingletonComponent as singletonComp;
 	binds singletonComp.firstClientInterface to this.firstClientInterface;
 	requires boot.Main as firstClientInterface;
 	binds singletonComp.secondClientInterface to this.secondClientInterface;

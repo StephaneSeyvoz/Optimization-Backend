@@ -2,6 +2,6 @@
 <mindpath>
 	<mindpathentry kind="SOURCE" path="/garbage-composite/src/main/mind"/>
 	<mindpathentry kind="PROJECT" path="/common"/>
-	<mindpathentry kind="APPLI" path="com.schneiderelectric.optimisation.garbagecomposite.GarbagedCompositeApplication:GarbagedCompositeApplication"/>
 	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
+	<mindpathentry kind="APPLI" path="garbagecomposite.GarbagedCompositeApplication:GarbagedCompositeApplication"/>
 </mindpath>

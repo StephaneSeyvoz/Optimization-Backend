@@ -3,5 +3,5 @@
 	<mindpathentry kind="SOURCE" path="/static-bindings/src/main/mind"/>
 	<mindpathentry kind="PROJECT" path="/common"/>
 	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
-	<mindpathentry kind="APPLI" path="com.schneiderelectric.optimisation.staticbindings.StaticBindingsApplication:StaticBindingsApplication"/>
+	<mindpathentry kind="APPLI" path="staticbindings.StaticBindingsApplication:StaticBindingsApplication"/>
 </mindpath>

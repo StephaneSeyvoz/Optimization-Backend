@@ -1,11 +1,11 @@
 /**
  * This component is part of the example demonstrating the usage of the '@GarbageComposite' optimization.
- * It is the manually unoptimized version of the component @component com.schneiderelectric.optimisation.common.BaseApplication.
- * Look at the component @component com.schneiderelectric.optimisation.common.BaseApplication for more documentation.
+ * It is the manually unoptimized version of the component @component common.BaseApplication.
+ * Look at the component @component common.BaseApplication for more documentation.
  */
  
 @Singleton
-composite com.schneiderelectric.optimisation.common.CompositeApplication {
+composite common.CompositeApplication {
 
  	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;

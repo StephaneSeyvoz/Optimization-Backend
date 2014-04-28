@@ -3,5 +3,5 @@
 	<mindpathentry kind="SOURCE" path="/static-definition-binding/src/main/mind"/>
 	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
 	<mindpathentry kind="PROJECT" path="/common"/>
-	<mindpathentry kind="APPLI" path="com.schneiderelectric.optimisation.staticdefinitionbinding.StaticDefinitionBindingApplication:StaticDefinitionBindingApplication"/>
+	<mindpathentry kind="APPLI" path="staticdefinitionbinding.StaticDefinitionBindingApp:StaticDefinitionBindingApp"/>
 </mindpath>

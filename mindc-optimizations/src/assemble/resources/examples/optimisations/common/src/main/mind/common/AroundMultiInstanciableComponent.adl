@@ -1,0 +1,5 @@
+composite common.AroundMultiInstanciableComponent {
+	provides boot.Main as serverInterface;
+	binds this.serverInterface to multiInstanciableComp.serverInterface;
+	contains common.MultiInstanciableComponent as multiInstanciableComp;
+}

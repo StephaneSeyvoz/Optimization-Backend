@@ -2,7 +2,7 @@
  * This component is part of the example demonstrating the usage of the 
  * '@StaticDefinitionBinding' annotations.
  * It is an optimized version of the component 
- * @component com.schneiderelectric.optimisation.common.MultiInstanceApplication
+ * @component common.MultiInstanceApplication
  */ 
 
 
@@ -17,8 +17,8 @@
 // will have there 'clientInterface' interface bound to the 
 // 'serverInterface' of an instance a 'MultiInstanciableComponent' component.
 @StaticDefinitionBinding(
-fromItf="com.schneiderelectric.optimisation.common.SingletonComponent.clientInterface",
-toItf="com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serverInterface"
+fromItf="common.SingletonComponent.clientInterface",
+toItf="common.MultiInstanciableComponent.serverInterface"
 ),
 
 // This specify that ALL instances of Boostrap component, 
@@ -26,11 +26,11 @@ toItf="com.schneiderelectric.optimisation.common.MultiInstanciableComponent.serv
 // 'serverInterface' of an instance a 'SingletonComponent' component.
 @StaticDefinitionBinding(
 fromItf="boot.Bootstrap.entryPoint",
-toItf="com.schneiderelectric.optimisation.common.SingletonComponent.serverInterface"
+toItf="common.SingletonComponent.serverInterface"
 )
 })
 
 composite 
-com.schneiderelectric.optimisation.staticdefinitionbinding.StaticDefBindingApp 
-extends com.schneiderelectric.optimisation.common.MultiInstanceApplication {	
+staticdefinitionbinding.StaticDefinitionBindingApp 
+extends common.MultiInstanceApplication {	
 }

@@ -30,7 +30,7 @@ endif
 sourcePathArg=
 ifdef sourcePath
 	ifneq ($(sourcePath), "")
-		sourcePathArg=--src-path="$(subst :,$(PATH_SEPARATOR),$(subst ::,:,$(sourcePath)))"
+		sourcePathArg=--src-path="$(subst :,$(PATH_SEPARATOR),$(subst ::,:,$(sourcePath):$(commonDependency)))"
 	endif
 endif
 

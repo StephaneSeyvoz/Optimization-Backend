@@ -1,6 +1,6 @@
 
 // -----------------------------------------------------------------------------
-// Implementation of the primitive com.schneiderelectric.optimisation.staticbinding.SingletonComponent.
+// Implementation of the primitive common.SingletonComponent.
 // -----------------------------------------------------------------------------
 
 
@@ -13,7 +13,7 @@
  * Here we simply print a string advertising :
  * <br/> - The current method : 'main'.
  * <br/> - The current interface name : 'serverInterface'.
- * <br/> - The current definition : 'com.schneiderelectric.optimisation.staticbinding.SingletonComponent'
+ * <br/> - The current definition : 'staticbinding.SingletonComponent'
  * <br/>
  *
  * And return a success code.
@@ -21,7 +21,7 @@
 int METH(serverInterface,main)(int argc, char** argv)
 {
 	int returnValue=0;
-	printf("This is the 'main' method of the 'serverInterface' interface of the 'com.schneiderelectric.optimisation.staticbinding.MultiInstanciableComponent' definition \n");
+	printf("This is the 'main' method of the 'serverInterface' interface of the 'common.SingletonComponent' definition \n");
 	printf("Calling the 'main' method of out 'firstClientInterface' interface\n");
 	returnValue += CALL(firstClientInterface,main)(argc,argv);
 	if (IS_BOUND(secondClientInterface)) {
