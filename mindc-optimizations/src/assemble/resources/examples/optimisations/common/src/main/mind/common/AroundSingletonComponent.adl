@@ -1,0 +1,14 @@
+/**
+ * This component 
+ */
+
+@Singleton
+composite common.AroundSingletonComponent {
+	provides boot.Main as serverInterface;
+	binds this.serverInterface to singletonComp.serverInterface;
+	contains common.SingletonComponent as singletonComp;
+	binds singletonComp.firstClientInterface to this.firstClientInterface;
+	requires boot.Main as firstClientInterface;
+	binds singletonComp.secondClientInterface to this.secondClientInterface;
+	requires optional boot.Main as secondClientInterface;
+}

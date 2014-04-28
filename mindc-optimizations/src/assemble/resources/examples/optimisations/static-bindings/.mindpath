@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mindpath>
 	<mindpathentry kind="SOURCE" path="/static-bindings/src/main/mind"/>
-	<mindpathentry kind="SOURCE" path="/static-bindings/src/test/mind"/>
 	<mindpathentry kind="PROJECT" path="/common"/>
 	<mindpathentry kind="PROJECT" path="/RUNTIME"/>
+	<mindpathentry kind="APPLI" path="staticbindings.StaticBindingsApplication:StaticBindingsApplication"/>
 </mindpath>

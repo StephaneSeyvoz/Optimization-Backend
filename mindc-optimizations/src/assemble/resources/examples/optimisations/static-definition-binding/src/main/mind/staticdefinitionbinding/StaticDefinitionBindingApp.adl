@@ -1,0 +1,36 @@
+/**
+ * This component is part of the example demonstrating the usage of the 
+ * '@StaticDefinitionBinding' annotations.
+ * It is an optimized version of the component 
+ * @component common.MultiInstanceApplication
+ */ 
+
+
+// As the annotation '@StaticDefinitionsBindingsList' is not contextual
+// We can apply it on an inherited component instead of modifying 
+// the original file.
+// Very few tests are implemented to verify the assumptions below.
+// Use with care 
+@StaticDefinitionsBindingsList({
+
+// This specify that ALL instances of SingletonComponent component, 
+// will have there 'clientInterface' interface bound to the 
+// 'serverInterface' of an instance a 'MultiInstanciableComponent' component.
+@StaticDefinitionBinding(
+fromItf="common.SingletonComponent.clientInterface",
+toItf="common.MultiInstanciableComponent.serverInterface"
+),
+
+// This specify that ALL instances of Boostrap component, 
+// will have there 'entryPoint' interface bound to the 
+// 'serverInterface' of an instance a 'SingletonComponent' component.
+@StaticDefinitionBinding(
+fromItf="boot.Bootstrap.entryPoint",
+toItf="common.SingletonComponent.serverInterface"
+)
+})
+
+composite 
+staticdefinitionbinding.StaticDefinitionBindingApp 
+extends common.MultiInstanceApplication {	
+}

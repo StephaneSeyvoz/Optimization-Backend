@@ -1,0 +1,45 @@
+/**
+ * This component is part of the example demonstrating the usage 
+ * of the '@GarbageComposite' optimization.
+ * It is a manually optimized version of the 
+ *
+ * @component 
+ * garbagecomposite.CompositeApplication 
+ * component
+ * 
+ * Have a look at the 
+ * 
+ * @component 
+ * garbagecomposite.CompositeApplication 
+ * component for more documentation.
+ *
+ */
+ 
+@Singleton
+
+//Directly specify that we don't want to keep the sub composites
+@GarbageComposite
+composite 
+garbagecomposite.GarbagedCompositeApplication 
+{
+ 	contains boot.Bootstrap as bootstrap; 
+	binds bootstrap.entryPoint to singletonComp.serverInterface;
+	/**
+	 * This component is a composite. It will be replaced by it's content.
+	 */
+	contains 
+	common.AroundSingletonComponent 
+	as 
+	singletonComp;
+	
+	binds singletonComp.firstClientInterface 
+	to firstMultiInstanciableComp.serverInterface;
+	
+	/**
+	 * This component is a composite. It will be replaced by it's content. 
+	 */
+	contains 
+	common.AroundMultiInstanciableComponent 
+	as 
+	firstMultiInstanciableComp;	
+}
