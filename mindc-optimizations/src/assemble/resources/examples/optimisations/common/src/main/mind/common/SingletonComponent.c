@@ -13,7 +13,7 @@
  * Here we simply print a string advertising :
  * <br/> - The current method : 'main'.
  * <br/> - The current interface name : 'serverInterface'.
- * <br/> - The current definition : 'staticbinding.SingletonComponent'
+ * <br/> - The current definition : 'common.SingletonComponent'
  * <br/>
  *
  * And return a success code.
