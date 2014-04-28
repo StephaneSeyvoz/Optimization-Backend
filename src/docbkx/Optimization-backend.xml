@@ -324,8 +324,7 @@
           <title>Extra file example 1</title>
 
           <programlisting>
-				<xi:include
-              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
+				<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   	        </programlisting>
         </example>
@@ -338,9 +337,9 @@
           <title>Extra file example 2</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-</programlisting>
+		  </programlisting>
         </example>
       </formalpara>
     </section>
@@ -512,9 +511,9 @@
           <title>The @flatten annotation</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/com/schneiderelectric/optimisation/garbagecomposite/GarbagedCompositeApplication.adl"
+		    <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/com/schneiderelectric/optimisation/garbagecomposite/GarbagedCompositeApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-</programlisting>
+		  </programlisting>
         </example>
       </formalpara>
     </section>
@@ -546,7 +545,7 @@
       <para>This annotation must be attached to a binding definition.</para>
 
       <note>
-        <para>This annocation is applicable on collections.</para>
+        <para>This annotation is applicable on collections.</para>
       </note>
 
       <example>
@@ -607,9 +606,9 @@
           <title>The @Static annotation</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-</programlisting>
+		  </programlisting>
         </example>
       </formalpara>
     </section>
@@ -720,10 +719,10 @@
           <title>The @Singleton annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
-<?db-font-size 75% ?>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
+			<?db-font-size 75% ?>
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-</programlisting>
+	      </programlisting>
         </example>
       </formalpara>
 
@@ -820,7 +819,7 @@
       <para>This annotation is used on composite definition.</para>
 
       <note>
-        <para>This annocation is applicable on collections.</para>
+        <para>This annotation is applicable on collections.</para>
       </note>
 
       <note>
@@ -920,11 +919,10 @@
           <title>The @StaticBindings annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
-<?db-font-size 75% ?>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+			<?db-font-size 75% ?>
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-
-</programlisting>
+		  </programlisting>
         </example>
       </formalpara>
     </section>
@@ -1037,10 +1035,10 @@
           annotation.</para>
 
           <programlisting language="adl" linenumbering="unnumbered">
-<?db-font-size 75% ?>
-<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+			<?db-font-size 75% ?>
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-</programlisting>
+		  </programlisting>
         </example>
       </formalpara>
     </section>
