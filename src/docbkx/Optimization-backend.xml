@@ -229,7 +229,9 @@
 
                 <entry>--flatten</entry>
 
-                <entry>This option remove all composite levels. All component are in the same level. The only remaining composite is the main composite.</entry>
+                <entry>This option remove all composite levels. All component
+                are in the same level. The only remaining composite is the
+                main composite.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -320,8 +322,11 @@
 
         <example>
           <title>Extra file example 1</title>
-            <programlisting>
-				<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+          <programlisting>
+				<xi:include
+              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
+              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   	        </programlisting>
         </example>
       </formalpara>
@@ -339,6 +344,81 @@
         </example>
       </formalpara>
     </section>
+  </chapter>
+
+  <chapter>
+    <title>Optimizations overview</title>
+
+    <table frame="all">
+      <title>Synthesis</title>
+
+      <para>This table attempts to synthesize optimization annotations.</para>
+
+      <tgroup align="left" cols="3" colsep="0.2" rowsep="1">
+        <thead>
+          <row>
+            <entry>Reconfigurable</entry>
+
+            <entry>Multi-instance (default behaviour without
+            optimization)</entry>
+
+            <entry>Single-instance (Singleton)</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Yes</entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>this-&gt;type.itf.fct(this, args ...)</para>
+            </entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>this-&gt;type.itf.fct(args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@Singleton (for component)</para>
+
+              <para>@Single (for provided interface)</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>No or partially</entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>fct(this, args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@StaticDefinitionBindingList</para>
+
+              <para>@FreezeCallPointer</para>
+            </entry>
+
+            <entry>
+              <para>CALL</para>
+
+              <para>fct(args ...)</para>
+
+              <para>RELATED ANNOTATION</para>
+
+              <para>@Static</para>
+
+              <para>@StaticBindings</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
   </chapter>
 
   <chapter>
@@ -465,6 +545,10 @@
 
       <para>This annotation must be attached to a binding definition.</para>
 
+      <note>
+        <para>This annocation is applicable on collections.</para>
+      </note>
+
       <example>
         <title>@Static overview</title>
 
@@ -523,7 +607,7 @@
           <title>The @Static annotation</title>
 
           <programlisting>
-<xi:include href="../../mindc-optimizations\src\assemble\resources\examples\optimisations\static\src\main\mind\com\schneiderelectric\optimisation\staticbinding\StaticBindingApplication.adl"
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </programlisting>
         </example>
@@ -580,8 +664,6 @@
           </imageobject>
         </mediaobject>
       </example>
-
-      <para/>
 
       <formalpara>
         <title>Usage condition</title>
@@ -644,6 +726,65 @@
 </programlisting>
         </example>
       </formalpara>
+
+      <section>
+        <title>Tips : Binding optimization on multi-instanciable
+        components</title>
+
+        <para>By definition a multi-intanciable component is not singleton. So
+        it's impossible to apply a binding optimization with the
+        <code>@StaticBindings</code> annotation. </para>
+
+        <para>In order to get around this problem the following tip is
+        recommended: </para>
+
+        <para>
+          <classname>Create an anonymous component with the
+          <code>@Singleton</code> annotation that extends the
+          multi-instanciable component.</classname>
+
+          <note>Component membrane and user code will be duplicated.</note>
+
+          <example>
+            <title>Singletonization of multi-instanciable component</title>
+			<para>
+				In this example the client component requires a collection of "MyItf" interface.
+				We want to optimize bindings between this client to "MultiInstanciableComponent" by using the
+				<code>@Static</code> and <code>@StaticBindings</code> annotations. To do this we have to singletonize all instances of "MultiInstanciableComponent".
+
+				<note>
+					The definition extension from anonymous definition is explained in the mindc documentation <code>http://mind.ow2.org/mindc/userGuide/ch02s11.html</code>
+				</note>
+			</para>
+
+            <programlisting language="adl" linenumbering="unnumbered">
+			@StaticBindings
+			composite MainComposite {
+				// Bindings
+				binds clientComp.MyItf[0] to MultiInstanciableComp1.MyItf;
+				binds clientComp.MyItf[1] to MultiInstanciableComp2.MyItf;
+				binds clientComp.MyItf[2] to MultiInstanciableComp3.MyItf;
+				binds clientComp.MyItf[3] to MultiInstanciableComp4.MyItf;
+				
+				// Contains
+				contains clientComponent as clientComp;
+				
+				contains MultiInstanciableComponent as MultiInstanciableComp1 
+				@Singleton primitive{};
+				
+				contains MultiInstanciableComponent as MultiInstanciableComp2 
+				@Singleton primitive{};
+				
+				contains MultiInstanciableComponent as MultiInstanciableComp3 
+				@Singleton primitive{};
+				
+				contains MultiInstanciableComponent as MultiInstanciableComp4 
+				@Singleton primitive{};
+			}
+			</programlisting>
+          </example>
+        </para>
+      </section>
     </section>
 
     <section id="optim-annot-StaticBindings">
@@ -952,6 +1093,11 @@
         the composite.</para>
       </note>
 
+      <note>
+        <para>Neither server collection nor client collection are supported
+        with this optimization.</para>
+      </note>
+
       <example>
         <title>@StaticDefinitionBindingsList overview</title>
 
@@ -983,6 +1129,9 @@
 
         <para>The server component is not
         <classname>singleton</classname>.</para>
+
+        <para>The client and server interface must be single (no
+        collection)</para>
       </formalpara>
 
       <formalpara>
@@ -1193,78 +1342,5 @@
         memory and method call time.</para>
       </formalpara>
     </section>
-  </chapter>
-
-  <chapter>
-    <title>Synthesis</title>
-
-    <table frame="all">
-      <title>Synthesis</title>
-
-      <tgroup align="left" cols="3" colsep="0.2" rowsep="1">
-        <thead>
-          <row>
-            <entry>Reconfigurable</entry>
-
-            <entry>Multi-instance (default behaviour without
-            optimization)</entry>
-
-            <entry>Single-instance (Singleton)</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry>Yes</entry>
-
-            <entry>
-              <para>CALL</para>
-
-              <para>this-&gt;type.itf.fct(this, args ...)</para>
-            </entry>
-
-            <entry>
-              <para>CALL</para>
-
-              <para>this-&gt;type.itf.fct(args ...)</para>
-
-              <para>RELATED ANNOTATION</para>
-
-              <para>@Singleton (for component)</para>
-
-              <para>@Single (for provided interface)</para>
-            </entry>
-          </row>
-
-          <row>
-            <entry>No or partially</entry>
-
-            <entry>
-              <para>CALL</para>
-
-              <para>fct(this, args ...)</para>
-
-              <para>RELATED ANNOTATION</para>
-
-              <para>@StaticDefinitionBindingList</para>
-            </entry>
-
-            <entry>
-              <para>CALL</para>
-
-              <para>fct(args ...)</para>
-
-              <para>RELATED ANNOTATION</para>
-
-              <para>@Static</para>
-
-              <para>@StaticBindings</para>
-
-              <para>@FreezeCallPointer</para>
-            </entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
   </chapter>
 </book>
