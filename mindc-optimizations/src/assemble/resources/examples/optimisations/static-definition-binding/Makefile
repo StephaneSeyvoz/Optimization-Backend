@@ -140,7 +140,13 @@ all: compile graph doc test
 
 clean_all: clean clean_graph clean_doc clean_test
 
-compile: build
+windows_warning:
+ifneq (,$(findstring Windows, $(OS)))
+	@echo 'WARNING (Windows users): Compiling this example MAY FAIL because of long file paths when placed in a deep folder hierarchy (lstat error). Moving it closer to the root of your drive will resolve the issue.'; \
+	read -p "Press a key to continue compiling..."
+endif
+
+compile: build windows_warning
 ifdef targetComponent
 	if test ! -x $(MINDC); \
         then echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \

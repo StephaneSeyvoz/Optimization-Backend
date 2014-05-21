@@ -1,4 +1,4 @@
-EXAMPLES = garbage-composite static static-bindings static-definition-binding
+EXAMPLES = garbage-composite static static-bindings
 
 all: common_all $(EXAMPLES:%=%.all)
 clean: common_clean $(EXAMPLES:%=%.clean)
