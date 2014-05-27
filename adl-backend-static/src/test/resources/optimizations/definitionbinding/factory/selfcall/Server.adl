@@ -36,7 +36,6 @@
 @controller.AttributeController
 primitive definitionbinding.factory.selfcall.Server {
   
-  @Single
   provides Service as s ;
   
   attribute string header = "-> ";
