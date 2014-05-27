@@ -1,4 +1,4 @@
-package org.ow2.mind.adl.annotations;
+package org.ow2.mind.adl.annotation.predefined;
 
 import org.ow2.mind.adl.annotation.ADLAnnotationTarget;
 import org.ow2.mind.annotation.Annotation;

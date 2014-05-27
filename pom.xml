@@ -23,15 +23,15 @@
 
 	<contributors>
 		<contributor>
-            <name>Yves Teissier</name>
-            <email>yteissier@assystem.com</email>
-            <organization>Assystem</organization>
-        </contributor>
-        		<contributor>
-            <name>Julien Tous</name>
-            <email>julien.tous@orange.com</email>
-            <organization>Orange</organization>
-        </contributor>
+			<name>Yves Teissier</name>
+			<email>yteissier@assystem.com</email>
+			<organization>Assystem</organization>
+		</contributor>
+		<contributor>
+			<name>Julien Tous</name>
+			<email>julien.tous@orange.com</email>
+			<organization>Orange</organization>
+		</contributor>
 	</contributors>
 
 	<modules>

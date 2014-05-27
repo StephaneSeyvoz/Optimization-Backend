@@ -11,7 +11,6 @@
 	<name>mindc-optimizations</name>
 	<description>optimizations integration module</description>
 
-	<groupId>org.ow2.mind</groupId>
 	<artifactId>mindc-optimizations</artifactId>
 	
 	<dependencies>

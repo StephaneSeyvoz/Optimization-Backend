@@ -24,20 +24,10 @@
     id="org.ow2.mind.single-interface"
     name="An extension to the IDL and ADL Backends of the MIND Compiler">
 
-	<!-- Extension that add a '<minus-minus>optimize' command-line option to mindc -->    
-	<extension
-	point="org.ow2.mind.mindc.command-line-options">
-		
-		<cmdFlag
-			id="org.ow2.mind.single-interface.SingleFlag"
-			longName="singleitfplugin"
-			description="Enable the Schneider-Electric experimental single-interface optimization plugin" />
-	</extension>
-
 	<extension
         point="org.ow2.mind.predefined-annotations">
         <annotation
-            package="org.ow2.mind.adl.annotations" />
+            package="org.ow2.mind.adl.annotations.predefined" />
     </extension>
 
 	<extension
@@ -47,8 +37,9 @@
             <override
                 class="org.ow2.mind.idl.IDLBackendModule" />
  			<enableWhen>
+				<!--  this option is defined in the adl-backend-static mind-plugin.xml -->
 				<cmdOption
-					id="org.ow2.mind.single-interface.SingleFlag" />
+					id="org.ow2.mind.adl-backend-static.Optim" />
 			</enableWhen>
         </module>
     </extension>

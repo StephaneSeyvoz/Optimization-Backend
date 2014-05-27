@@ -25,13 +25,13 @@
 
 package org.ow2.mind.adl.annotation.predefined;
 
+import org.ow2.mind.adl.FreezeCallPointerAnnotationProcessor;
 import org.ow2.mind.adl.annotation.ADLAnnotationTarget;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.ADLLoaderProcessor;
 import org.ow2.mind.annotation.Annotation;
 import org.ow2.mind.annotation.AnnotationElement;
 import org.ow2.mind.annotation.AnnotationTarget;
-import org.ow2.mind.adl.StaticAnnotationProcessor;
 
 /**
  * The SingleStaticCallPointer annotation is used to specify that CALL_PTR in the
@@ -83,17 +83,17 @@ import org.ow2.mind.adl.StaticAnnotationProcessor;
  * for the same client component).
  *  
  */
-@ADLLoaderProcessor(processor = StaticAnnotationProcessor.class, phases = {ADLLoaderPhase.AFTER_CHECKING})
-public class SingleStaticCallPointer implements Annotation {
+@ADLLoaderProcessor(processor = FreezeCallPointerAnnotationProcessor.class, phases = {ADLLoaderPhase.AFTER_CHECKING})
+public class FreezeCallPointer implements Annotation {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1018300207099478502L;
 	
-	private final AnnotationTarget[] ANNOTATION_TARGETS = {ADLAnnotationTarget.BINDING};
+	private final AnnotationTarget[] ANNOTATION_TARGETS = { ADLAnnotationTarget.DEFINITION };
 
-	public final String VALUE = "@SingleStaticCallPointer";
+	public final String VALUE = "@FreezeCallPointer";
 	
 	/**
 	 * We need to configure the one and only static destination of CALL_PTR for this
