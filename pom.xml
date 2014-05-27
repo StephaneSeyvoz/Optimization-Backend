@@ -36,7 +36,9 @@
 
 	<modules>
 		<module>adl-frontend-static</module>
+<!-- 
 		<module>single-interface-plugin</module>
+ -->
 		<module>cpl-preproc-static</module>
 		<module>adl-backend-static</module>
         <module>mindc-optimizations</module>
