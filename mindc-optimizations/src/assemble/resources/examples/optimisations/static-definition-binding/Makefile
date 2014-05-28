@@ -143,7 +143,7 @@ clean_all: clean clean_graph clean_doc clean_test
 windows_warning:
 ifneq (,$(findstring Windows, $(OS)))
 	@echo 'WARNING (Windows users): Compiling this example MAY FAIL because of long file paths when placed in a deep folder hierarchy (lstat error). Moving it closer to the root of your drive will resolve the issue.'; \
-	read -p "Press a key to continue compiling..."
+	#read -p "Press a key to continue compiling..."
 endif
 
 compile: build windows_warning
