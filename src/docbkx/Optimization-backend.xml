@@ -60,7 +60,7 @@
 
             <entry>Document review</entry>
           </row>
-		  
+
           <row>
             <entry>0.3</entry>
 
@@ -92,6 +92,16 @@
 
             <entry>Add synthesis chapter. Add generalization of the
             @StaticBindings annotation to collections.</entry>
+          </row>
+
+          <row>
+            <entry>0.6</entry>
+
+            <entry>03/06/2014</entry>
+
+            <entry>Yves Teissier</entry>
+
+            <entry>Add gain table.</entry>
           </row>
         </tbody>
       </tgroup>
@@ -154,7 +164,7 @@
           <member>
             <code>adl-backend-static</code>
           </member>
-		  
+
           <member>
             <code>idl-backend-static</code>
           </member>
@@ -224,7 +234,8 @@
                 <entry>Indicates files that contains optimization
                 rules.</entry>
               </row>
-			  <row>
+
+              <row>
                 <entry>NONE</entry>
 
                 <entry>--flatten</entry>
@@ -250,7 +261,7 @@
       <para>
         <note>Global extensions (.ext files) are defined outside ADLs.</note>
       </para>
-	  
+
       <para>
         <note>Annotations are associated to specific keywords of the MIND
         language.</note>
@@ -324,7 +335,8 @@
           <title>Extra file example 1</title>
 
           <programlisting>
-				<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
+				<xi:include
+              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   	        </programlisting>
         </example>
@@ -421,6 +433,161 @@
   </chapter>
 
   <chapter>
+    <title>Memory and CPU gains</title>
+
+    <table frame="all">
+      <title>Synthesis</title>
+
+      <para>This table aims to identify gains for each optimization.</para>
+
+      <para>The real memory and CPU gains depends on the native compiler (gcc,
+      iar etc...) and optimization options.</para>
+
+      <para>For more details please read the following document : "MIND
+      Optimisation génération de code.ppt" in
+      https://teamforge.schneider-electric.com/sf/docman/do/downloadDocument/projects.mind4se/docman.root.private.docf2603/doc30171</para>
+
+      <tgroup align="left" cols="3" colsep="0.2" rowsep="1">
+        <thead>
+          <row>
+            <entry>Annotation</entry>
+
+            <entry>Memory gain</entry>
+
+            <entry>CPU gain</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>@Singleton</entry>
+
+            <entry>
+              <para>Flash : Add one stub function for each interface
+              mehode.</para>
+
+              <para>RAM : 0</para>
+            </entry>
+
+            <entry>
+              <para>Add an intermediary stub fonction.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@Static</entry>
+
+            <entry>
+              <para>Flash : Remove size of the client interface vtable.</para>
+
+              <para>RAM : Remove the "this" passed during the call (one
+              pointer on the stack)</para>
+            </entry>
+
+            <entry>
+              <para>Remove 2 indirection before the function call (remove some
+              move instruction for each function call).</para>
+
+              <para>We can use optimization option of the native compiler
+              (gcc, iar etc...)</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@StaticBindings</entry>
+
+            <entry>
+              <para>Generalisation of the previous gain one all bindings. Both
+              client and server structures are removed.</para>
+            </entry>
+
+            <entry>
+              <para>Remove indirections.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@StaticDefinitionBindingList</entry>
+
+            <entry>
+              <para>Flash : Remove some byte dedicated to indirections</para>
+
+              <para>RAM : 0</para>
+            </entry>
+
+            <entry>
+              <para>Remove 2 indirection before the function call</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@FreezeCallPointer</entry>
+
+            <entry>
+              <para>Same as @StaticDefinitionBindingList</para>
+            </entry>
+
+            <entry>
+              <para>Same as @StaticDefinitionBindingList</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@Flatten</entry>
+
+            <entry>
+              <para>Flash : Remove size of the composite server interface
+              vtable + factory code + lifecycle methodes + composite internal
+              data</para>
+
+              <para>RAM : Remove data associated with delegation
+              bindings</para>
+            </entry>
+
+            <entry>
+              <para>Remove indirection for binding delagation.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry>@GarbageUnusedInternal</entry>
+
+            <entry>
+              <para>Activated by default</para>
+            </entry>
+
+            <entry>
+              <para>Activated by default</para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <example>
+      <title>@Static gain</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="images/AtStaticGains.png"
+                     format="PNG" scale="70"/>
+        </imageobject>
+      </mediaobject>
+    </example>
+
+    <example>
+      <title>@StaticBindings gain</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="images/AtStaticBindingsGain.png"
+                     format="PNG" scale="70"/>
+        </imageobject>
+      </mediaobject>
+    </example>
+  </chapter>
+
+  <chapter>
     <title>Annotations</title>
 
     <section id="optim-annot-garbagecomposite">
@@ -511,7 +678,8 @@
           <title>The @flatten annotation</title>
 
           <programlisting>
-		    <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/com/schneiderelectric/optimisation/garbagecomposite/GarbagedCompositeApplication.adl"
+		    <xi:include
+              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/garbagecomposite/GarbagedCompositeApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
@@ -606,7 +774,7 @@
           <title>The @Static annotation</title>
 
           <programlisting>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/com/schneiderelectric/optimisation/staticbinding/StaticBindingApplication.adl"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/staticbinding/StaticBindingApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
@@ -720,7 +888,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/com/schneiderelectric/optimisation/common/SingletonComponent.adl"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/common/SingletonComponent.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 	      </programlisting>
         </example>
@@ -732,10 +900,10 @@
 
         <para>By definition a multi-intanciable component is not singleton. So
         it's impossible to apply a binding optimization with the
-        <code>@StaticBindings</code> annotation. </para>
+        <code>@StaticBindings</code> annotation.</para>
 
         <para>In order to get around this problem the following tip is
-        recommended: </para>
+        recommended:</para>
 
         <para>
           <classname>Create an anonymous component with the
@@ -746,15 +914,15 @@
 
           <example>
             <title>Singletonization of multi-instanciable component</title>
-			<para>
-				In this example the client component requires a collection of "MyItf" interface.
-				We want to optimize bindings between this client to "MultiInstanciableComponent" by using the
-				<code>@Static</code> and <code>@StaticBindings</code> annotations. To do this we have to singletonize all instances of "MultiInstanciableComponent".
 
-				<note>
-					The definition extension from anonymous definition is explained in the mindc documentation <code>http://mind.ow2.org/mindc/userGuide/ch02s11.html</code>
-				</note>
-			</para>
+            <para>In this example the client component requires a collection
+            of "MyItf" interface. We want to optimize bindings between this
+            client to "MultiInstanciableComponent" by using the
+            <code>@Static</code> and <code>@StaticBindings</code> annotations.
+            To do this we have to singletonize all instances of
+            "MultiInstanciableComponent". <note> The definition extension from
+            anonymous definition is explained in the mindc
+            documentation<code>http://mind.ow2.org/mindc/userGuide/ch02s11.html</code></note></para>
 
             <programlisting language="adl" linenumbering="unnumbered">
 			@StaticBindings
@@ -920,7 +1088,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
@@ -1036,7 +1204,7 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/com/schneiderelectric/optimisation/staticbindings/StaticBindingsApplication.adl"
+			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
@@ -1164,7 +1332,7 @@
           <title>The @StaticDefinitionBindingsList annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?><xi:include
-              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/com/schneiderelectric/optimisation/staticdefinitionbinding/StaticDefBindingApp.adl"
+              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/staticdefinitionbinding/StaticDefinitionBindingApp.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
         </example>
       </formalpara>
@@ -1195,7 +1363,6 @@
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
       call an explicit server interface via an interface pointer (macro
       CALL_PTR), in an optimized way. Its objective is the same as
-
       <classname>StaticDefinitionBinding</classname>, but allows to optimize
       the CALL_PTR (which is thread-safe and lock-free), while calling a pool
       of target component instances (restricted to the same target definition,
