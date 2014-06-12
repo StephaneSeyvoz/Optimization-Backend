@@ -1,4 +1,4 @@
-package org.ow2.mind.adl.annotations;
+package org.ow2.mind.adl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.objectweb.fractal.adl.ADLErrors;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
@@ -15,13 +14,11 @@ import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
-import org.ow2.mind.adl.annotation.predefined.UseIDL;
+import org.ow2.mind.adl.annotation.predefined.StaticDefinitionBinding;
+import org.ow2.mind.adl.annotation.predefined.StaticDefinitionsBindingsList;
 import org.ow2.mind.adl.ast.MindInterface;
 import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.annotation.Annotation;
-import org.ow2.mind.error.ErrorManager;
-
-import com.google.inject.Inject;
 
 public class StaticDefinitionsBindingsListAnnotationProcessor extends
 AbstractADLLoaderAnnotationProcessor {

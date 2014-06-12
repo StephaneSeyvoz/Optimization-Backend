@@ -136,9 +136,9 @@ testDocOutputDir=$(confOutputDirVar)/test-doc
 
 # The real build command.
 
-all: compile graph doc test  
+all: compile graph doc  
 
-clean_all: clean clean_graph clean_doc clean_test
+clean_all: clean clean_graph clean_doc
 
 windows_warning:
 ifneq (,$(findstring Windows, $(OS)))

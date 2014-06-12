@@ -1,4 +1,4 @@
-package org.ow2.mind.adl.annotations;
+package org.ow2.mind.adl.annotations.predefined;
 
 import java.util.Map;
 

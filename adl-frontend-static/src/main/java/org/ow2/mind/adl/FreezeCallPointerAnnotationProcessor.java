@@ -22,10 +22,8 @@
  * Based on an idea suggested by Julien Tous, answering time-critical issues
  * on an hard real-time internal product development.
  */
-package org.ow2.mind.adl.annotations;
+package org.ow2.mind.adl;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +37,7 @@ import org.objectweb.fractal.adl.types.TypeInterface;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
+import org.ow2.mind.adl.annotation.predefined.FreezeCallPointer;
 import org.ow2.mind.adl.idl.InterfaceDefinitionDecorationHelper;
 import org.ow2.mind.annotation.Annotation;
 import org.ow2.mind.idl.ast.InterfaceDefinition;
