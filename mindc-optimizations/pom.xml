@@ -19,11 +19,13 @@
 			<artifactId>adl-frontend-static</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+<!-- 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>single-interface-plugin</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+ -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cpl-preproc-static</artifactId>
