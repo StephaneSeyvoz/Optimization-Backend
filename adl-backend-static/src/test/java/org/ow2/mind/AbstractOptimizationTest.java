@@ -5,6 +5,7 @@ import static org.testng.Assert.assertTrue;
 import java.io.File;
 
 import org.objectweb.fractal.adl.ADLException;
+import org.ow2.mind.cli.OptimOptionHandler;
 import org.ow2.mind.io.BasicOutputFileLocator;
 
 public abstract class AbstractOptimizationTest extends AbstractFunctionalTest {
@@ -31,6 +32,10 @@ public abstract class AbstractOptimizationTest extends AbstractFunctionalTest {
 		if (!buildDir.exists()) {
 			buildDir.mkdirs();
 		}
+		
+		// Remove users warning
+		runner.context.put(OptimOptionHandler.OPTIM_CONTEXT_KEY, true);
+		
 		runner.context.put(BasicOutputFileLocator.OUTPUT_DIR_CONTEXT_KEY, buildDir);
 		ForceRegenContextHelper.setForceRegen(runner.context, force);
 		ForceRegenContextHelper.setKeepTemp(runner.context, true);
