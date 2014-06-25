@@ -32,7 +32,8 @@
 			id="org.ow2.mind.adl-backend-static.Optim"
 			shortName="O"
 			longName="optimize"
-			description="Use the Schneider-Electric experimental optimization backend" />
+			description="Use the Schneider-Electric experimental optimization backend"
+			handler="org.ow2.mind.cli.OptimOptionHandler" />
 	</extension>
 
     <extension-point

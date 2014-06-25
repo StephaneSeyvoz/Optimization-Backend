@@ -40,6 +40,7 @@ import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
 import org.ow2.mind.adl.annotation.predefined.FreezeCallPointer;
 import org.ow2.mind.adl.idl.InterfaceDefinitionDecorationHelper;
 import org.ow2.mind.annotation.Annotation;
+import org.ow2.mind.cli.OptimOptionHandler;
 import org.ow2.mind.idl.ast.InterfaceDefinition;
 
 /**
@@ -107,6 +108,9 @@ AbstractADLLoaderAnnotationProcessor {
 
 		assert annotation instanceof FreezeCallPointer;
 
+		if (!OptimOptionHandler.isOptimizationBackendEnabled(context))
+			logger.warning("@FreezeCallPointer found in '" + definition.getName() + "' definition, but --optimize is missing ! Add it to enable optimizations.");
+		
 		Definition targetDef = null;
 		FreezeCallPointer sscpAnno = (FreezeCallPointer) annotation;
 

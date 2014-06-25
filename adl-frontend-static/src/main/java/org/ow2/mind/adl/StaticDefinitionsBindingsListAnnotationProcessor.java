@@ -19,6 +19,7 @@ import org.ow2.mind.adl.annotation.predefined.StaticDefinitionsBindingsList;
 import org.ow2.mind.adl.ast.MindInterface;
 import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.annotation.Annotation;
+import org.ow2.mind.cli.OptimOptionHandler;
 
 public class StaticDefinitionsBindingsListAnnotationProcessor extends
 AbstractADLLoaderAnnotationProcessor {
@@ -32,6 +33,9 @@ AbstractADLLoaderAnnotationProcessor {
 
 		assert annotation instanceof StaticDefinitionsBindingsList;
 
+		if (!OptimOptionHandler.isOptimizationBackendEnabled(context))
+			logger.warning("@StaticBindingsList found in '" + definition.getName() + "' definition, but --optimize is missing ! Add it to enable optimizations.");
+		
 		StaticDefinitionsBindingsList anno = (StaticDefinitionsBindingsList) annotation;
 		StaticDefinitionBinding[] arrayOfDefinitionsBinding = anno.value;
 

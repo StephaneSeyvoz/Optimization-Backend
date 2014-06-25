@@ -41,6 +41,7 @@ import org.ow2.mind.adl.membrane.ast.ControllerContainer;
 import org.ow2.mind.adl.membrane.ast.ControllerInterface;
 import org.ow2.mind.annotation.Annotation;
 import org.ow2.mind.annotation.AnnotationHelper;
+import org.ow2.mind.cli.OptimOptionHandler;
 
 public class StaticBindingsAnnotationProcessor extends
 AbstractADLLoaderAnnotationProcessor {
@@ -75,11 +76,12 @@ AbstractADLLoaderAnnotationProcessor {
 					OptimADLErrors.INVALID_STATICBINDINGS_NOT_A_COMPOSITE, definition);
 			return null;
 		}
-
-		// TODO : check if the source/destination of bindings are Singleton
-		// TODO : check if the current component should be a Singleton ?
+		
 		if ((phase == ADLLoaderPhase.AFTER_CHECKING) || (phase == ADLLoaderPhase.AFTER_TEMPLATE_INSTANTIATE)) {
-
+			
+			if (!OptimOptionHandler.isOptimizationBackendEnabled(context))
+				logger.warning("@StaticBindings found in '" + definition.getName() + "' definition, but --optimize is missing ! Add it to enable optimizations.");
+			
 			if (!OptimASTHelper.isSingleton(definition)) {
 				errorManagerItf.logError(
 						OptimADLErrors.INVALID_STATICBINDINGS_NOT_SINGLETON, definition);

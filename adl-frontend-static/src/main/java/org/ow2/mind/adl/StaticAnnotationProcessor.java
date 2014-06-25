@@ -39,6 +39,7 @@ import org.ow2.mind.adl.ast.Binding;
 import org.ow2.mind.adl.ast.Component;
 import org.ow2.mind.adl.ast.OptimASTHelper;
 import org.ow2.mind.annotation.Annotation;
+import org.ow2.mind.cli.OptimOptionHandler;
 
 public class StaticAnnotationProcessor extends
 AbstractADLLoaderAnnotationProcessor {
@@ -95,6 +96,10 @@ AbstractADLLoaderAnnotationProcessor {
 
 		if (phase == ADLLoaderPhase.AFTER_CHECKING)
 		{
+			if (!OptimOptionHandler.isOptimizationBackendEnabled(context))
+				logger.warning("@Static found in '" + definition.getName() + "' definition, but --optimize is missing ! Add it to enable optimizations.");
+			
+			
 			binding = (Binding) node;
 
 			/*
