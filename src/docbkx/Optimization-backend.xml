@@ -103,6 +103,17 @@
 
             <entry>Add gain table.</entry>
           </row>
+
+          <row>
+            <entry>0.7</entry>
+
+            <entry>09/07/2014</entry>
+
+            <entry>Stephane Seyvoz</entry>
+
+            <entry>Removed all @Single-related references
+            (deprecated).</entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -172,10 +183,6 @@
           <member>
             <code>cpl-preproc-static</code>
           </member>
-
-          <member>
-            <code>single-interface-plugin</code>
-          </member>
         </simplelist>
       </para>
 
@@ -215,15 +222,6 @@
 
                 <entry>Informes the mindc compiler to use the optimization
                 backend.</entry>
-              </row>
-
-              <row>
-                <entry>NONE</entry>
-
-                <entry>--singleitfplugin</entry>
-
-                <entry>Enable the additional optimization plugin mandatory for
-                the usage of @Single and @StaticDefinitionBinding</entry>
               </row>
 
               <row>
@@ -395,8 +393,6 @@
               <para>RELATED ANNOTATION</para>
 
               <para>@Singleton (for component)</para>
-
-              <para>@Single (for provided interface)</para>
             </entry>
           </row>
 
@@ -1449,62 +1445,6 @@
               href="../../adl-backend-static/src/test/resources/optimizations/singlestaticcallptr/factory/selfcall/Client.adl"
               parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
         </example>
-      </formalpara>
-    </section>
-
-    <section id="optim-annot-Single">
-      <title>
-        <classname>@Single</classname>
-      </title>
-
-      <formalpara>
-        <title>Annotation fields</title>
-
-        <para>NO FIELD</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Annotation targets</title>
-
-        <para>
-          <simplelist type="inline">
-            <member>provided interface</member>
-          </simplelist>
-        </para>
-      </formalpara>
-
-      <para>The <classname>Single</classname> annotation allows to make a
-      provided interface unique.</para>
-
-      <example>
-        <title>@Single overview</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" fileref="images/AtSingle.png"
-                       format="PNG" scale="80"/>
-          </imageobject>
-        </mediaobject>
-      </example>
-
-      <formalpara>
-        <title>Usage condition</title>
-
-        <para>To be used only with the association of the annotation
-        @StaticDefinitionBindingsList</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Consequences</title>
-
-        <para>The server interface can't be discovered.</para>
-      </formalpara>
-
-      <formalpara>
-        <title>Gains</title>
-
-        <para>The vtable of the provided interface is suppressed. So gain in
-        memory and method call time.</para>
       </formalpara>
     </section>
   </chapter>
