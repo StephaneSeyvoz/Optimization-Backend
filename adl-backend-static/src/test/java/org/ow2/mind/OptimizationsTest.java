@@ -203,7 +203,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 			final String adl;
 			adl = (runAnno.addBootstrap)
-					? "GenericApplication" + "SBrGUIr" + "<" + adlName + ">"
+					? "GenericApplication" + "SBr" + "<" + adlName + ">"
 							: adlName;
 
 			File exeFile = runner.compile(adl, runAnno.executableName);
@@ -230,28 +230,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 		initContext(true);
 		String adlName = "partial.HelloworldApplicationSB_HWnoSB_sHWSB";
-
-		List<String> flags = new ArrayList<String>();
-
-		runner.addCFlags(flags);
-
-		File exeFile = runner.compile(adlName, null);
-		final int r = runner.run(exeFile, (String[]) null);
-
-		assertEquals(r, 0, "Unexpected return value");
-	}
-
-	/**
-	 * Same as partialAlternateOptimizationsTest() but with internal data garbaging (recursively on the whole architecture).
-	 */
-	@Test(groups = {"optimizations"})
-	public void partialAlternateOptimizationsTestWithGUIr()
-			throws Exception {
-		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
-				"common", "optimizations");
-
-		initContext(true);
-		String adlName = "partial.HelloworldApplicationSBGUIr_HWnoSB_sHWSB";
 
 		List<String> flags = new ArrayList<String>();
 
