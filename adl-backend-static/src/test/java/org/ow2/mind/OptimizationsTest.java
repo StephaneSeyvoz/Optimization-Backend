@@ -70,7 +70,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		List<String> flags = new ArrayList<String>();
 
 		// GarbageUnusedInternals <=> GUI, StaticBindings <=> SB, r = recursive
-		String annotationCombinations[] = { "", "GUI", "GUIr", "S", "SB", "SBGUI", "SBGUIr", "SBr", "SBrGUI", "SBrGUIr"} ;
+		String annotationCombinations[] = { "", "S", "SB", "SBr"} ;
 
 		for (int i = 0; i < ADLs.length; i++) {
 			for (String annoCombo : annotationCombinations) {
