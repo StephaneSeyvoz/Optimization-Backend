@@ -140,21 +140,21 @@ all: compile graph doc
 
 clean_all: clean clean_graph clean_doc
 
-windows_warning:
-ifneq (,$(findstring Windows, $(OS)))
-	@echo 'WARNING (Windows users): Compiling this example MAY FAIL because of long file paths when placed in a deep folder hierarchy (lstat error). Moving it closer to the root of your drive will resolve the issue.'; \
-	#read -p "Press a key to continue compiling..."
-endif
-
-compile: build windows_warning
+compile: build
 ifdef targetComponent
 	if test ! -x $(MINDC); \
         then echo ' Not found mindc ! Set MIND_ROOT variable or go to 'Mindc location' eclipse preference page'; \
-    	else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
-    fi
+        else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
+    fi || if test ! -x $(findstring Windows, $(OS)); \
+        then echo 'WARNING for Windows users:';\
+        echo '  Compilation of this example HAVE FAILED, this may be due to long file paths if example is placed in a deep folder hierarchy (lstat error).';\
+        echo '  Move it closer to the root of your drive to solve the issue.';\
+        #read -p "Press a key to continue compiling...";\
+        else false ;\
+    fi 
 else
 	echo "No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
-endif
+endif 
 
 graph: build_graph
 ifdef targetComponent
