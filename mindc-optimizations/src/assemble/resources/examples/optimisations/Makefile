@@ -1,23 +1,22 @@
-EXAMPLES = garbage-composite static static-bindings
+SUBDIRS = $(filter-out common, $(patsubst %/,%, $(sort $(dir $(wildcard */)))))
 
-all: common_all $(EXAMPLES:%=%.all)
-clean: common_clean $(EXAMPLES:%=%.clean)
+.PHONY: $(MAKECMDGOALS) $(SUBDIRS) subdir common
 
-%.all:
-	$(MAKE) -C $(@:%.all=%) compile CONFIGURATION=Default
-	$(MAKE) -C $(@:%.all=%) compile CONFIGURATION=Ext
+# To handle the case of $(MAKECMDGOALS) is empty
+subdir: $(SUBDIRS)
 
-%.clean:
-	$(MAKE) -C $(@:%.clean=%) clean CONFIGURATION=Default
-	$(MAKE) -C $(@:%.clean=%) clean CONFIGURATION=Ext
+$(SUBDIRS): common
+	$(MAKE) -C $@ CONFIGURATION=Default
+	$(MAKE) -C $@ CONFIGURATION=Ext
 
-common_all:
-	$(MAKE) -C common compile CONFIGURATION=BaseApplication
-	$(MAKE) -C common compile CONFIGURATION=CompositeApplication
-	$(MAKE) -C common compile CONFIGURATION=MultiInstanceApplication
-
-	
-common_clean:
-	$(MAKE) -C common clean CONFIGURATION=BaseApplication
-	$(MAKE) -C common clean CONFIGURATION=CompositeApplication
-	$(MAKE) -C common clean CONFIGURATION=MultiInstanceApplication
+# To handle the case of $(MAKECMDGOALS) is not empty
+$(MAKECMDGOALS): common
+	for dir in $(SUBDIRS); do \
+        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Default;\
+	$(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Ext;\
+    done
+    
+common:
+	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=BaseApplication
+	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=CompositeApplication
+	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=MultiInstanceApplication	
