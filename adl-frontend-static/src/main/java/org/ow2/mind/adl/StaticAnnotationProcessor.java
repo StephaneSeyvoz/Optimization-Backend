@@ -81,6 +81,7 @@ AbstractADLLoaderAnnotationProcessor {
 	 */
 	private static Logger logger = FractalADLLogManager.getLogger(Static.VALUE);
 
+	@SuppressWarnings("unchecked")
 	public Definition processAnnotation(Annotation annotation, Node node,
 			Definition definition, ADLLoaderPhase phase,
 			Map<Object, Object> context) throws ADLException {
@@ -184,9 +185,6 @@ AbstractADLLoaderAnnotationProcessor {
 				if (!fromComponent.equals("this")) {
 					// Decorate the client interface for later optimization
 					OptimASTHelper.setStaticDecoration(currentClientItf);
-					
-					// For IS_BOUND to always return true we need a switch at the definition level
-					currentClientDef.astSetDecoration("static-in-parent", Boolean.TRUE);
 					
 					// optimize further on ?
 					if (OptimASTHelper.isInline(binding)) {

@@ -1,0 +1,17 @@
+// Test for MIND-114
+
+@Singleton
+composite hw {
+  provides Main as main;
+
+  contains helloworld.Client as client @Singleton primitive {};
+  contains as server
+    primitive {
+      provides helloworld.Service as s ;
+      attribute int count = 2;
+      source helloworld/server.c;
+    }
+  
+  binds this.main to client.main;
+  binds client.sa to server.s;
+}

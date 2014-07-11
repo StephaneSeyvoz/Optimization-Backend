@@ -206,6 +206,8 @@ InterfaceDescriptorDecl(definition, itf, instance, isInternal) ::= <<
 StaticBindingsClientCollectionsArrays(definition, instance) ::= <<
 <if (definition.interfaces)><definition.interfaces:{ <if (isClient.(it.role))><if (it.numberOfElement)><if (definition.astDecorations.("parent-has-static-bindings"))>
 <SBClientCollectionArrayDecl(definition=definition, itf=it, itfDef=it.astDecorations.("interfaceDefinition"))><endif><endif><endif>} ; separator="\n"><endif>
+<if (definition.astNodeTypes.("internalInterface"))><if (definition.internalInterfaces)><definition.internalInterfaces:{ <if (isClient.(it.role))><if (it.numberOfElement)><if (definition.astDecorations.("has-static-bindings"))>
+<SBClientCollectionArrayDecl(definition=definition, itf=it, itfDef=it.astDecorations.("interfaceDefinition"))><endif><endif><endif>} ; separator="\n"><endif><endif>
 >>
 
 SBClientCollectionArrayDecl(definition, itf, itfDef) ::= <<
@@ -457,14 +459,27 @@ int __component_<definition.name;format="toCName">_destroy(void *instance, void 
 
 AddStaticBindingsCollectionItfInitMacros(definition, instance) ::= <<
 <definition.interfaces:{<AddStaticBindingsCollectionItfInitMacro(definition=definition, itf=it, instance=instance)>}; separator="\n">
+<if (definition.astNodeTypes.("internalInterface"))>
+<if (definition.internalInterfaces)>
+<definition.internalInterfaces:{<AddStaticBindingsCollectionItfInitMacro(definition=definition, itf=it, instance=instance, isInternal="true")>}; separator="\n">
+<endif>
+<endif>
 >>
 
-AddStaticBindingsCollectionItfInitMacro(definition, itf, instance) ::= <<
+AddStaticBindingsCollectionItfInitMacro(definition, itf, instance, isInternal) ::= <<
 <if (isClient.(itf.role))>
 <if (itf.numberOfElement)>
+<if (isInternal)>
+<if (definition.astDecorations.("has-static-bindings"))>
+<if (itf.astDecorations.("interfaceDefinition"))>
+<itf.astDecorations.("interfaceDefinition").methods:{<AddStaticBindingsCollectionFuncInitMacro(definition=definition, itf=itf, method=it, instance=instance)>}; separator="\n">
+<endif>
+<endif>
+<else>
 <if (definition.astDecorations.("parent-has-static-bindings"))>
 <if (itf.astDecorations.("interfaceDefinition"))>
 <itf.astDecorations.("interfaceDefinition").methods:{<AddStaticBindingsCollectionFuncInitMacro(definition=definition, itf=itf, method=it, instance=instance)>}; separator="\n">
+<endif>
 <endif>
 <endif>
 <endif>

@@ -1,0 +1,5 @@
+
+@Singleton
+type generic.ClientType extends ServerType {
+  requires Main as clientMain;
+}

@@ -1,0 +1,4 @@
+
+primitive generic.Server extends ServerType {
+  source ../empty_main.c
+}

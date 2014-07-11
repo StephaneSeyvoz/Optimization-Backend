@@ -12,9 +12,12 @@ public abstract class AbstractOptimizationTest extends AbstractFunctionalTest {
 
 	//protected CompilerRunner runner;
 
-	protected static final String SRC_ROOT = "optimizations";
+	protected static final String FUNCTIONAL_OPTIMIZATIONS_ROOT = "functional-optimizations";
+	protected static final String OPTIMIZATIONS_ROOT = "optimizations";
+/*	protected static final String INCREMENTAL_ROOT = "incremental"; TODO ? */
+	
 	protected static File         buildDir = new File(
-			"target/build/optimizations-test");
+			"target/build/functional-optimizations-test");
 
 	protected void initContext(final boolean force) throws ADLException {
 		// delete previous temporary directory.

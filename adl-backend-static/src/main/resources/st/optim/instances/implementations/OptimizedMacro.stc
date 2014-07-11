@@ -379,7 +379,7 @@ GET_COLLECTION_SIZE(definition) ::= <<
 /* definition of the GET_COLLECTION_SIZE macro */
 #define GET_COLLECTION_SIZE(itfName) GET_COLLECTION_SIZE_##itfName
 
-<definition.interfaces:GET_COLLECTION_SIZEInterface(definition=definition, itf=it); separator="\n">
+<definition.interfaces:{<GET_COLLECTION_SIZEInterface(definition=definition, itf=it)>}; separator="\n">
 >>
 
 GET_COLLECTION_SIZEInterface(definition, itf) ::= <<
@@ -402,24 +402,32 @@ BIND_MY_INTERFACE(definition) ::= <<
 
 IS_BOUND(definition) ::= <<
 #define IS_BOUND_PTR(itfPtr) __component_is_bound(itfPtr)
-<! replacing IS_BOUND by specific behavior when optimized !>
-<if (definition.astDecorations.("parent-has-static-bindings"))>
 #define IS_BOUND(itfName) IS_BOUND_##itfName
+<if (definition.astDecorations.("parent-has-static-bindings"))>
 #define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_COLLECTION_##itfName(idx)
-<definition.interfaces:IS_BOUND_INTERFACE_STATICBINDINGS(definition=definition, itf=it); separator="\n">
+<definition.interfaces:{<IS_BOUND_INTERFACE_STATICBINDINGS(definition=definition, itf=it)>}; separator="\n">
+  <if (definition.astDecorations.("has-static-bindings"))>
+    <if (definition.astNodeTypes.("internalInterface"))>
+      <if (definition.internalInterfaces)>
+<definition.internalInterfaces:{<IS_BOUND_INTERFACE_STATICBINDINGS(definition=definition, itf=it)>}; separator="\n">
+      <endif>
+    <endif>
+  <endif>
 <else>
 #define IS_BOUND_COLLECTION(itfName, idx) IS_BOUND_PTR(GET_MY_INTERFACE_COLLECTION(itfName, idx))
-	<if (definition.astDecorations.("static-in-parent"))>
-#define IS_BOUND(itfName) IS_BOUND_##itfName
-<definition.interfaces:IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it); separator="\n">
-	<else>
-#define IS_BOUND(itfName) IS_BOUND_PTR(GET_MY_INTERFACE(itfName))
-	<endif>
+<definition.interfaces:{<IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it)>}; separator="\n">
+  <if (definition.astDecorations.("has-static-bindings"))>
+    <if (definition.astNodeTypes.("internalInterface"))>
+      <if (definition.internalInterfaces)>
+<definition.internalInterfaces:{<IS_BOUND_INTERFACE_STATIC(definition=definition, itf=it)>}; separator="\n">
+      <endif>
+    <endif>
+  <endif>
 <endif>
 >>
 
 IS_BOUND_INTERFACE_STATICBINDINGS(definition, itf) ::= <<
-<if (itf.numberOfElement)><! Right now we force the user to bind ALL his collection elements to simplify !>
+<if (itf.numberOfElement)>
 <IS_BOUND_COLLECTION_STATICBINDINGS(definition=definition, itf=itf)>
 <else>
   <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding)>
