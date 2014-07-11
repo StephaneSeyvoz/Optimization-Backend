@@ -4,13 +4,14 @@ ifdef MIND_ROOT
   # If MIND_ROOT contains '\', replace them by '/' (for Windows)
   MINDC = $(subst \,/, $(MIND_ROOT)/bin/mindc)
   MINDUNIT = $(subst \,/, $(MIND_ROOT)/bin/mindunit)
+  # Documentation generator command
+  MINDOC = $(subst \,/, $(MIND_ROOT)/bin/mindoc)
+  
 else 
   MINDC = mindc
   MINDUNIT = mindunit
+  MINDOC = mindoc
 endif
-
-# Documentation generator command
-MINDOC = mindoc
 
 # Non-MindEd users should invoke this Makefile using "make CONFIGURATION=<configName> all" to run the build,
 # where <configName> matches the desired <configName>.properties file.
