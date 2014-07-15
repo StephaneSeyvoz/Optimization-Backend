@@ -90,7 +90,7 @@
 
             <entry>Yves Teissier</entry>
 
-            <entry>Add synthesis chapter. Add generalization of the
+            <entry>Add synthesis section. Add generalization of the
             @StaticBindings annotation to collections.</entry>
           </row>
 
@@ -118,11 +118,9 @@
       </tgroup>
     </table>
   </chapter>
-
-  <chapter>
+<chapter>
     <title>Introduction</title>
 
-    <section>
       <para>From the origin the &productName; compiler has been built in order
       to allow maximum flexibility. The downside of this choice is the
       inflation of the generated code and a loss of performances.</para>
@@ -150,23 +148,17 @@
         <para>A definition compiled with some optimizations may not be
         reusable.</para>
       </note>
-    </section>
-  </chapter>
 
-  <chapter>
+  <section>
     <title>Goal of this document</title>
-
-    <section>
       <para>This document is intended for developers who wish to reduce the
       memory footprint of their embedded applications and gain performance for
       some specific features.</para>
-    </section>
-  </chapter>
+  </section>
 
-  <chapter>
+  <section>
     <title>Mindc compiler extension</title>
 
-    <section>
       <para>The optimization extension is provided by the following jar
       files:</para>
 
@@ -188,13 +180,11 @@
 
       <para>Please make sure that these jar files are present in the
       <code>ext</code> folder.</para>
-    </section>
-  </chapter>
+  </section>
 
-  <chapter>
+  <section>
     <title>Running the Mindc compiler</title>
 
-    <section>
       <para>In order to take into account the optimization annotations and
       according code generators, the following options must be used during the
       compiler invocation:</para>
@@ -246,117 +236,85 @@
           </tgroup>
         </table>
       </para>
-    </section>
-  </chapter>
+  </section>
 
-  <chapter>
+  <section>
     <title>Optimization techniques</title>
 
-    <section>
       <para>Ways provided by the &productName; compiler to optimize the
-      application are ADL annotations or global extension.</para>
+      application are ADL annotations inlined in adl files or provided by
+      a deployment style sheet. (<code>--ext-files</code> at the &productName; command line)</para>
 
-      <para>
-        <note>Global extensions (.ext files) are defined outside ADLs.</note>
-      </para>
-
-      <para>
-        <note>Annotations are associated to specific keywords of the MIND
-        language.</note>
-      </para>
-
-      <para>
-        <note>The developer has to identify the code parts to be optimized,
-        following requirements.</note>
-      </para>
+      <itemizedlist>
+      <listitem><para>
+        Annotations are associated to specific keywords of the MIND
+        language.
+      </para></listitem>
+      <listitem><para>
+        The developer has to identify the code parts to be optimized,
+        following requirements.
+      </para></listitem>
+      </itemizedlist>
 
       <para>By default the optimization backend (activated by the -O option)
       limit the generation of fractal factories to the factories declared in
       ADL. This optimization does not reduce the flexibility of the
       application, and can already lead to significant reduction of the code
       sections.</para>
-    </section>
-  </chapter>
+  </section>
 
-  <chapter>
-    <title>Global extensions</title>
+  <section>
+    <title>Deployment style sheet</title>
 
-    <section>
       <para>This mechanism allows to apply optimizations on specific
-      components without ADL code intrusion.</para>
+      components without intrusion in the ADL code. 
+      The deployment context is then clearly separated from the logical architecture description.</para>
 
       <para>This mechanism is materialized by <code>ext</code> files
-      referenced in the <code>Ext.properties</code> file.</para>
+      referenced in the <code>extraOption</code> field of the <code>.properties</code> file.</para>
 
       <note>
-        <para>global extension are applicable on components and bindings but
-        not one interfaces.</para>
+        <para>Deployment style sheet are applicable on components and bindings but
+        not (yet) one interfaces.</para>
       </note>
 
       <formalpara>
         <title>Usage</title>
-
-        <para/>
-
-        <para>
-          <code>(@Singleton || @StaticBindings ||
-          @StaticDefinitionBindingList(...))</code>
-        </para>
-
-        <para>
-          <code>(primitive || composite) &lt;package&gt;.&lt;component
-          name&gt; {</code>
-        </para>
-
-        <para>
-          <code>@Static binds &lt;package&gt;.&lt;instance name from&gt; to
-          &lt;package&gt;.&lt;instance name to&gt;;</code>
-        </para>
-
-        <para>
-          <code>}</code>
-        </para>
-
-        <note>
-          <para>&lt;package&gt;, &lt;component name&gt; and &lt;instance name
-          ...&gt; can be replaced by '*' if we want to apply the annotation to
-          all packages and/or all components.</para>
-        </note>
-      </formalpara>
-
-      <formalpara/>
-
-      <formalpara>
-        <title>Extra file example 1</title>
+		<programlisting>
+(@Singleton || @StaticBindings ||  @StaticDefinitionBindingList(...))
+(primitive || composite) &lt;package&gt;.&lt;component name&gt; {
+  @Static 
+  binds &lt;package&gt;.&lt;instance name from&gt; to &lt;package&gt;.&lt;instance name to&gt;
+}
+		</programlisting>
+		</formalpara>
+        
+        <para>&lt;package&gt;, &lt;component name&gt; and &lt;instance name
+        ...&gt; can be replaced by '*' if we want to apply the annotation to
+        all packages and/or all components.</para>
 
         <example>
           <title>Extra file example 1</title>
 
           <programlisting>
-				<xi:include
-              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include
+href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
   	        </programlisting>
         </example>
-      </formalpara>
-
-      <formalpara>
-        <title>Extra file example 2</title>
 
         <example>
           <title>Extra file example 2</title>
 
           <programlisting>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
-      </formalpara>
-    </section>
+  </section>
   </chapter>
-
-  <chapter>
-    <title>Optimizations overview</title>
+<chapter>
+<title>Optimization overview</title>
 
     <table frame="all">
       <title>Synthesis</title>
@@ -426,9 +384,8 @@
         </tbody>
       </tgroup>
     </table>
-  </chapter>
 
-  <chapter>
+  <section>
     <title>Memory and CPU gains</title>
 
     <table frame="all">
@@ -581,8 +538,10 @@
         </imageobject>
       </mediaobject>
     </example>
-  </chapter>
+  </section>
 
+  </chapter>
+  
   <chapter>
     <title>Annotations</title>
 
@@ -674,9 +633,9 @@
           <title>The @flatten annotation</title>
 
           <programlisting>
-		    <xi:include
-              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/garbagecomposite/GarbagedCompositeApplication.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include
+href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/garbagecomposite/GarbagedCompositeApplication.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
       </formalpara>
@@ -770,8 +729,8 @@
           <title>The @Static annotation</title>
 
           <programlisting>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/staticbinding/StaticBindingApplication.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/staticbinding/StaticBindingApplication.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
       </formalpara>
@@ -884,8 +843,8 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/common/SingletonComponent.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/common/SingletonComponent.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 	      </programlisting>
         </example>
       </formalpara>
@@ -916,34 +875,36 @@
             client to "MultiInstanciableComponent" by using the
             <code>@Static</code> and <code>@StaticBindings</code> annotations.
             To do this we have to singletonize all instances of
-            "MultiInstanciableComponent". <note> The definition extension from
+            "MultiInstanciableComponent". 
+            <note> The definition extension from
             anonymous definition is explained in the mindc
-            documentation<code>http://mind.ow2.org/mindc/userGuide/ch02s11.html</code></note></para>
+            documentation<code>http://mind.ow2.org/mindc/userGuide/ch02s11.html</code></note>
+            </para>
 
             <programlisting language="adl" linenumbering="unnumbered">
-			@StaticBindings
-			composite MainComposite {
-				// Bindings
-				binds clientComp.MyItf[0] to MultiInstanciableComp1.MyItf;
-				binds clientComp.MyItf[1] to MultiInstanciableComp2.MyItf;
-				binds clientComp.MyItf[2] to MultiInstanciableComp3.MyItf;
-				binds clientComp.MyItf[3] to MultiInstanciableComp4.MyItf;
-				
-				// Contains
-				contains clientComponent as clientComp;
-				
-				contains MultiInstanciableComponent as MultiInstanciableComp1 
-				@Singleton primitive{};
-				
-				contains MultiInstanciableComponent as MultiInstanciableComp2 
-				@Singleton primitive{};
-				
-				contains MultiInstanciableComponent as MultiInstanciableComp3 
-				@Singleton primitive{};
-				
-				contains MultiInstanciableComponent as MultiInstanciableComp4 
-				@Singleton primitive{};
-			}
+@StaticBindings
+composite MainComposite {
+	// Bindings
+	binds clientComp.MyItf[0] to MultiInstanciableComp1.MyItf;
+	binds clientComp.MyItf[1] to MultiInstanciableComp2.MyItf;
+	binds clientComp.MyItf[2] to MultiInstanciableComp3.MyItf;
+	binds clientComp.MyItf[3] to MultiInstanciableComp4.MyItf;
+	
+	// Contains
+	contains clientComponent as clientComp;
+	
+	contains MultiInstanciableComponent as MultiInstanciableComp1 
+	@Singleton primitive{};
+	
+	contains MultiInstanciableComponent as MultiInstanciableComp2 
+	@Singleton primitive{};
+	
+	contains MultiInstanciableComponent as MultiInstanciableComp3 
+	@Singleton primitive{};
+	
+	contains MultiInstanciableComponent as MultiInstanciableComp4 
+	@Singleton primitive{};
+}
 			</programlisting>
           </example>
         </para>
@@ -1084,8 +1045,8 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
       </formalpara>
@@ -1186,9 +1147,6 @@
         footprint (BSS section).</para>
       </formalpara>
 
-      <formalpara>
-        <title>Example</title>
-
         <example>
           <title>The @GarbageUnusedInternal annotation</title>
 
@@ -1200,11 +1158,10 @@
 
           <programlisting language="adl" linenumbering="unnumbered">
 			<?db-font-size 75% ?>
-			<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+<xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 		  </programlisting>
         </example>
-      </formalpara>
     </section>
 
     <section id="optim-annot-StaticDefinitionBindingsList">
@@ -1241,24 +1198,26 @@
       <para>Function call is « frozen » for the specified unique target
       definition (no other) at compilation time.</para>
 
-      <note>
+		<itemizedlist>
+      <listitem>
         <para>The call function is blocked on a component definition.</para>
-      </note>
+      </listitem>
 
-      <note>
+      <listitem>
         <para>The client component and the server component are not necessary
         singleton.</para>
-      </note>
+      </listitem>
 
-      <note>
+      <listitem>
         <para>The server component type can be instanciated several time in
         the composite.</para>
-      </note>
+      </listitem>
 
-      <note>
+      <listitem>
         <para>Neither server collection nor client collection are supported
         with this optimization.</para>
-      </note>
+      </listitem>
+		</itemizedlist>
 
       <example>
         <title>@StaticDefinitionBindingsList overview</title>
@@ -1327,9 +1286,11 @@
         <example>
           <title>The @StaticDefinitionBindingsList annotation</title>
 
-          <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?><xi:include
-              href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/staticdefinitionbinding/StaticDefinitionBindingApp.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+          <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?>
+<xi:include
+href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/staticdefinitionbinding/StaticDefinitionBindingApp.adl"
+parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+			</programlisting>
         </example>
       </formalpara>
     </section>
@@ -1357,16 +1318,16 @@
       </formalpara>
 
       <para>The <classname>FreezeCallPointer</classname> annotation allows to
-      call an explicit server interface via an interface pointer (macro
-      CALL_PTR), in an optimized way. Its objective is the same as
+      optimize <code>CALL_PTR</code> invocation which can't be captured by the 
+      <code>@StaticDefinitionBindingList</code> annotation.
+      Its objective is the same as
       <classname>StaticDefinitionBinding</classname>, but allows to optimize
       the CALL_PTR (which is thread-safe and lock-free), while calling a pool
       of target component instances (restricted to the same target definition,
-      like <classname>StaticDefinitionBinding</classname>).</para>
-
-      <note>
-        <para>The required interface must be removed.</para>
-      </note>
+      like <classname>StaticDefinitionBinding</classname>).
+      It is likely to be used with component allready using the <code>@UseIDL</code>
+      annotation.
+      </para>
 
       <example>
         <title>@FreezeCallPointer overview</title>
@@ -1441,9 +1402,32 @@
         <example>
           <title>The @FreezeCallPointer annotation</title>
 
-          <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?><xi:include
-              href="../../adl-backend-static/src/test/resources/optimizations/singlestaticcallptr/factory/selfcall/Client.adl"
-              parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+        <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?>
+import fractal.api.Factory;
+import fractal.api.Component;
+import fractal.api.AttributeController;
+
+// This component is calling a "Service" interface implementation 
+// from a pointer, using the CALL_PTR macro. 
+// This is not an optimisation, but a declaration. 
+@UseIDL("singlestaticcallptr.factory.selfcall.Service")
+
+// Hard-write the CALL_PTR in the component to
+// target interface instance ("s") from definition
+// type ("singlestaticcallptr.factory.selfcall.Server")
+// the instances can be different though: the optimization
+// just replaces the function call
+@FreezeCallPointer(toItf="singlestaticcallptr.factory.selfcall.Server.s")
+
+primitive singlestaticcallptr.factory.selfcall.Client {
+  provides Main as entryPoint;
+  requires optional Component as compCtrl;
+  requires optional AttributeController as attrCtrl;
+  requires optional GetServicePointer as getServicePtrItf;
+  requires Factory as f;
+  source client.c;
+}
+		</programlisting>
         </example>
       </formalpara>
     </section>
