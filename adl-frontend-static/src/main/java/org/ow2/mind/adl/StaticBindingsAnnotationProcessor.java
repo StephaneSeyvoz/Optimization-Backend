@@ -284,7 +284,6 @@ AbstractADLLoaderAnnotationProcessor {
 
 	private void decorateBindingIfTargetAlreadyMetForSourceDefinition(Definition sourceDefinition, Binding binding, DefinitionInterfaceIndexTuple targetTuple) {
 		
-		@SuppressWarnings("unchecked")
 		List<DefinitionInterfaceIndexTuple> allTuplesForDefinition = (List<DefinitionInterfaceIndexTuple>) sourceDefinition.astGetDecoration("already-met-target-definition-interface-pairs");
 		if (allTuplesForDefinition == null) {
 			allTuplesForDefinition = new ArrayList<DefinitionInterfaceIndexTuple>();

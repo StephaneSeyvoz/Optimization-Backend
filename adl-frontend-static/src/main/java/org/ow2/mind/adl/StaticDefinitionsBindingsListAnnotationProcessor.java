@@ -27,7 +27,6 @@ AbstractADLLoaderAnnotationProcessor {
 	protected static Logger        sdblapLogger        = FractalADLLogManager
 			.getLogger("sdblap");
 
-	@SuppressWarnings("unchecked")
 	public Definition processAnnotation(Annotation annotation, Node node,
 			Definition definition, ADLLoaderPhase phase,
 			Map<Object, Object> context) throws ADLException {

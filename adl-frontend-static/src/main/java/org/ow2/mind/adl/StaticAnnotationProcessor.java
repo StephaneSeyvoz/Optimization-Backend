@@ -81,7 +81,6 @@ AbstractADLLoaderAnnotationProcessor {
 	 */
 	private static Logger logger = FractalADLLogManager.getLogger(Static.VALUE);
 
-	@SuppressWarnings("unchecked")
 	public Definition processAnnotation(Annotation annotation, Node node,
 			Definition definition, ADLLoaderPhase phase,
 			Map<Object, Object> context) throws ADLException {
