@@ -214,39 +214,6 @@ public class FunctionalOptimizationsTest extends AbstractOptimizationTest {
 //		}
 //
 //	}
-//	
-//	@Test(groups = {"optimizations"})
-//	public void collection4Test()
-//			throws Exception {
-//		initSourcePath(getDepsDir("memory/api/Allocator.itf").getAbsolutePath(),
-//				"common", FUNCTIONAL_OPTIMIZATIONS_ROOT);
-//
-//		initContext(true);
-//		String adlName = "collection.HelloworldCollection4";
-//
-//		List<String> flags = new ArrayList<String>();
-//
-//		final Definition d = runner.load(adlName);
-//		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
-//		if (runAnno != null) {
-//			runner.addCFlags(flags);
-//
-//			final String adl;
-//			adl = (runAnno.addBootstrap)
-//					? "GenericApplication" + "SBr" + "<" + adlName + ">"
-//							: adlName;
-//
-//			File exeFile = runner.compile(adl, runAnno.executableName);
-//			final int r = runner.run(exeFile, (String[]) null);
-//
-//			assertEquals(r, 0, "Unexpected return value");
-//
-//		} else {
-//			if (logger.isLoggable(Level.FINE))
-//				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
-//		}
-//
-//	}
 	
 }
 
