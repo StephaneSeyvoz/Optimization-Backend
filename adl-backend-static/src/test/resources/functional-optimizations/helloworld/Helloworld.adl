@@ -1,0 +1,11 @@
+@Run
+@Singleton
+composite helloworld.Helloworld {
+  provides Main as main;
+
+  contains Client as client @Singleton primitive{};
+  contains Server as server @Singleton primitive{};
+  
+  binds this.main to client.main;
+  binds client.sa to server.s;
+}

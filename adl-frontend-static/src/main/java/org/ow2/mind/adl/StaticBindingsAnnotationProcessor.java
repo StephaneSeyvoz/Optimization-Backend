@@ -22,15 +22,20 @@
 
 package org.ow2.mind.adl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
+import org.objectweb.fractal.adl.interfaces.Interface;
+import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.ow2.mind.adl.annotation.ADLLoaderPhase;
 import org.ow2.mind.adl.annotation.AbstractADLLoaderAnnotationProcessor;
 import org.ow2.mind.adl.annotation.predefined.Static;
 import org.ow2.mind.adl.annotation.predefined.StaticBindings;
+import org.ow2.mind.adl.ast.ASTHelper;
 import org.ow2.mind.adl.ast.Binding;
 import org.ow2.mind.adl.ast.BindingContainer;
 import org.ow2.mind.adl.ast.Component;
@@ -65,6 +70,7 @@ AbstractADLLoaderAnnotationProcessor {
 	 * The current binding server component definition.
 	 */
 	private Definition currentServerDef = null;
+	
 
 	public Definition processAnnotation(Annotation annotation, Node node,
 			Definition definition, ADLLoaderPhase phase,
@@ -117,11 +123,34 @@ AbstractADLLoaderAnnotationProcessor {
 				}
 
 				// We also need to protect "self" bindings (from a component client interfaces to its own server interfaces)
+				// (talking about definitions, not instances)
 				// since the server methods prototypes are already defined in the .inc file, we do not need to redefine them
 				// when handling optimized clients (still in the .inc / implementations/Component.stc) when writing their
 				// target function prototype (= redundant declaration = compilation failure)
-				if (binding.getFromComponent().equals(binding.getToComponent()))
-					binding.astSetDecoration("self-binding-detected", "true");
+				// We also filter to check redundant prototype declarations in .inc files
+				Definition fromCompDef = null;
+				if (!binding.getFromComponent().equals(Binding.THIS_COMPONENT)) {
+					Component fromComponent = ASTHelper.getComponent((ComponentContainer) definition, binding.getFromComponent());
+					fromCompDef = ASTHelper.getResolvedComponentDefinition(fromComponent, loaderItf, context);
+				} else
+					fromCompDef = definition;
+				
+				Definition toCompDef = null;
+				if (!binding.getToComponent().equals(Binding.THIS_COMPONENT)) {
+					Component toComponent = ASTHelper.getComponent((ComponentContainer) definition, binding.getToComponent());
+					toCompDef = ASTHelper.getResolvedComponentDefinition(toComponent, loaderItf, context);
+				}
+				
+				if (fromCompDef.equals(toCompDef))
+					binding.astSetDecoration("self-definition-binding-detected", "true");
+				
+				// Useful to avoid redundant prototypes declarations in .inc files
+				Interface toInterfaceInstance = ASTHelper.getInterface((InterfaceContainer) toCompDef, binding.getToInterface());
+				Integer toInterfaceIndex = ASTHelper.getToInterfaceNumber(binding);
+				DefinitionInterfaceIndexTuple targetTuple = new DefinitionInterfaceIndexTuple(toCompDef, toInterfaceInstance, toInterfaceIndex);
+				
+				// Should work for collections
+				decorateBindingIfTargetAlreadyMetForSourceDefinition(fromCompDef, binding, targetTuple);
 			}
 
 			// Please note that the propagation DOES NOT work for sub-components at this stage.
@@ -217,17 +246,54 @@ AbstractADLLoaderAnnotationProcessor {
 					}
 
 					// We also need to protect "self" bindings (from a component client interfaces to its own server interfaces)
+					// (talking about definitions, not instances)
 					// since the server methods prototypes are already defined in the .inc file, we do not need to redefine them
 					// when handling optimized clients (still in the .inc / implementations/Component.stc) when writing their
 					// target function prototype (= redundant declaration = compilation failure)
-					if (binding.getFromComponent().equals(binding.getToComponent()))
-						binding.astSetDecoration("self-binding-detected", "true");
+					// We also filter to check redundant prototype declarations in .inc files
+					Definition fromCompDef = null;
+					if (!binding.getFromComponent().equals(Binding.THIS_COMPONENT)) {
+						Component fromComponent = ASTHelper.getComponent((ComponentContainer) subCompDef, binding.getFromComponent());
+						fromCompDef = ASTHelper.getResolvedComponentDefinition(fromComponent, loaderItf, context);
+					} else
+						fromCompDef = subCompDef;
+					
+					Definition toCompDef = null;
+					if (!binding.getToComponent().equals(Binding.THIS_COMPONENT)) {
+						Component toComponent = ASTHelper.getComponent((ComponentContainer) subCompDef, binding.getToComponent());
+						toCompDef = ASTHelper.getResolvedComponentDefinition(toComponent, loaderItf, context);
+					}
+					
+					if (fromCompDef.equals(toCompDef))
+						binding.astSetDecoration("self-definition-binding-detected", "true");
+					
+					// Useful to avoid redundant prototypes declarations in .inc files
+					Interface toInterfaceInstance = ASTHelper.getInterface((InterfaceContainer) toCompDef, binding.getToInterface());
+					Integer toInterfaceIndex = ASTHelper.getToInterfaceNumber(binding);
+					DefinitionInterfaceIndexTuple targetTuple = new DefinitionInterfaceIndexTuple(toCompDef, toInterfaceInstance, toInterfaceIndex);
+					
+					// Should work for collections
+					decorateBindingIfTargetAlreadyMetForSourceDefinition(fromCompDef, binding, targetTuple);
 				}
 
 				// Now take care of other sub-components in the architecture tree
 				recursiveStaticDecorationPropagation(subCompDef, context, recursive);
 			}
 		}
+	}
+
+	private void decorateBindingIfTargetAlreadyMetForSourceDefinition(Definition sourceDefinition, Binding binding, DefinitionInterfaceIndexTuple targetTuple) {
+		
+		List<DefinitionInterfaceIndexTuple> allTuplesForDefinition = (List<DefinitionInterfaceIndexTuple>) sourceDefinition.astGetDecoration("already-met-target-definition-interface-pairs");
+		if (allTuplesForDefinition == null) {
+			allTuplesForDefinition = new ArrayList<DefinitionInterfaceIndexTuple>();
+			sourceDefinition.astSetDecoration("already-met-target-definition-interface-pairs", allTuplesForDefinition); // track the referenced object
+			allTuplesForDefinition.add(targetTuple);
+			return;
+		}
+		
+		if (allTuplesForDefinition.contains(targetTuple))
+			binding.astSetDecoration("skip-redundant-declaration", true);
 	}
 
 	private boolean hasStaticBindingsVSBindingControllerIncompatibilities(Definition definition, Map<Object, Object> context, boolean recursive) throws ADLException{
@@ -263,4 +329,5 @@ AbstractADLLoaderAnnotationProcessor {
 		}
 		return result;
 	}
+	
 }

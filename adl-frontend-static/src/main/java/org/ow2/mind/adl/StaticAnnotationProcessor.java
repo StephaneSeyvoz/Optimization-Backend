@@ -185,9 +185,6 @@ AbstractADLLoaderAnnotationProcessor {
 					// Decorate the client interface for later optimization
 					OptimASTHelper.setStaticDecoration(currentClientItf);
 					
-					// For IS_BOUND to always return true we need a switch at the definition level
-					currentClientDef.astSetDecoration("static-in-parent", Boolean.TRUE);
-					
 					// optimize further on ?
 					if (OptimASTHelper.isInline(binding)) {
 						OptimASTHelper.setInlineDecoration(currentClientItf);

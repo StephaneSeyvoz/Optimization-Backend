@@ -135,7 +135,7 @@ SingleStaticCallPointerMethodDecls(definition, isInternal) ::= <<
 >>
 
 SingletonOptimizedMethodDecl(definition, instance, itf, index, method, isInternal) ::= <<
-<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("self-binding-detected")))>
+<if (!(instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("self-definition-binding-detected")))>
 <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal=isInternal)).binding.astDecorations.("is-static"))>
 <(idl2c.methodDef)(method=method,methodName=OptimizationMETHODName(instance=instance, itf=itf, methodName=method.name, isInternal=isInternal), withThisPtr="false")>;
 <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
@@ -203,8 +203,10 @@ AddSBCollectionTargetFunctionPrototype1(definition, instance, itf, index, isInte
 // do not redefine target server functions when target is self
 AddSBCollectionTargetFunctionPrototype2(definition, instance, itf, index, isInternal, bindingDesc, methName) ::= <<
 <if (bindingDesc.binding)>
-<if (!(bindingDesc.binding.astDecorations.("self-binding-detected")))>
+<if (!(bindingDesc.binding.astDecorations.("skip-redundant-declaration")))>
+<if (!(bindingDesc.binding.astDecorations.("self-definition-binding-detected")))>
 <(idl2c.methodDef)(method=method, methodName=FuncName(bindingDesc=bindingDesc, methName=methName), withThisPtr="false")>;
+<endif>
 <endif>
 <endif>
 >>

@@ -225,7 +225,9 @@ BindingCastIfNeeded(instance, itf, isInternal) ::= << <if (instance.decorations.
 CollectionBindingCastIfNeeded(instance, itf, index, isInternal) ::= << <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"))>(<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal=isInternal)).binding.astDecorations.("type-inheritance-cast"); format="toCName">)<endif> >>
 
 AddSBCollectionItfValues(definition, instance) ::= <<
+<if (definition.interfaces)>
 <definition.interfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it)>
+<endif>
 <if (definition.astNodeTypes.("internalInterface"))>
 <if (definition.internalInterfaces)>
 <definition.internalInterfaces:AddSBCollectionItfValue(definition=definition, instance=instance, itf=it, isInternal="true")>
@@ -237,10 +239,19 @@ AddSBCollectionItfValues(definition, instance) ::= <<
 AddSBCollectionItfValue(definition, instance, itf, isInternal) ::= <<
 <if (isClient.(itf.role))>
 <if (itf.numberOfElement)>
+<if (isInternal)>
+<if (definition.astDecorations.("has-static-bindings"))>
+<if (itf.astDecorations.("interfaceDefinition"))>
+// <itf.name> client interface
+<itf.astDecorations.("interfaceDefinition").methods:{<AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal)>}; separator="\n">
+<endif>
+<endif>
+<else>
 <if (definition.astDecorations.("parent-has-static-bindings"))>
 <if (itf.astDecorations.("interfaceDefinition"))>
 // <itf.name> client interface
 <itf.astDecorations.("interfaceDefinition").methods:{<AddSBItfCollectionValue(definition=definition, instance=instance, itf=itf, method=it, isInternal=isInternal)>}; separator="\n">
+<endif>
 <endif>
 <endif>
 <endif>

@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
+import org.ow2.mind.adl.annotation.predefined.Compile;
 import org.ow2.mind.adl.annotation.predefined.Run;
 import org.ow2.mind.annotation.AnnotationHelper;
 import org.ow2.mind.unit.UnitTestDataProvider;
@@ -45,7 +46,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	@Override
 	protected void initPath() {
 		initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
-				"common", SRC_ROOT);
+				"common", OPTIMIZATIONS_ROOT);
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 	@DataProvider(name = "complex-optimizations-test")
 	protected Object[][] complexDataProvider() throws Exception {
 
-		final Object[][] ADLs = UnitTestDataProvider.listADLs(SRC_ROOT);
+		final Object[][] optimizationsADLs = UnitTestDataProvider.listADLs(OPTIMIZATIONS_ROOT);
 
 		ArrayList<Object[]> tmpList = new ArrayList<Object[]>();
 
@@ -72,22 +73,23 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		// GarbageUnusedInternals <=> GUI, StaticBindings <=> SB, r = recursive
 		String annotationCombinations[] = { "", "S", "SB", "SBr"} ;
 
-		for (int i = 0; i < ADLs.length; i++) {
+		for (int i = 0; i < optimizationsADLs.length; i++) {
 			for (String annoCombo : annotationCombinations) {
 
 				// ADLs[i][0] = rootDir, ADLs[i][1] = adlName (Standard row of the classic tests)
-				String rootDir = (String) ADLs[i][0];
-				String adlName = (String) ADLs[i][1];
+				String rootDir = (String) optimizationsADLs[i][0];
+				String adlName = (String) optimizationsADLs[i][1];
 
 				initSourcePath(getDepsDir("fractal/api/Component.itf").getAbsolutePath(),
 						"common", rootDir);
 
 				final Definition d = runner.load(adlName);
+				final Compile compileAnno = AnnotationHelper.getAnnotation(d, Compile.class);
 				final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
 
 				// Only add the test case to the list if it's @Run-annotated
 				// (useless test case otherwise : gain some execution time !)
-				if (runAnno != null)
+				if (compileAnno != null || runAnno != null)
 					tmpList.add(new Object[] { new TestCase(rootDir, adlName, annoCombo, flags) });
 			}
 		}
@@ -115,6 +117,21 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		String adlName = testCase.adlName;
 
 		final Definition d = runner.load(adlName);
+
+		final Compile compileAnno = AnnotationHelper
+				.getAnnotation(d, Compile.class);
+		if (compileAnno != null) {
+			
+			if ((cFlags != null) && (!cFlags.isEmpty()))
+				runner.addCFlags(cFlags);
+			
+			if (compileAnno.addBootstrap) {
+				runner.compile("GenericApplication<" + testCase.optimCombo + adlName + ">");
+			} else {
+				runner.compile(adlName);
+			}
+		}
+
 		final Run runAnno = AnnotationHelper.getAnnotation(d, Run.class);
 		if (runAnno != null) {
 
@@ -140,9 +157,6 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 
 			assertEquals(r, 0, "Unexpected return value");
 
-		} else {
-			if (logger.isLoggable(Level.FINE))
-				logger.log(Level.FINE, "Skipped test on ADL " + adlName + " : no @Run annotation was found.");
 		}
 
 	}
@@ -295,7 +309,7 @@ public class OptimizationsTest extends AbstractOptimizationTest {
 		assertEquals(r, 0, "Unexpected return value");
 
 	}
-	
+
 	/**
 	 * Test if @StaticDefinitionBindingList({@StaticDefinitionBinding(fromItf=..., toItf=..., inline=true)}) works well.
 	 */

@@ -1,0 +1,5 @@
+@Run(addBootstrap=false)
+@Singleton
+composite itfinheritance.HelloworldApplicationCollection
+    extends GenericApplication<HelloworldCollection> {
+}

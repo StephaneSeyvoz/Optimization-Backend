@@ -11,19 +11,19 @@ $${
 // -----------------------------------------------------------------------------
 
 ControllerImplementation(definition, instance, controller, interfaceDefinitions) ::= <<
-<ItfDelegator(instance=instance, itf=first(controller.controllerInterfaces).astDecorations.("referenced-interface"), interfaceDefinitions=interfaceDefinitions)>
+<ItfDelegator(definition=definition, instance=instance, itf=first(controller.controllerInterfaces).astDecorations.("referenced-interface"), interfaceDefinitions=interfaceDefinitions)>
 >>
 
 // -----------------------------------------------------------------------------
 // Internal templates
 // -----------------------------------------------------------------------------
 
-ItfDelegator(instance, itf, interfaceDefinitions) ::= <<
+ItfDelegator(definition, instance, itf, interfaceDefinitions) ::= <<
 /* Start interface delegator for interface <itf.name> */
 <if (itf.numberOfElement)>
-<itf.astDecorations.("collectionIndexes"):{index | <interfaceDefinitions.(itf.signature).methods:MethodDelegator(instance=instance, itf=itf, index=index, method=it);separator="\n">};separator="\n">
+<itf.astDecorations.("collectionIndexes"):{index | <interfaceDefinitions.(itf.signature).methods:MethodDelegator(definition=definition, instance=instance, itf=itf, index=index, method=it);separator="\n">};separator="\n">
 <else>
-<interfaceDefinitions.(itf.signature).methods:MethodDelegator(instance=instance, itf=itf, method=it);separator="\n">
+<interfaceDefinitions.(itf.signature).methods:MethodDelegator(definition=definition, instance=instance, itf=itf, method=it);separator="\n">
 <endif>
 
 /* End interface delegator for interface <itf.name> */
@@ -33,7 +33,7 @@ ItfDelegator(instance, itf, interfaceDefinitions) ::= <<
 
 StaticBindingItfName(itfName, index, isInternal) ::= "<if (isInternal)>INTERNAL_<endif><itfName><if (index)>_<index><endif>"
 
-MethodDelegator(instance, itf, index, method) ::= <<
+MethodDelegator(definition, instance, itf, index, method) ::= <<
 <if (definition.astDecorations.("is-singleton"))>
 <(idl2c.methodDef)(method=method,withThisPtr="false",methodName=ProxyName(itfName=itf.name, index=index, methodName=method.name)) > { 
 <else>
@@ -60,24 +60,44 @@ MethodDelegator(instance, itf, index, method) ::= <<
   return
   <endif>
     <if (method.parameters)>
-      <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.astDecorations.("is-static"))>
+      <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.astDecorations.("is-static"))>
+        <if (index)>
+    // Static internal collection binding call with parameters
+    __component_<definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.fromInterface>_<method.name>[<index>](<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;    
+        <else>
     // Static internal binding call with parameters
-    __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.toInterface>_<method.name>(<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
-      <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
+    __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.toInterface><if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.toInterfaceNumber)>_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.toInterfaceNumber><endif>_<method.name>(<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
+        <endif>
+      <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.astDecorations.("is-static"))>
+        <if (index)>
+    // Static collection binding call with parameters
+    __component_<definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.fromInterface>_<method.name>[<index>](<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
+        <else>
     // Static binding call with parameters
-    __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.toInterface>_<method.name>(<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
+    __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.toInterface><if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.toInterfaceNumber)>_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.toInterfaceNumber><endif>_<method.name>(<method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
+        <endif>
       <else>
     // Standard call with parameters
     CALL_INTERFACE_PTR_WITH_PARAM(CONTEXT_PTR_ACCESS->__component_internal_data.<if (isServer.(itf.role))>inner_<endif>type.<itf.name><if (index)>[<index>]<endif>, <method.name>)
       <method.parameters:{<it.name>};separator=", "> PARAMS_RPARENT;
-      <endif>
+    <endif>
   <else>
-    <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.astDecorations.("is-static"))>
+    <if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.astDecorations.("is-static"))>
+      <if (index)>
+  // Static internal collection binding call without parameters
+  __component_<definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.fromInterface>_<method.name>[<index>]();
+      <else>
   // Static internal binding call without parameters
-  __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.toInterface>_<method.name>();
-    <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.astDecorations.("is-static"))>
+  __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, isInternal="true")).binding.toInterface><if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.toInterfaceNumber)>_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index, isInternal="true")).binding.toInterfaceNumber><endif>_<method.name>();
+      <endif>
+    <elseif (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.astDecorations.("is-static"))>
+      <if (index)>
+  // Static collection binding call without parameters
+  __component_<definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.fromInterface>_<method.name>[<index>]();
+      <else>
   // Static binding call without parameters
-  __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.toInterface>_<method.name>();
+  __component_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).serverComponent.definition.name; format="toCName">_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name)).binding.toInterface><if (instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.toInterfaceNumber)>_<instance.decorations.("binding-descriptors").(StaticBindingItfName(itfName=itf.name, index=index)).binding.toInterfaceNumber><endif>_<method.name>();
+      <endif>
     <else>
   // Standard call without parameters
   CALL_INTERFACE_PTR_WITHOUT_PARAM(CONTEXT_PTR_ACCESS->__component_internal_data.<if (isServer.(itf.role))>inner_<endif>type.<itf.name><if (index)>[<index>]<endif>, <method.name>);

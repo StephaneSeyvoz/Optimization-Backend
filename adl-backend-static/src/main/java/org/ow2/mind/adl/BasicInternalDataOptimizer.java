@@ -22,7 +22,6 @@
 package org.ow2.mind.adl;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -63,7 +62,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 
 	@Inject
 	protected Loader 			loaderItf;
-	
+
 	@Inject
 	protected ErrorManager		errorManagerItf;
 
@@ -116,9 +115,9 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 			externalTypeOptimizationAllowed = OptimASTHelper.isSingleton(compDef)
 					&& (parentIsTaggedStaticBindings(graph)
 							|| (!parentIsTaggedStaticBindings(graph) && !existsNonStaticBindingFromComponent(graph) && !existsServerInterface(graph)))
-					&& (!existsOptionalUnboundClientInterface(graph))
-					&& (!existsDestinationControllerInterfaceAndDecorateIt(graph, context))
-					&& (!hostsController_ExceptDelegator(compDef));
+							&& (!existsOptionalUnboundClientInterface(graph))
+							&& (!existsDestinationControllerInterfaceAndDecorateIt(graph, context))
+							&& (!hostsController_ExceptDelegators(compDef));
 
 			// Check for inner_type data
 			internalTypeOptimizationAllowed = OptimASTHelper.isSingleton(compDef)
@@ -348,30 +347,28 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		return result;
 	}
 
-	protected boolean hostsController_ExceptDelegator(Definition def) {
+	protected boolean hostsController_ExceptDelegators(Definition def) {
 		if (! (def instanceof ControllerContainer))
 			return false;
 
 		Controller[] ctrlArray = ((ControllerContainer) def).getControllers();
 
-		if (ctrlArray.length < 1)
+		if (ctrlArray.length <= 0)
 			return false;
 
-		boolean foundDelegator = false;
+		int delegatorsNumber = 0;
 		for (Controller currCtrlr : ctrlArray) {
 			Source[] currCtrlrSources = currCtrlr.getSources();
 			for (Source currSource : currCtrlrSources) {
 				if (currSource.getPath().equals("InterfaceDelegator")) 
-					foundDelegator = true;
+					delegatorsNumber++;
 			}
 		}
 
-		if (foundDelegator)
-			if (ctrlArray.length > 1)
-				return true;
-			else
-				return false;
-		else return true;
+		if (ctrlArray.length > delegatorsNumber)
+			return true;
+		else
+			return false;
 	}
 
 	protected boolean parentIsTaggedStaticBindings(ComponentGraph graph){
@@ -437,6 +434,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 	}
 
 	protected boolean isBound(TypeInterface typeInterface, ComponentGraph instanceGraph) {
+
 		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
 
 		// binding-descriptors are systematically created even if a client interface is not bound !
@@ -451,25 +449,26 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 			return false;
 		}
 	}
-	
+
 	protected boolean isStatic(TypeInterface typeInterface, ComponentGraph instanceGraph) {
+
 		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
 
 		// binding-descriptors are systematically created even if a client interface is not bound !
 		// we've got to check if the DESTINATION is null !
-		
+
 		BindingDescriptor desc = descs.get(typeInterface.getName());
-		
+
 		if (desc == null)
 			return false;
-		
+
 		Binding binding = desc.binding;
-		
+
 		if (binding == null)
 			return false;
-		
+
 		Boolean isStatic = (Boolean) binding.astGetDecoration("is-static");
-		
+
 		// Get the binding
 		if ((isStatic != null) && isStatic.equals(Boolean.TRUE)) {
 			//System.out.println("Component " + instanceGraph.getNameInParent(instanceGraph.getParents()[0]) + " interface \"" + typeInterface.getName() + "\" is bound.");
