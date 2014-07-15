@@ -277,9 +277,6 @@ public class OptimizedDefinitionCompiler extends BasicDefinitionCompiler {
 				}
 
 				// client side
-
-				// TODO: add a check
-				@SuppressWarnings("unchecked")
 				List<Definition> targetInlineDefinitions = (List<Definition>) definition.astGetDecoration("inline-target-defs");
 				if (targetInlineDefinitions != null)
 					// for all targets concerned by an inline binding, -include the according .inline file
