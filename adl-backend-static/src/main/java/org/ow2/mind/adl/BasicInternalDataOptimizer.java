@@ -266,7 +266,6 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected boolean existsDestinationControllerInterfaceAndDecorateIt(ComponentGraph instanceGraph, Map<Object, Object> context) {
 		boolean result = false;
 
@@ -435,7 +434,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 	}
 
 	protected boolean isBound(TypeInterface typeInterface, ComponentGraph instanceGraph) {
-		@SuppressWarnings("unchecked")
+
 		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
 
 		// binding-descriptors are systematically created even if a client interface is not bound !
@@ -452,7 +451,7 @@ public class BasicInternalDataOptimizer implements InternalDataOptimizer {
 	}
 
 	protected boolean isStatic(TypeInterface typeInterface, ComponentGraph instanceGraph) {
-		@SuppressWarnings("unchecked")
+
 		Map<String, BindingDescriptor> descs = (Map<String, BindingDescriptor>) instanceGraph.getDecoration("binding-descriptors");
 
 		// binding-descriptors are systematically created even if a client interface is not bound !
