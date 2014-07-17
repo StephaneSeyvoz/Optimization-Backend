@@ -25,7 +25,7 @@ garbagecomposite.GarbagedCompositeApplication
  	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
 	/**
-	 * This component is a composite. It will be replaced by it's content.
+	 * This component is a composite. It will be replaced by its content.
 	 */
 	contains 
 	common.AroundSingletonComponent 
@@ -36,7 +36,7 @@ garbagecomposite.GarbagedCompositeApplication
 	to firstMultiInstanciableComp.serverInterface;
 	
 	/**
-	 * This component is a composite. It will be replaced by it's content. 
+	 * This component is a composite. It will be replaced by its content. 
 	 */
 	contains 
 	common.AroundMultiInstanciableComponent 

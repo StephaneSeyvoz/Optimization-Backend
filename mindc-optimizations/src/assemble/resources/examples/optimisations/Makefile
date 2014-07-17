@@ -11,12 +11,12 @@ $(SUBDIRS): common
 
 # To handle the case of $(MAKECMDGOALS) is not empty
 $(MAKECMDGOALS): common
-	for dir in $(SUBDIRS); do \
-        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Default;\
-	$(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Ext;\
+	@for dir in $(SUBDIRS); do \
+        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Default || exit $$? ;\
+        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Ext || exit $$? ;\
     done
-    
+
 common:
 	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=BaseApplication
 	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=CompositeApplication
-	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=MultiInstanceApplication	
+	$(MAKE) -C common $(MAKECMDGOALS) CONFIGURATION=MultiInstanceApplication
