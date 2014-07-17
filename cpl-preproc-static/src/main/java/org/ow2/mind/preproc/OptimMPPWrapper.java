@@ -42,7 +42,9 @@ import org.objectweb.fractal.adl.CompilerError;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.error.GenericErrors;
 import org.objectweb.fractal.adl.util.FractalADLLogManager;
+import org.ow2.mind.adl.implementation.ImplementationLocator;
 import org.ow2.mind.error.ErrorManager;
+import org.ow2.mind.io.OutputFileLocator;
 import org.ow2.mind.plugin.PluginManager;
 import org.ow2.mind.preproc.parser.AbstractCPLParser;
 import org.ow2.mind.preproc.parser.OptimAbstractCPLParser;
@@ -54,10 +56,16 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 	protected static Logger logger = FractalADLLogManager.getLogger("io");
 
 	@Inject
-	protected ErrorManager  errorManagerItf;
+	protected ErrorManager          errorManagerItf;
 
 	@Inject
-	protected PluginManager pluginManagerItf;
+	protected PluginManager         pluginManagerItf;
+
+	@Inject
+	protected ImplementationLocator implLocatorItf;
+
+	@Inject
+	protected OutputFileLocator     outputFileLocatorItf;
 
 	// ---------------------------------------------------------------------------
 	// Implementation of the MPPWrapper interface
@@ -78,12 +86,13 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 
 			super(definition, context);
 
-			this.cplChecker = new OptimCPLChecker(errorManagerItf, definition, context);
+			this.cplChecker = new OptimCPLChecker(errorManagerItf, implLocatorItf,
+			          outputFileLocatorItf, definition, context);
 		}
 
 		public void prepare() {
 			inputFiles = Arrays.asList(inputFile);
-			
+
 			outputFiles = new ArrayList<File>();
 			outputFiles.add(outputFile);
 			if (headerOutputFile != null)
@@ -149,7 +158,7 @@ public class OptimMPPWrapper extends BasicMPPWrapper implements MPPWrapper {
 						throw new CompilerError(GenericErrors.INTERNAL_ERROR, e, "IO error");
 					}
 					mpp.setInlineOutputStream(inlineOutPS);
-					
+
 					//
 					inlineOutPS.println("#define __COMPONENT_IN_" + definition.getName().toUpperCase().replace(".", "_"));
 					inlineOutPS.println("#include \"" + definition.getName().replace(".", "/") + ".adl.h\"");

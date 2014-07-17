@@ -31,6 +31,7 @@ import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.types.TypeInterface;
 import org.ow2.mind.adl.ast.ASTHelper;
 import org.ow2.mind.adl.idl.InterfaceDefinitionDecorationHelper;
+import org.ow2.mind.adl.implementation.ImplementationLocator;
 import org.ow2.mind.error.ErrorManager;
 import org.ow2.mind.idl.ast.ArrayOf;
 import org.ow2.mind.idl.ast.ConstantDefinition;
@@ -48,15 +49,18 @@ import org.ow2.mind.idl.ast.TypeDefReference;
 import org.ow2.mind.idl.ast.TypeDefinition;
 import org.ow2.mind.idl.ast.UnionDefinition;
 import org.ow2.mind.idl.ast.UnionReference;
+import org.ow2.mind.io.OutputFileLocator;
 
 public class OptimCPLChecker extends CPLChecker {
 
 	final protected String staticInlinePrefix = "static inline";
 
 	public OptimCPLChecker(final ErrorManager errorManager,
+			final ImplementationLocator implLocatorItf,
+			final OutputFileLocator outputFileLocatorItf,
 			final Definition definition, final Map<Object, Object> context) {
 
-		super(errorManager, definition, context);
+		super(errorManager, implLocatorItf, outputFileLocatorItf, definition, context);
 	}
 
 	/**
@@ -106,8 +110,8 @@ public class OptimCPLChecker extends CPLChecker {
 		String typeString = typeToString(currMethod.getType());
 
 		final String methodSymbol = "__component_" + definition.getName().replace(".", "_") + "_"
-          + itfName.getText() + "_" + methName.getText() + "_inline";
-		
+				+ itfName.getText() + "_" + methName.getText() + "_inline";
+
 		String methodSymbolAndParams = staticInlinePrefix + " " + typeString + " " + methodSymbol;
 
 		return methodSymbolAndParams;
