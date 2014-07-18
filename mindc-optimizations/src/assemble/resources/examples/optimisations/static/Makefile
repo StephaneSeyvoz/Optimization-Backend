@@ -134,7 +134,7 @@ dependencies: build_dependencies
 
 compile: build 
 ifdef targetComponent
-	@if test ! -x $(MINDC) && ! which $(MINDC) &>/dev/null ; \
+	@if test ! -x $(MINDC) && ! (which $(MINDC) 2>&1)>/dev/null ; \
 		then echo ' Mindc not found! Set MIND_ROOT environment variable or set 'Mindc location' in Preference page of Eclipse' && exit 1 ; \
 		else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
 	fi
@@ -144,7 +144,7 @@ endif
 
 graph: build_graph
 ifdef targetComponent
-	@if test ! -x $(MINDC) && ! which $(MINDC) &>/dev/null ; \
+	@if test ! -x $(MINDC) && ! (which $(MINDC) 2>&1)>/dev/null ; \
 		then echo ' Mindc not found! Set MIND_ROOT environment variable or set 'Mindc location' in Preference page of Eclipse' && exit 1 ; \
 		else $(MINDC) --check-adl $(sourcePathArg) $(includePathArg) -o=$(graphOutputDir) 'dot.DumpComponentDot<'$(targetComponent)'>' ;\
 	fi
@@ -153,7 +153,7 @@ else
 endif
 
 doc: build_doc
-	@if test ! -x $(MINDOC) && ! which $(MINDOC) &>/dev/null ; \
+	@if test ! -x $(MINDOC) && ! (which $(MINDOC) 2>&1)>/dev/null ; \
 		then echo ' Mindoc not found! Set MIND_ROOT environment variable or set 'Mindc location' in Preference page of Eclipse' && exit 1 ; \
 		else $(MINDOC) $(sourcePathArg) -o=$(docOutputDir);\
 	fi
@@ -161,7 +161,7 @@ doc: build_doc
 # here we reuse the same flags as the common build ones
 test: build_test
 ifdef testSourcePath
-	@if test ! -x $(MINDUNIT) && ! which $(MINDUNIT) &>/dev/null ; \
+	@if test ! -x $(MINDUNIT) && ! (which $(MINDUNIT) 2>&1)>/dev/null ; \
 		then echo ' Mindunit not found! Set MIND_ROOT environment variable or set 'Mindc location' in Preference page of Eclipse' && exit 1 ; \
 		else $(MINDUNIT) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) $(testExtraOptionsArg) -o=$(testBinOutputDir) $(testSourcePathArg);\
 	fi
