@@ -18,7 +18,7 @@
       </affiliation>
     </author>
 
-    <pubdate>19/03/2014</pubdate>
+    <pubdate>2014-08-12</pubdate>
   </bookinfo>
 
   <chapter>
@@ -210,7 +210,7 @@
 
                 <entry>--optimize</entry>
 
-                <entry>Informes the mindc compiler to use the optimization
+                <entry>Informs the mindc compiler to use the optimization
                 backend.</entry>
               </row>
 
@@ -280,14 +280,14 @@
 
       <formalpara>
         <title>Usage</title>
-		<programlisting>
+        <programlisting>
 (@Singleton || @StaticBindings ||  @StaticDefinitionBindingList(...))
 (primitive || composite) &lt;package&gt;.&lt;component name&gt; {
   @Static 
   binds &lt;package&gt;.&lt;instance name from&gt; to &lt;package&gt;.&lt;instance name to&gt;
 }
-		</programlisting>
-		</formalpara>
+        </programlisting>
+      </formalpara>
         
         <para>&lt;package&gt;, &lt;component name&gt; and &lt;instance name
         ...&gt; can be replaced by '*' if we want to apply the annotation to
@@ -309,7 +309,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
           <programlisting>
 <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-		  </programlisting>
+          </programlisting>
         </example>
   </section>
   </chapter>
@@ -317,7 +317,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <title>Optimization overview</title>
 
     <table frame="all">
-      <title>Synthesis</title>
+      <title>Synthesis of optimizations</title>
 
       <para>This table attempts to synthesize optimization annotations.</para>
 
@@ -389,7 +389,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <title>Memory and CPU gains</title>
 
     <table frame="all">
-      <title>Synthesis</title>
+      <title>Synthesis of memory and CPU gains</title>
 
       <para>This table aims to identify gains for each optimization.</para>
 
@@ -417,13 +417,13 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
             <entry>
               <para>Flash : Add one stub function for each interface
-              mehode.</para>
+              method.</para>
 
               <para>RAM : 0</para>
             </entry>
 
             <entry>
-              <para>Add an intermediary stub fonction.</para>
+              <para>Add an intermediary stub function.</para>
             </entry>
           </row>
 
@@ -490,7 +490,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
             <entry>
               <para>Flash : Remove size of the composite server interface
-              vtable + factory code + lifecycle methodes + composite internal
+              vtable + factory code + lifecycle methods + composite internal
               data</para>
 
               <para>RAM : Remove data associated with delegation
@@ -498,7 +498,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
             </entry>
 
             <entry>
-              <para>Remove indirection for binding delagation.</para>
+              <para>Remove indirection for binding delegation.</para>
             </entry>
           </row>
 
@@ -636,7 +636,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <xi:include
 href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/garbage-composite/src/main/mind/garbagecomposite/GarbagedCompositeApplication.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-		  </programlisting>
+          </programlisting>
         </example>
       </formalpara>
     </section>
@@ -731,7 +731,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
           <programlisting>
 <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/staticbinding/StaticBindingApplication.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-		  </programlisting>
+          </programlisting>
         </example>
       </formalpara>
     </section>
@@ -805,7 +805,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
           <para>Using Mind macros-annotated code from standard C functions is
           made possible.</para>
 
-          <para>Use of global data as PRIVATE is made safe, which is usefull
+          <para>Use of global data as PRIVATE is made safe, which is useful
           when componentizing legacy C code.</para>
         </note>
 
@@ -842,10 +842,10 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
           <title>The @Singleton annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
-			<?db-font-size 75% ?>
+            <?db-font-size 75% ?>
 <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/common/src/main/mind/common/SingletonComponent.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-	      </programlisting>
+          </programlisting>
         </example>
       </formalpara>
 
@@ -853,7 +853,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         <title>Tips : Binding optimization on multi-instanciable
         components</title>
 
-        <para>By definition a multi-intanciable component is not singleton. So
+        <para>By definition a multi-instanciable component is not singleton. So
         it's impossible to apply a binding optimization with the
         <code>@StaticBindings</code> annotation.</para>
 
@@ -905,7 +905,7 @@ composite MainComposite {
 	contains MultiInstanciableComponent as MultiInstanciableComp4 
 	@Singleton primitive{};
 }
-			</programlisting>
+            </programlisting>
           </example>
         </para>
       </section>
@@ -1034,7 +1034,7 @@ composite MainComposite {
       <formalpara>
         <title>Example</title>
 
-        <para>This example illustrate the usage of the
+        <para>This example illustrates the usage of the
         <classname>StaticBindings</classname> annotation.</para>
 
         <para>All bindings in the composite
@@ -1044,10 +1044,10 @@ composite MainComposite {
           <title>The @StaticBindings annotation</title>
 
           <programlisting language="adl" linenumbering="unnumbered">
-			<?db-font-size 75% ?>
+            <?db-font-size 75% ?>
 <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-		  </programlisting>
+          </programlisting>
         </example>
       </formalpara>
     </section>
@@ -1061,7 +1061,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         <title>Note (March 2014, 19th)</title>
 
         <para>This annotation will be OBSOLETE / DEPRECATED in the future
-        compiler releases: Unused internals garbaging is now always
+        compiler releases: Unused internals garbage is now always
         triggered.</para>
 
         <para>The annotation will thus be ineffective and useless: It is
@@ -1157,10 +1157,10 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
           annotation.</para>
 
           <programlisting language="adl" linenumbering="unnumbered">
-			<?db-font-size 75% ?>
+            <?db-font-size 75% ?>
 <xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-		  </programlisting>
+          </programlisting>
         </example>
     </section>
 
@@ -1198,7 +1198,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
       <para>Function call is « frozen » for the specified unique target
       definition (no other) at compilation time.</para>
 
-		<itemizedlist>
+      <itemizedlist>
       <listitem>
         <para>The call function is blocked on a component definition.</para>
       </listitem>
@@ -1217,7 +1217,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         <para>Neither server collection nor client collection are supported
         with this optimization.</para>
       </listitem>
-		</itemizedlist>
+      </itemizedlist>
 
       <example>
         <title>@StaticDefinitionBindingsList overview</title>
@@ -1290,7 +1290,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <xi:include
 href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/staticdefinitionbinding/StaticDefinitionBindingApp.adl"
 parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-			</programlisting>
+          </programlisting>
         </example>
       </formalpara>
     </section>
@@ -1372,7 +1372,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         no other, in the whole scope of the component.</para>
 
         <para>Compared to <classname>StaticDefinitionBinding</classname>, you
-        lose the expressivity of the required interface in the
+        lose the expressibility of the required interface in the
         architecture.</para>
       </formalpara>
 
@@ -1392,7 +1392,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         BIND_MY_INTERFACE has an effect on a variable (stateful action),
         multi-threaded applications could cause trouble during this action.
         CALL_PTR being stateless, safe and lock-free multi-threading is
-        possible within the component while targetting different
+        possible within the component while targeting different
         components.</para>
       </formalpara>
 
@@ -1402,7 +1402,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
         <example>
           <title>The @FreezeCallPointer annotation</title>
 
-        <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?>
+          <programlisting language="adl" linenumbering="unnumbered"><?db-font-size 75% ?>
 import fractal.api.Factory;
 import fractal.api.Component;
 import fractal.api.AttributeController;
@@ -1427,7 +1427,7 @@ primitive singlestaticcallptr.factory.selfcall.Client {
   requires Factory as f;
   source client.c;
 }
-		</programlisting>
+          </programlisting>
         </example>
       </formalpara>
     </section>
