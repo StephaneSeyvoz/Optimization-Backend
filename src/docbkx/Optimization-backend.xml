@@ -18,7 +18,7 @@
       </affiliation>
     </author>
 
-    <pubdate>19/03/2014</pubdate>
+    <pubdate>2014-08-12</pubdate>
   </bookinfo>
 
   <chapter>
@@ -317,7 +317,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 <title>Optimization overview</title>
 
     <table frame="all">
-      <title>Synthesis</title>
+      <title>Synthesis of optimizations</title>
 
       <para>This table attempts to synthesize optimization annotations.</para>
 
@@ -389,7 +389,7 @@ parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <title>Memory and CPU gains</title>
 
     <table frame="all">
-      <title>Synthesis</title>
+      <title>Synthesis of memory and CPU gains</title>
 
       <para>This table aims to identify gains for each optimization.</para>
 
