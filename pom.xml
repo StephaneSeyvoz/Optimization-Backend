@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<name>Schneider-Electric experimental optimization backend</name>
-	<description>Perform compilation using ADL annotations-based optimizations, with new code generation</description>
-	
-	<packaging>pom</packaging>
-	
-	<artifactId>Optimization-Backend</artifactId>
-	<groupId>org.ow2.mind</groupId>
-	<version>2.1-SNAPSHOT</version>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<developers>
-		<developer>
-			<id>sseyvoz</id>
-			<name>Stephane Seyvoz</name>
-			<email>sseyvoz@assystem.com</email>
-			<organization>Assystem</organization>
-		</developer>
-	</developers>
+    <parent>
+        <groupId>org.ow2.mind</groupId>
+        <artifactId>mind-compiler</artifactId>
+        <version>2.1-SNAPSHOT</version>
+    </parent>
 
-	<contributors>
-		<contributor>
-			<name>Yves Teissier</name>
-			<email>yteissier@assystem.com</email>
-			<organization>Assystem</organization>
-		</contributor>
-		<contributor>
-			<name>Julien Tous</name>
-			<email>julien.tous@orange.com</email>
-			<organization>Orange</organization>
-		</contributor>
-	</contributors>
+    <name>Schneider-Electric experimental optimization backend</name>
+    <description>Perform compilation using ADL annotations-based optimizations, with new code generation</description>
 
-	<modules>
-		<module>adl-frontend-static</module>
+    <packaging>pom</packaging>
+
+    <artifactId>Optimization-Backend</artifactId>
+    <groupId>org.ow2.mind</groupId>
+    <version>2.1-SNAPSHOT</version>
+
+    <developers>
+        <developer>
+            <id>sseyvoz</id>
+            <name>Stephane Seyvoz</name>
+            <email>sseyvoz@assystem.com</email>
+            <organization>Assystem</organization>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>Yves Teissier</name>
+            <email>yteissier@assystem.com</email>
+            <organization>Assystem</organization>
+        </contributor>
+        <contributor>
+            <name>Julien Tous</name>
+            <email>julien.tous@orange.com</email>
+            <organization>Orange</organization>
+        </contributor>
+    </contributors>
+
+    <modules>
+        <module>adl-frontend-static</module>
 <!-- 
-		<module>single-interface-plugin</module>
+        <module>single-interface-plugin</module>
  -->
-		<module>cpl-preproc-static</module>
-		<module>adl-backend-static</module>
+        <module>cpl-preproc-static</module>
+        <module>adl-backend-static</module>
         <module>mindc-optimizations</module>
-	</modules>
-	
-	<build>
+    </modules>
+
+    <build>
         <plugins>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -63,13 +69,13 @@
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
+                <version>2.5</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>
                         <id>copy-docbook-resources</id>
                         <!-- here the phase you need -->
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -93,7 +99,7 @@
                 <executions>
                     <execution>
                         <id>pdf</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-pdf</goal>
                         </goals>
@@ -106,7 +112,7 @@
                     </execution>
                     <execution>
                         <id>html-printable</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -121,7 +127,7 @@
                     <!-- User Guide HTML executions -->
                     <execution>
                         <id>userguide-html</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -153,7 +159,7 @@
                     </execution>
                     <execution>
                         <id>userguide-html-chunked</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -188,7 +194,7 @@
                     <!-- Dev Guide HTML executions -->
                     <!-- <execution>
                         <id>devguide-html</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>
@@ -220,7 +226,7 @@
                     </execution>
                     <execution>
                         <id>devguide-html-chunked</id>
-                        <phase>pre-site</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>generate-html</goal>
                         </goals>

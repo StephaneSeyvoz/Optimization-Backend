@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.ow2.mind</groupId>
-        <artifactId>mind-compiler</artifactId>
-        <version>2.1-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.ow2.mind</groupId>
+		<artifactId>Optimization-Backend</artifactId>
+		<version>2.1-SNAPSHOT</version>
+	</parent>
 
 	<name>mindc-optimizations</name>
 	<description>optimizations integration module</description>

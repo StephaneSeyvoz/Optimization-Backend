@@ -30,4 +30,11 @@
             <directoryMode>0644</directoryMode>
         </fileSet>
     </fileSets>
+    <files>
+        <file>
+            <source>../target/site/Optimization-backend.pdf</source>
+            <fileMode>0644</fileMode>
+            <outputDirectory>doc</outputDirectory>
+        </file>
+    </files>
 </assembly>
