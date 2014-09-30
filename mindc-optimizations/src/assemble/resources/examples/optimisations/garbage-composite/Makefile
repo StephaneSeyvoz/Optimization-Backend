@@ -132,11 +132,17 @@ clean: clean_dependencies clean_compile clean_graph clean_doc clean_test
 dependencies: build_dependencies
 # Add 'cp' commands here to copy your project dependencies files to depsOutputDir
 
-compile: build 
+compile: build
 ifdef targetComponent
 	@if test ! -x $(MINDC) && ! (which $(MINDC) 2>&1)>/dev/null ; \
 		then echo ' Mindc not found! Set MIND_ROOT environment variable or set 'Mindc location' in Preference page of Eclipse' && exit 1 ; \
 		else $(MINDC) $(sourcePathArg) $(includePathArg) $(compilerCommandArg) $(linkerCommandArg) $(assemblerCommandArg) $(asFlagsArg) $(cppFlagsArg) $(cFlagsArg) $(ldFlagsArg) $(extraOptionsArg) -o=$(binOutputDir) $(targetComponent):$(binaryName) ;\
+	fi || if test ! -x $(findstring Windows, $(OS)) ; \
+		then echo 'WARNING for Windows users:' ; \
+		echo '  Compilation of this example HAVE FAILED, this may be due to long file paths if example is placed in a deep folder hierarchy (lstat error).' ; \
+		echo '  Move it closer to the root of your drive to solve the issue.' ; \
+		#read -p "Press a key to continue compiling..." ; \
+		else false ; \
 	fi
 else
 	@echo "Compile: No application defined - MindEd users: Please configure your project target with the 'Mind Path' -> (right click) 'New application' menu."
