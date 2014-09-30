@@ -12,8 +12,8 @@ $(SUBDIRS): common
 # To handle the case of $(MAKECMDGOALS) is not empty
 $(MAKECMDGOALS): common
 	@for dir in $(SUBDIRS); do \
-        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Default || exit $$? ;\
-        $(MAKE) -C $$dir $(MAKECMDGOALS) CONFIGURATION=Ext || exit $$? ;\
+        $(MAKE) -C $$dir $@ CONFIGURATION=Default || exit $$? ;\
+        $(MAKE) -C $$dir $@ CONFIGURATION=Ext || exit $$? ;\
     done
 
 common:
