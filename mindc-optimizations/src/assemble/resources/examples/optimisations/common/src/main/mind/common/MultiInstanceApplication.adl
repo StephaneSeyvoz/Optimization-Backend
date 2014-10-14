@@ -2,7 +2,7 @@
  * This component is part of the example demonstrating the usage of the optimization annotations.
  * It is the non optimized example application with multi-instanciated component. 
  * <br/>
- * It it an extension of the component @component common.BaseApplication,
+ * It is an extension of the component @component common.BaseApplication,
  * to which it adds a second instance of @component common.MultiInstanciableComponent,
  */ 
 

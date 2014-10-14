@@ -4,7 +4,7 @@
  * 
  * It is a singleton component (NOT multi-instanciable).
  */
- 
+
 @Singleton
 primitive 
 common.SingletonComponent
@@ -29,13 +29,13 @@ common.SingletonComponent
  * @component this#interfaces#secondClientInterface 
  * interface return code.
  */
- 	provides boot.Main as serverInterface;
- 	requires boot.Main as firstClientInterface;
-	
+	provides boot.Main as serverInterface;
+	requires boot.Main as firstClientInterface;
+
 /**
  * This interface is optional. 
  * It will be tested before calling its method. 
- */ 	
- 	requires optional boot.Main as secondClientInterface;
-  	source SingletonComponent.c;
+ */
+	requires optional boot.Main as secondClientInterface;
+	source SingletonComponent.c;
 }

@@ -6,28 +6,28 @@
  * Only the differences with he 
  * @component common.BaseApplication 
  * component are documented here.
- * Considere having a look at the 
+ * Consider having a look at the 
  * @component common.BaseApplication 
  * documentation for more.
  */
 
-//Will try to apply the the same optimization as '@Static' everywhere 
+/* Will try to apply the same optimization as '@Static' everywhere */ 
 @StaticBindings
 
 @Singleton
 composite 
 staticbindings.StaticBindingsApplication
- {
+{
 
- 	contains boot.Bootstrap as bootstrap; 
+	contains boot.Bootstrap as bootstrap; 
 
- 	/**
- 	 * As both @component boot.Bootstrap and 
+	/**
+	 * As both @component boot.Bootstrap and 
 	 * @component common.SingletonComponent 
 	 * are singletons,
- 	 * This binding will be optimized in the same way as if '@Static' 
+	 * This binding will be optimized in the same way as if '@Static' 
 	 * would have been used.
- 	 */
+	 */
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
 	contains common.SingletonComponent 
 	as singletonComp;

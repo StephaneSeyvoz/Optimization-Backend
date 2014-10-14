@@ -21,7 +21,7 @@ fromItf="common.SingletonComponent.clientInterface",
 toItf="common.MultiInstanciableComponent.serverInterface"
 ),
 
-// This specify that ALL instances of Boostrap component, 
+// This specify that ALL instances of Bootstrap component, 
 // will have there 'entryPoint' interface bound to the 
 // 'serverInterface' of an instance a 'SingletonComponent' component.
 @StaticDefinitionBinding(
@@ -32,5 +32,5 @@ toItf="common.SingletonComponent.serverInterface"
 
 composite 
 staticdefinitionbinding.StaticDefinitionBindingApp 
-extends common.MultiInstanceApplication {	
+extends common.MultiInstanceApplication {
 }

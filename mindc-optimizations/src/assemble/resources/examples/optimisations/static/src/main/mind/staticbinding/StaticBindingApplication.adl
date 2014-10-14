@@ -2,7 +2,7 @@
  * This component is part of the example demonstrating the usage of the 
  * '@Static' optimization.
  * It is the optimized version of the 
- *
+ * 
  * @component 
  * common.BaseApplication 
  * component.
@@ -11,35 +11,35 @@
  * @component 
  * common.BaseApplication 
  * component are documented here.
- 
+ * 
  * Consider having a look at the 
  * @component 
  * common.BaseApplication 
  * documentation for more.
  */
- 
+
 @Singleton
 composite 
 staticbinding.StaticBindingApplication 
 {
 
- 	contains boot.Bootstrap as bootstrap; 
+	contains boot.Bootstrap as bootstrap; 
 
- 	/**
- 	 * As both @component boot.Bootstrap and 
+	/**
+	 * As both @component boot.Bootstrap and 
 	 * @component common.SingletonComponent 
 	 * are singletons,
- 	 * It is possible to annotate this binding with '@Static'
- 	 */
- 	@Static
+	 * It is possible to annotate this binding with '@Static'
+	 */
+	@Static
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
-	
+
 	contains 
 	common.SingletonComponent 
 	as 
 	singletonComp;
-	
-	
+
+
 	/**
 	 * @component 
 	 * common.MultiInstanciableComponent 
@@ -50,7 +50,7 @@ staticbinding.StaticBindingApplication
 	singletonComp.firstClientInterface 
 	to 
 	firstMultiInstanciableComp.serverInterface;
-	
+
 	contains 
 	common.MultiInstanciableComponent 
 	as 
