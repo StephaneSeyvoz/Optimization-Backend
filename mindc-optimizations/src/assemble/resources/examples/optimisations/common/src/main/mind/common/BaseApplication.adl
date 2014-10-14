@@ -2,19 +2,19 @@
  * This component is part of the example demonstrating the usage of the optimization annotations.
  * It is the non optimized example application (hence the name BaseApplication).
  */
- 
-// 
-// Several of the contained component are singletons.
-// This component is implicitly singleton. 
-// Let' advertise this fact.
-//  
+
+/**
+ * Several of the contained component are singletons.
+ * This component is implicitly singleton.
+ * Let's advertise this fact.
+ */
 @Singleton
 
 composite common.BaseApplication {
  	/**
  	 * Initialize everything necessary to enter the component world.
  	 * <br/>
- 	 * This component is a singleton. 
+ 	 * This component is a singleton.
  	 */
  	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
