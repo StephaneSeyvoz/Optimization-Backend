@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="Optimization-backend_DSS" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>Usage of deployment style sheet</title>
+  <para>With deployment style sheet mechanism, it is possible to apply optimizations
+    annotations on specific entities without intrusion in the ADL code. </para>
+  <para>The advantage is that the deployment context is clearly separated from the logical
+    architecture description (the ADL files are not modified).</para>
+  <para>To apply an extension file, the <code>--ext-file</code> or <code>-E</code> option must
+    be used with the <command>mindc</command> command line.</para>
+  <para>Refer to the deployment style sheet documentation plugin for further details about
+    this mechanism.<note>
+      <para>Deployment style sheet documentation not yet available, to be written and
+        integrated in Mindc and plugins User Guide.</para>
+    </note></para>
+  <para>The syntax in the extension file to set annotations is the following :</para>
+  <para>
+    <programlisting>(@Singleton || @StaticBindings ||  @StaticDefinitionsBindingsList(...))
+(primitive || composite) &lt;package&gt;.&lt;component name&gt; {
+  @Static 
+  binds &lt;package>.&lt;instance name from> to &lt;package>.&lt;instance name to>
+}</programlisting>
+  </para>
+  <para><code>&lt;package></code>, <code>&lt;component name></code> and <code>&lt;instance
+    name ...></code> can be replaced by '<code>*</code>' if the annotation has to applied to
+    all packages and/or all components.</para>
+  <example>
+    <title>Extension file example 1</title>
+    <programlisting language="adl" linenumbering="unnumbered"><xi:include href="../../../mindc-optimizations/src/assemble/resources/examples/optimisations/static/src/main/mind/StaticBinding.ext" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+  </example>
+  <example>
+    <title>Extension file example 2</title>
+    <programlisting language="adl" linenumbering="unnumbered"><xi:include href="../../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-definition-binding/src/main/mind/StaticDefinitionBinding.ext" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+  </example>
+</section>

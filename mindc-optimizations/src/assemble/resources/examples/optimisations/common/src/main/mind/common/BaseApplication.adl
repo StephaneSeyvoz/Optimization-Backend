@@ -11,12 +11,12 @@
 @Singleton
 
 composite common.BaseApplication {
- 	/**
- 	 * Initialize everything necessary to enter the component world.
- 	 * <br/>
- 	 * This component is a singleton.
- 	 */
- 	contains boot.Bootstrap as bootstrap; 
+	/**
+	 * Initialize everything necessary to enter the component world.
+	 * <br/>
+	 * This component is a singleton.
+	 */
+	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
 	/**
 	 * Calls its client interfaces if bound.

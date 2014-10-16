@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="Optimization-backend_aim" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>Aim of the &productName;</title>
+  <para>The Mindc compiler is designed to be modular and to use plugins.</para>
+  <para>The standard back-end of the Mindc compiler generates code that fits any situation, the
+    drawback is that this code may not be optimum in terms of memory footprint and
+    performances.</para>
+  <para>In embedded system, the software has to be integrated on very constrained devices (low
+    RAM and Flash memory sizes), so the <emphasis>&productName;</emphasis> is an alternative
+    back-end for the Mindc compiler, it is designed to provide optimized alternatives of code
+    generation: applying optimizations, the advantages of Fractal architecture definition are
+    kept with the performance of pure C.</para>
+  <para>The proposed optimizations are based on hypotheses about the instantiation context of a
+    definition in order to optimize interface method invocations, the purpose is to remove the
+    overhead induced by the separation between component definitions and instances (in
+    Object-Oriented Programming, compare to classes and objects).</para>
+  <para>Concretely, the generic <code>CALL(itf, fct)(args...)</code> transformation into C code
+    is simplified when the maximum flexibility provided by Mind language is not required.</para>
+</section>
