@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="Optimization-backend_annotations" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>Annotations directives</title>
+  <para>The directives for the &productName; are inline annotations in the ADL files, they can
+    be placed directly in the code or using deployment style sheet files (see <xref linkend="Optimization-backend_DSS"/>).</para>
+  <para>Some optimization directives are effective only when the component is singleton (using
+    <code>@Singleton</code> annotation), meaning only one instance of the component is present
+    in the application.</para>
+  <para>Using <code>@Flatten</code> annotation on a composite or with <code>--flatten</code>
+    option used with the <command>mindc</command> command line to flatten the whole application,
+    a partial or whole architecture tree is flattened: the composition information is removed
+    and as a result the code and data structures used to cross composites membranes is also
+    removed. This tree manipulation has good effects on memory usage and performances.</para>
+  <para>Here are the optimization directives and the entities they apply to:<itemizedlist>
+    <listitem>
+      <para>Targeted at a composite :<itemizedlist>
+        <listitem>
+          <para><code>@StaticBindings</code></para>
+        </listitem>
+        <listitem>
+          <para><code>@StaticDefinitionsBindingsList</code></para>
+        </listitem>
+        <listitem>
+          <para><code>@GarbageUnusedInternal</code> : this annotation is set by default when
+            invoking the &productName;, it does not reduce the flexibility of the
+            application and leads to significant code reductions (removal of unused factory
+            code and empty data structures)</para>
+        </listitem>
+      </itemizedlist></para>
+    </listitem>
+    <listitem>
+      <para>Targeted at a primitive :<itemizedlist>
+        <listitem>
+          <para><code>@FreezeCallPointer</code></para>
+        </listitem>
+      </itemizedlist></para>
+    </listitem>
+    <listitem>
+      <para>Targeted at a binding :<itemizedlist>
+        <listitem>
+          <para><code>@Static</code></para>
+        </listitem>
+      </itemizedlist></para>
+    </listitem>
+  </itemizedlist></para>
+  <para>
+    <note>
+      <para>When developing software architecture bricks to be re-used, it is generally not
+        recommended to put optimizations directives in order to keep maximum flexibility in the
+        brick.</para>
+      <para>Then when using the bricks in an application, the relevant optimization directive
+        can be applied depending on the context and constraints of the application, it is
+        recommended not to modify the re-used brick code but to use deployment style sheet to
+        apply optimization directives.</para>
+    </note>
+  </para>
+</section>

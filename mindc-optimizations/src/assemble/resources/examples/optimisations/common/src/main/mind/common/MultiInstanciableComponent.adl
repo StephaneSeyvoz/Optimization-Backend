@@ -11,6 +11,6 @@ primitive common.MultiInstanciableComponent {
  * <br/> - The current definition.
  * <br/>And return a success code.
  */
- 	provides boot.Main as serverInterface;
-  	source MultiInstanciableComponent.c;
+	provides boot.Main as serverInterface;
+	source MultiInstanciableComponent.c;
 }

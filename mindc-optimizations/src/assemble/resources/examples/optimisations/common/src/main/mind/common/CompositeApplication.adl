@@ -3,11 +3,11 @@
  * It is the manually unoptimized version of the component @component common.BaseApplication.
  * Look at the component @component common.BaseApplication for more documentation.
  */
- 
+
 @Singleton
 composite common.CompositeApplication {
 
- 	contains boot.Bootstrap as bootstrap; 
+	contains boot.Bootstrap as bootstrap; 
 	binds bootstrap.entryPoint to singletonComp.serverInterface;
 	/**
 	 * This component is a composite wrapping an instance of the @component SingletonComponent component.

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section[
+<!ENTITY % myents SYSTEM "../shared.ent" >
+%myents;
+]>
+<section xml:id="Optimization-backend_usage" xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <title>Usage</title>
+  <section>
+    <title>Pre-requisites</title>
+    <para>The files: <filename>adl-backend-static.jar</filename>,
+      <filename>idl-backend-static.jar</filename> and
+      <filename>cpl-preproc-static.jar</filename> are required in the <filename>ext</filename>
+      sub-directory of the Mind C compiler directory.</para>  
+  </section>
+  <section>
+    <title>Parameters</title>
+    <para>To activate the &productName; for a compilation, the option <code>--optimize</code> or
+      <code>-O</code> must be used with the <command>mindc</command> command line.</para>
+  </section>
+</section>

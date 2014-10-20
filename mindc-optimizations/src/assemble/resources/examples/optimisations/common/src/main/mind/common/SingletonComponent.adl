@@ -1,6 +1,6 @@
 /**
- * This component is part of the example demonstrating the usage of the 
- * '@Static' optimization.
+ * This component is part of the example demonstrating the usage of 
+ * the '@Singleton' annotation.
  * 
  * It is a singleton component (NOT multi-instanciable).
  */
@@ -10,7 +10,8 @@ primitive
 common.SingletonComponent
 {
 /**
- * The @interface boot.Main#methods#main method of this interface will print :
+ * The @interface boot.Main#methods#main method of this interface 
+ * will print :
  * <br/> - The current method name.
  * <br/> - The current interface name.
  * <br/> - The current definition.
