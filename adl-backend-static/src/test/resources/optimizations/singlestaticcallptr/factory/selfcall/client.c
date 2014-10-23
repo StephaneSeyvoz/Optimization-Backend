@@ -112,7 +112,7 @@ int METH(entryPoint, main) (int argc, char *argv[]) {
   
   /* Bind the client to the service */
   BIND_MY_INTERFACE(getServicePtrItf, server1getServicePtrItf);
-  /* get the service interface pointer
+  /* get the service interface pointer */
   singlestaticcallptr_factory_selfcall_Service service1Ptr = CALL(getServicePtrItf, getServicePtr)();
   
   /* call the 'print' method of the 's' client interface, without binding */
