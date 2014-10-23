@@ -22,13 +22,13 @@
  * Authors: Matthieu Leclercq
  */
 
-// -----------------------------------------------------------------------------
-// Implementation of the entryPoint interface with signature boot.Main.
-// -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+   Implementation of the entryPoint interface with signature boot.Main.
+   -------------------------------------------------------------------------- */
 
 #include <stdio.h>
 
-// int main(int argc, string[] argv)
+/* int main(int argc, string[] argv) */
 int METH(entryPoint, main) (int argc, char *argv[]) {
 
   int r;
@@ -36,7 +36,7 @@ int METH(entryPoint, main) (int argc, char *argv[]) {
   void *serverInstance0;
   void *serverInstance1;
 
-  // reused
+  /* reused */
   fractal_api_Component serverInstanceCompItf;
   
   const char *getServicePtrItfName = "getServicePtrItf";
@@ -49,75 +49,75 @@ int METH(entryPoint, main) (int argc, char *argv[]) {
   const char *hello = "hello world !";
   const char *bye = "goodbye world !";
 
-  // create a server instance
+  /* create a server instance */
   r = CALL(f, newFcInstance) (&serverInstance0);
   if (r != FRACTAL_API_OK) {
     printf("ERROR %d In client while creating instance 0\n", r);
     return r;
   }
   
-  // Component controller is the first interface ?
+  /* Component controller is the first interface ? */
   serverInstanceCompItf = (fractal_api_Component) serverInstance0;
   
-  // Bind to the controller of the server instance
+  /* Bind to the controller of the server instance */
   BIND_MY_INTERFACE(compCtrl, serverInstanceCompItf);
-  // Get its service
+  /* Get its service */
   r = CALL(compCtrl, getFcInterface)(getServicePtrItfName, (void **)& server0getServicePtrItf);
   if (r != FRACTAL_API_OK) {
     printf("ERROR %d In client while getting server interface 0\n", r);
     return r;
   }
   
-  // Bind the client to the service
+  /* Bind the client to the service */
   BIND_MY_INTERFACE(getServicePtrItf, server0getServicePtrItf);
-  // get the service interface pointer
+  /* get the service interface pointer */
   singlestaticcallptr_factory_selfcall_Service service0Ptr = CALL(getServicePtrItf, getServicePtr)();
   
-  // call the 'print' method of the 's' client interface, without binding
+  /* call the 'print' method of the 's' client interface, without binding */
   CALL_PTR(service0Ptr, print)(hello);
-  // call again the same interface (without binding) to look at invocation count
+  /* call again the same interface (without binding) to look at invocation count */
   CALL_PTR(service0Ptr, println)(bye);
 
-  // create a server instance
+  /* create a server instance */
   r = CALL(f, newFcInstance) (&serverInstance1);
   if (r != FRACTAL_API_OK) {
     printf("ERROR %d In client while creating instance 1\n", r);
     return r;
   }
   
-  // BEWARE, INSTANCE0 STILL EXISTS IN MEMORY !
+  /* BEWARE, INSTANCE0 STILL EXISTS IN MEMORY ! */
   
-  // Component controller is the first interface ?
+  /* Component controller is the first interface ? */
   serverInstanceCompItf = (fractal_api_Component) serverInstance1;
   
-  // Bind to the controller of the server instance
+  /* Bind to the controller of the server instance */
   BIND_MY_INTERFACE(compCtrl, serverInstanceCompItf);
   
-  // Get its attributeController
+  /* Get its attributeController */
   r = CALL(compCtrl, getFcInterface)(attributeControllerInterfaceName, (void **)& acItf);
   if (r != FRACTAL_API_OK) {
     printf("ERROR %d In client while getting attribute controller\n", r);
     return r;
   }
-  // Bind the client to the AttributeController
+  /* Bind the client to the AttributeController */
   BIND_MY_INTERFACE(attrCtrl, acItf);
   CALL(attrCtrl, setFcAttribute)("instance_number", (void*) 1);
   
-  // Get its service
+  /* Get its service */
   r = CALL(compCtrl, getFcInterface)(getServicePtrItfName, (void **)& server1getServicePtrItf);
   if (r != FRACTAL_API_OK) {
     printf("ERROR %d In client while getting server interface 1\n", r);
     return r;
   }
   
-  // Bind the client to the service
+  /* Bind the client to the service */
   BIND_MY_INTERFACE(getServicePtrItf, server1getServicePtrItf);
-  // get the service interface pointer
+  /* get the service interface pointer
   singlestaticcallptr_factory_selfcall_Service service1Ptr = CALL(getServicePtrItf, getServicePtr)();
   
-  // call the 'print' method of the 's' client interface, without binding
+  /* call the 'print' method of the 's' client interface, without binding */
   CALL_PTR(service1Ptr, print)(hello);
-  // call again the same interface (without binding) to look at invocation count
+  /* call again the same interface (without binding) to look at invocation count */
   CALL_PTR(service1Ptr, println)(bye);
   
   return 0;

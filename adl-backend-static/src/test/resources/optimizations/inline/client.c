@@ -22,11 +22,11 @@
  * Authors: Matthieu Leclercq
  */
 
-// -----------------------------------------------------------------------------
-// Implementation of the entryPoint interface with signature boot.Main.
-// -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+   Implementation of the entryPoint interface with signature boot.Main.
+   -------------------------------------------------------------------------- */
 
-// int main(int argc, string[] argv)
+/* int main(int argc, string[] argv) */
 int METH(main, main) (int argc, char *argv[]) {
 
   int i = 0;

@@ -1,17 +1,17 @@
 #include <stdio.h>
 
 void METH(s, print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "instance_number" attribute
+  /* retrieve the value of the "instance_number" attribute */
   int c = ATTR(instance_number);
 
   if (ATTR(instance_number) == 0)
 	CALL(s, println)(msg);
   
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(instance_number=%d) %s", h, c, msg);
 }
 

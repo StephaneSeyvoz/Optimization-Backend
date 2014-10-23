@@ -24,16 +24,16 @@
 
 #include <stdio.h>
 
-// -----------------------------------------------------------------------------
-// Constructor implementation
-// -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+   Constructor implementation
+   -------------------------------------------------------------------------- */
 
 CONSTRUCTOR() {
-  // initialize the "count" private data
+  /* initialize the "count" private data */
   PRIVATE.count = 0;
 }
 
-// int main(int argc, string[] argv)
+/* int main(int argc, string[] argv) */
 int METH(main, main) (int argc, char *argv[]) {
 
   CALL(s0, print)("hello world !");
@@ -57,159 +57,159 @@ int METH(main, main) (int argc, char *argv[]) {
   return 0;
 }
 
-// -----------------------------------------------------------------------------
-// Implementation of the s interface with signature helloworld.Service.
-// -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+   Implementation of the s interface with signature helloworld.Service.
+   -------------------------------------------------------------------------- */
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[0], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[0], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[1], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[1], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[2], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[2], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[3], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[3], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[4], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[4], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[5], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[5], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }
 
-// void print(string msg)
+/* void print(string msg) */
 void METH(s[6], print)(string msg) {
-  // retrieve the value of the "header" attribute defined in "helloworld.Server"
-  // ADL.
+  /* retrieve the value of the "header" attribute defined in "helloworld.Server"
+     ADL. */
   string h = ATTR(header);
 
-  // retrieve the value of the "count" private data declared in the
-  // "serverData.h" file
+  /* retrieve the value of the "count" private data declared in the
+     "serverData.h" file */
   int c = PRIVATE.count;
 
-  // Use printf to print message.
+  /* Use printf to print message. */
   printf("%s(count=%d) %s", h, c, msg);
 
-  // increment the invocation counter.
+  /* increment the invocation counter. */
   PRIVATE.count ++;
 }
 
-// void println(string msg)
+/* void println(string msg) */
 void METH(s[6], println)(string msg) {
   printf("%s(count=%d) %s\n", ATTR(header), PRIVATE.count++, msg);
 }

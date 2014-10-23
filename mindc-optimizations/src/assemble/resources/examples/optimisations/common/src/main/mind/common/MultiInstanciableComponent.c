@@ -1,7 +1,7 @@
 
-// -----------------------------------------------------------------------------
-// Implementation of the primitive common.MultiInstanciableComponent.
-// -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+   Implementation of the primitive common.MultiInstanciableComponent.
+   -------------------------------------------------------------------------- */
 
 /**
  * We need stdio as we will be using "printf" in this component
