@@ -118,7 +118,8 @@
   <chapter>
     <title>Overview</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="sections/Optimization-backend_usage.xml"/>
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="sections/Optimization-backend_annotations.xml"/>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="sections/Optimization-backend_annotations.xml"/>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="sections/Optimization-backend_DSS.xml"/>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="sections/Optimization-backend_gains.xml"/>
 
@@ -242,7 +243,8 @@
         <title>Annotation fields</title>
 
         <para>
-            <command>@StaticBindings ( <replaceable>true</replaceable> | <replaceable>false</replaceable> )</command>
+          <command>@StaticBindings ( recursive = <replaceable>true</replaceable> |
+              <replaceable>false</replaceable> )</command>
         </para>
 
         <para>This option allows to propagate the annotation in all sub-composites, by default,
@@ -748,7 +750,8 @@ composite MainComposite {
       <simplesect>
         <title>Annotation fields</title>
         <para>
-          <command>@Flatten ( <replaceable>true</replaceable> | <replaceable>false</replaceable> )</command>
+          <command>@Flatten ( dumpADL = <replaceable>true</replaceable> |
+              <replaceable>false</replaceable> )</command>
         </para>
         
         <para>This option allows to generate the result of the flattened ADL in the build output
@@ -817,8 +820,8 @@ composite MainComposite {
       <simplesect>
         <title>Example</title>
         
-        <para>The <code>@flatten</code> annotation is described in the file
-          <filename>optimisation/garbagecomposite/GarbagedCompositeApplication.adl</filename></para>
+        <para>The <code>@Flatten</code> annotation is described in the file
+            <filename>optimisation/garbagecomposite/GarbagedCompositeApplication.adl</filename></para>
         
         <example>
           <title>The <code>@flatten</code> annotation</title>
@@ -829,14 +832,14 @@ composite MainComposite {
     </section>    
     <section xml:id="optim-annot-GarbageUnusedInternal">
       <title>
-        <code>@GarbageUnusedInternal</code>
+        <code>@GarbageUnusedInternals</code>
       </title>
       
       <simplesect>
         <title>Note (March 2014)</title>
         
-        <para>Since March 2014, this annotation will be OBSOLETE / DEPRECATED:
-            <code>@GarbageUnusedInternal</code> is now always triggered.</para>
+        <para>Since March 2014, this annotation is <emphasis>obsolete</emphasis> :
+            <code>@GarbageUnusedInternals</code> is now always triggered.</para>
         
         <para>The annotation is ineffective and useless: it is strongly advised to remove it from
           your source code.</para>
@@ -846,7 +849,7 @@ composite MainComposite {
         <title>Annotation fields</title>
         
         <para>
-          <command>@GarbageUnusedInternal ( <replaceable>true</replaceable> |
+          <command>@GarbageUnusedInternals ( recursive = <replaceable>true</replaceable> |
               <replaceable>false</replaceable> )</command>
         </para>
         
@@ -864,18 +867,18 @@ composite MainComposite {
         </para>
 
       
-      <para>The <code>@GarbageUnusedInternal</code> annotation removes residual generated code
+      <para>The <code>@GarbageUnusedInternals</code> annotation removes residual generated code
           resulting of the usage of the <code>@StaticBindings</code> annotation.</para>
       
       <para>This annotation is used on composite definitions and removes unused code for composite
           and primitive definitions (optimal case removes the totality of the membrane code).</para>
       
       <example>
-        <title><code>@GarbageUnusedInternal</code> overview</title>
+        <title><code>@GarbageUnusedInternals</code> overview</title>
         
         <mediaobject>
           <imageobject>
-            <imagedata align="center" fileref="images/AtGarbageUnusedInternal.png" format="PNG" width="80%"/>
+            <imagedata align="center" fileref="images/AtGarbageUnusedInternals.png" format="PNG" width="80%"/>
           </imageobject>
         </mediaobject>
       </example>
@@ -893,7 +896,7 @@ composite MainComposite {
         <para>Detects all possible cases where <code>@StaticBindings</code> can generate empty
           structures. Compilers such as GCC tolerate those and reserve space in BSS section, however
           embedded compilers such as IAR completely forbid empty structures and stop compilation
-          with an error, using <code>@GarbageUnusedInternal</code> allows avoiding this
+          with an error, using <code>@GarbageUnusedInternals</code> allows avoiding this
           pitfall.</para>
       </simplesect>
       
@@ -904,9 +907,9 @@ composite MainComposite {
  
       
       <example>
-        <title>The <code>@GarbageUnusedInternal</code> annotation</title>
+        <title>The <code>@GarbageUnusedInternals</code> annotation</title>
         
-        <para>The <code>@GarbageUnusedInternal</code> annotation is used in conjunction with the
+        <para>The <code>@GarbageUnusedInternals</code> annotation is used in conjunction with the
               <code>@StaticBindings</code> annotation.</para>
         
         <programlisting language="adl" linenumbering="unnumbered"><xi:include href="../../mindc-optimizations/src/assemble/resources/examples/optimisations/static-bindings/src/main/mind/staticbindings/StaticBindingsApplication.adl" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>

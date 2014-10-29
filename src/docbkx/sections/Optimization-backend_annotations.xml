@@ -25,7 +25,7 @@
           <para><code>@StaticDefinitionsBindingsList</code></para>
         </listitem>
         <listitem>
-          <para><code>@GarbageUnusedInternal</code> : this annotation is set by default when
+          <para><code>@GarbageUnusedInternals</code> : this annotation is set by default when
             invoking the &productName;, it does not reduce the flexibility of the
             application and leads to significant code reductions (removal of unused factory
             code and empty data structures)</para>
