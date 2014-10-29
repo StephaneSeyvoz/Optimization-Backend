@@ -56,7 +56,7 @@
 <!-- Customization of programlisting areas -->
 <xsl:attribute-set name="monospace.verbatim.properties"
                    use-attribute-sets="monospace.properties verbatim.properties">
-  <!-- Try to put a block on a single page -->
+  <!-- Do not force blocks on a single page -->
   <xsl:attribute name="keep-together.within-column">auto</xsl:attribute>
   <!-- Wrap of long lines -->
   <xsl:attribute name="wrap-option">wrap</xsl:attribute>
