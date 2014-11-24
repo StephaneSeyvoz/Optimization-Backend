@@ -1,40 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
  	<parent>
 		<groupId>org.ow2.mind</groupId>
-		<artifactId>mind-compiler</artifactId>
-		<version>2.1-SNAPSHOT</version>
+		<artifactId>Optimization-Backend</artifactId>
+		<version>2.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>single-interface-plugin</artifactId>
 	<name>Single annotation for interfaces optimization</name>
 	<description>This module is a prototype for interfaces optimization. The specific case covered by this module is about allowing a single instance of a serveur interface in order to allow multi-instantiation of server components (non Singleton), leading to keeping a context pointer argument ("this") but removing V-Table method pointers data structures declarations, as well as allowing direct calls from clients without indirection.</description>
+
+	<artifactId>single-interface-plugin</artifactId>
 	
 	<dependencies>
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>plugin-loader</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>idl-backend</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>idl-frontend</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>adl-frontend</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.parent.groupId}</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>adl-frontend-static</artifactId>
-			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 	
