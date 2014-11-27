@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -74,6 +74,7 @@
 
     <build>
         <plugins>
+            <!-- User documentation generation -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
@@ -114,8 +115,8 @@
                         <inherited>false</inherited>
                         <configuration>
                             <targetDirectory>${project.build.directory}/site</targetDirectory>
-                            <foCustomization>${basedir}/src/docbkx/xsl/minddoc-fo.xsl</foCustomization>
-                            <draftWatermarkImage>${basedir}/src/docbkx/images/draft.png</draftWatermarkImage>
+                            <foCustomization>${project.build.directory}/site/xsl/minddoc-fo.xsl</foCustomization>
+                            <draftWatermarkImage>${project.build.directory}/site/images/draft.png</draftWatermarkImage>
                         </configuration>
                     </execution>
                     <!-- User Guide HTML executions -->
@@ -129,7 +130,7 @@
                         <configuration>
                             <targetDirectory>${project.build.directory}/site/printable</targetDirectory>
                             <imgSrcPath>../</imgSrcPath>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html-printable.xsl</htmlCustomization>
+                            <htmlCustomization>${project.build.directory}/site/xsl/minddoc-html-printable.xsl</htmlCustomization>
                             <htmlStylesheet>../css/docbook-printable.css</htmlStylesheet>
                         </configuration>
                     </execution>
@@ -143,7 +144,7 @@
                         <configuration>
                             <includes>Optimization-backend.xml</includes>
                             <targetDirectory>${project.build.directory}/site</targetDirectory>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-html.xsl</htmlCustomization>
+                            <htmlCustomization>${project.build.directory}/site/xsl/minddoc-html.xsl</htmlCustomization>
                             <htmlStylesheet>css/docbook.css</htmlStylesheet>
                             <customizationParameters>
                                 <parameter>
@@ -177,7 +178,7 @@
                             <chunkedOutput>true</chunkedOutput>
                             <targetDirectory>${project.build.directory}/site/userGuide</targetDirectory>
                             <imgSrcPath>../</imgSrcPath>
-                            <htmlCustomization>${basedir}/src/docbkx/xsl/minddoc-chunk.xsl</htmlCustomization>
+                            <htmlCustomization>${project.build.directory}/site/xsl/minddoc-chunk.xsl</htmlCustomization>
                             <htmlStylesheet>../css/docbook-chunk.css</htmlStylesheet>
                             <customizationParameters>
                                 <parameter>
@@ -203,9 +204,6 @@
                 <configuration>
                     <sourceDirectory>${basedir}/src/docbkx</sourceDirectory>
                     <targetDirectory>${project.build.directory}/site</targetDirectory>
-                    <highlightXslthlConfig>${basedir}/src/docbkx/xsl/xslthl-config.xml</highlightXslthlConfig>
-                    <highlightSource>1</highlightSource>
-                    <xincludeSupported>true</xincludeSupported>
                 </configuration>
             </plugin>
         </plugins>

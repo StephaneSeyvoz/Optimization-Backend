@@ -18,7 +18,7 @@
     </note></para>
   <para>The syntax in the extension file to set annotations is the following :</para>
   <para>
-    <programlisting>(@Singleton || @StaticBindings ||  @StaticDefinitionsBindingsList(...))
+    <programlisting language="adl" linenumbering="unnumbered">(@Singleton || @StaticBindings ||  @StaticDefinitionsBindingsList(...))
 (primitive || composite) &lt;package&gt;.&lt;component name&gt; {
   @Static 
   binds &lt;package>.&lt;instance name from> to &lt;package>.&lt;instance name to>
