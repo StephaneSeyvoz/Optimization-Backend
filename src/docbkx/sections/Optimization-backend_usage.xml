@@ -7,9 +7,9 @@
   <title>Usage</title>
   <section>
     <title>Pre-requisites</title>
-    <para>The files: <filename>adl-backend-static.jar</filename>,
-      <filename>idl-backend-static.jar</filename> and
-      <filename>cpl-preproc-static.jar</filename> are required in the <filename>ext</filename>
+    <para>The files: <filename>adl-backend-static*.jar</filename>,
+        <filename>adl-frontend-static*.jar</filename> and
+        <filename>cpl-preproc-static*.jar</filename> are required in the <filename>ext</filename>
       sub-directory of the Mind C compiler directory.</para>  
   </section>
   <section>
